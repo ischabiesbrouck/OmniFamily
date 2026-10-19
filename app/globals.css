@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-surface: #ffffff;
+  --color-ink: #111827;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}
