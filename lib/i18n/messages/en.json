@@ -1,0 +1,9 @@
+{
+  "app": {
+    "name": "OmniFamily Nexus",
+    "tagline": "Your family calendar, tasks and chores — on this device, no account needed."
+  },
+  "common": {
+    "loading": "Loading…"
+  }
+}

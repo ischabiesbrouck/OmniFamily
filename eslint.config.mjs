@@ -45,6 +45,20 @@ const config = [
       ],
     },
   },
+  {
+    // D10: user-facing copy comes from the next-intl catalogue, never JSX literals.
+    files: ['app/**/*.tsx', 'components/**/*.tsx'],
+    rules: {
+      'react/jsx-no-literals': [
+        'error',
+        {
+          noStrings: true,
+          ignoreProps: true,
+          allowedStrings: ['·', '—', '–', ':', '/', '%', '+', '-'],
+        },
+      ],
+    },
+  },
   prettier,
 ];
 

@@ -1,0 +1,9 @@
+{
+  "app": {
+    "name": "OmniFamily Nexus",
+    "tagline": "Je gezinsagenda, taken en klusjes — op dit apparaat, zonder account."
+  },
+  "common": {
+    "loading": "Laden…"
+  }
+}
