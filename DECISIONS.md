@@ -37,3 +37,35 @@ Deviations from, and clarifications of, SPEC.md. Newest phase last. Format: **ID
 | `jsdom`                                             | DOM environment for Vitest component tests.                   |
 | `@testing-library/dom`, `@testing-library/jest-dom` | Peer of `@testing-library/react`; DOM matchers.               |
 | `@types/node`, `@types/react`, `@types/react-dom`   | Type definitions for strict TypeScript.                       |
+
+## Process
+
+**D-P.1 — Several phases run in one session.** On 2026-10-19 the owner replied "Build" after Phase 0, explicitly asking to continue. SPEC §8 ("one phase per session") and §10.1 (plan approval per phase) are waived for this run; each phase still ends with a green gate and its own commits.
+
+## Phase 1 — Data layer, HLC, i18n (2026-10-19)
+
+**D-1.1 — HLC wire format uses zero-padded hex: `<12 hex pt>:<4 hex counter>:<deviceId>`.** Fixed width makes SPEC §5.3 "compare lexicographically" correct; deviceId is the final segment, so ties break by deviceId for free. A counter overflow borrows the next millisecond; remote timestamps more than 24 h ahead throw `HlcDriftError` instead of dragging the clock forward.
+
+**D-1.2 — HLC state is persisted in `settings` and re-read inside every write transaction.** Guarantees monotonicity across reloads (wall clock regressions) and across tabs sharing one IndexedDB.
+
+**D-1.3 — Outbox `payloadCiphertext` holds the UTF-8 JSON snapshot in Phase 1; encryption happens at the transport boundary (Phase 6).** Web Crypto is asynchronous and cannot be awaited inside an IndexedDB transaction without it auto-committing, which would break SPEC §5.1 atomicity. The outbox never leaves the device and IndexedDB is plaintext at rest by design (D5), so this does not weaken the threat model; SPEC §5.5 (nothing leaves the device unencrypted) remains enforced in the sync engine.
+
+**D-1.4 — Boolean indexes (`completed`, `purchased`, `revoked`) are declared as SPEC §4 requires but are inert.** IndexedDB cannot index booleans; queries on these fields use `.filter()`. Changing to 0/1 would need a schema migration; revisit only if a query proves slow.
+
+**D-1.5 — Syncable tables use `Table<T, string>` (not `EntityTable`).** IDs are always generated client-side, so the insert type never omits `id`.
+
+**D-1.6 — All writes go through `RepositoryCore.write(entities, fn)`.** It opens one `rw` transaction over the declared tables + `outbox` + `settings`, stamps each mutation with `clock.send()`, and lets callers write several entities atomically (needed by Phase 4's task → ledger flow). Touching an undeclared table throws.
+
+**D-1.7 — `syncStatus` stays `pending_insert` when a never-synced record is updated.** The peer has never seen it, so it must still be inserted.
+
+**D-1.8 — Tombstone sweep (`maybeSweepTombstones`) runs at most once per 24 h, triggered from the app shell, not a timer.** "Nightly" is not achievable reliably in a PWA without background execution; it also deletes the purged records' outbox rows.
+
+**D-1.9 — next-intl runs client-only via `NextIntlClientProvider` without the Next.js plugin or locale routing.** No middleware or server rendering per locale (D1); both catalogues are bundled so localisation works offline. Locale comes from `navigator.languages` via `useSyncExternalStore` (server snapshot `en`, so prerendered HTML is English and switches after hydration). A user-chosen override arrives with the Settings page.
+
+**D-1.10 — `react/jsx-no-literals` is an error in `app/` and `components/`.** Mechanically enforces D10; D-0.8's placeholder exception is closed.
+
+### Dependencies added in Phase 1
+
+| Package                | Justification                           |
+| ---------------------- | --------------------------------------- |
+| `fake-indexeddb` (dev) | Listed in D9; IndexedDB for unit tests. |
