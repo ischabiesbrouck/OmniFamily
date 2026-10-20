@@ -9,7 +9,11 @@
     "cancel": "Cancel",
     "remove": "Remove",
     "add": "Add",
-    "optional": "optional"
+    "optional": "optional",
+    "close": "Close",
+    "edit": "Edit",
+    "done": "Done",
+    "more": "More"
   },
   "nav": {
     "label": "Main",
@@ -17,7 +21,9 @@
     "settings": "Settings",
     "calendar": "Calendar",
     "tasks": "Tasks",
-    "groceries": "Groceries"
+    "groceries": "Groceries",
+    "wallDisplay": "Wall display",
+    "menu": "Menu"
   },
   "roles": {
     "parent": "Parent",
@@ -335,5 +341,25 @@
     "delete": "Delete everything",
     "deleteHint": "Erase the family vault, keys, cached app files and settings from this device. This cannot be undone.",
     "deleteConfirm": "Delete ALL family data from this device? This cannot be undone."
+  },
+  "toast": {
+    "eventAdded": "Event added",
+    "saved": "Saved",
+    "deleted": "Deleted",
+    "taskAdded": "Task added",
+    "groceryAdded": "Added to the list",
+    "imported": "{count, plural, one {# event} other {# events}} added"
+  },
+  "add": {
+    "label": "Add",
+    "title": "Add something",
+    "event": "Event",
+    "eventHint": "Appointment, activity or birthday",
+    "task": "Task or chore",
+    "taskHint": "With points if you like",
+    "grocery": "Groceries",
+    "groceryHint": "Put something on the list",
+    "import": "Import dates",
+    "importHint": "From a message, photo or spreadsheet"
   }
 }

@@ -1,21 +1,20 @@
 'use client';
 
 import { useTimeZone } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { windowFor } from '@/lib/calendar/grid';
 import { useMembers } from '@/lib/db/repositories/hooks';
 import { todayIn } from '@/lib/time/zoned';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { useUiStore } from '@/stores/uiStore';
 import { DayAgenda } from './DayAgenda';
-import type { EditorState } from './EventDialog';
-import { LazyEventDialog as EventDialog } from './LazyEventDialog';
 import { useOccurrences, useTaskProgress } from './useOccurrences';
 
 export function TodayAgenda() {
   const zone = useTimeZone() ?? 'UTC';
   const members = useMembers() ?? [];
   const activeMemberId = useDeviceStore((s) => s.activeMemberId);
-  const [editor, setEditor] = useState<EditorState>(null);
+  const openEditor = useUiStore((s) => s.openEditor);
   const today = todayIn(zone);
   const window = useMemo(() => windowFor('day', today, zone), [today, zone]);
   const occurrences = useOccurrences(window, zone, activeMemberId);
@@ -23,20 +22,11 @@ export function TodayAgenda() {
 
   if (!occurrences) return null;
   return (
-    <>
-      <DayAgenda
-        occurrences={occurrences}
-        members={members}
-        progress={progress}
-        onOpen={(occurrence) => setEditor({ mode: 'edit', occurrence })}
-      />
-      <EventDialog
-        state={editor}
-        members={members}
-        timeZone={zone}
-        activeMemberId={activeMemberId}
-        onClose={() => setEditor(null)}
-      />
-    </>
+    <DayAgenda
+      occurrences={occurrences}
+      members={members}
+      progress={progress}
+      onOpen={(occurrence) => openEditor({ mode: 'edit', occurrence })}
+    />
   );
 }

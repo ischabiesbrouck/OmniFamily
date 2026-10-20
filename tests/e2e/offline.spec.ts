@@ -82,7 +82,7 @@ test('S1 + S5: every core feature works with the network disabled', async ({ pag
   // Groceries: add, tick, clear.
   await page.getByRole('link', { name: en.nav.groceries }).click();
   await page.getByLabel(en.groceries.name, { exact: true }).fill('Bread');
-  await page.getByRole('button', { name: en.groceries.add }).click();
+  await page.getByRole('button', { name: en.groceries.add, exact: true }).click();
   await page.getByRole('checkbox', { name: 'Mark “Bread” bought' }).check();
   await page.getByRole('button', { name: en.groceries.clearPurchased }).click();
   await expect(page.getByText(en.groceries.empty)).toBeVisible();
@@ -90,7 +90,7 @@ test('S1 + S5: every core feature works with the network disabled', async ({ pag
   // Members: add one in Settings.
   await page.getByRole('link', { name: en.nav.settings }).click();
   await page.getByLabel(en.onboarding.memberName, { exact: true }).fill('Daan');
-  await page.getByRole('button', { name: en.common.add }).click();
+  await page.getByRole('button', { name: en.common.add, exact: true }).click();
   await expect(page.locator('li', { hasText: 'Daan' })).toBeVisible();
 
   // Everything survives an offline reload.

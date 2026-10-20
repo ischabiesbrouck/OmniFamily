@@ -17,14 +17,14 @@ export function TextField({
   const describedBy = [hint ? hintId : '', error ? errorId : ''].filter(Boolean).join(' ');
   return (
     <div className={`flex flex-col gap-1 ${className}`}>
-      <label htmlFor={id} className="font-medium">
+      <label htmlFor={id} className="text-sm font-semibold">
         {label}
       </label>
       <input
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy || undefined}
-        className="min-h-12 rounded-lg border border-ink/40 bg-surface px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus aria-invalid:border-danger"
+        className="min-h-12 w-full rounded-xl border border-line-strong bg-surface px-3.5 text-base text-ink transition placeholder:text-muted focus:border-accent aria-invalid:border-danger"
         {...props}
       />
       {hint && (

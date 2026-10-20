@@ -62,7 +62,7 @@ test('acceptance: device B receives device A’s vault and a subsequent edit', a
   await expect(b).toHaveURL(/\/$/);
   await expect(b.getByText('Lotte')).toBeVisible();
   await expect(b.getByRole('button', { name: /Swimming/ })).toBeVisible();
-  await expect(a.getByRole('banner').getByText('Live with Daan’s phone')).toBeVisible();
+  await expect(a.getByRole('navigation').getByText('Live with Daan’s phone')).toBeVisible();
   await expect(a.locator('li', { hasText: 'Daan’s phone' })).toBeVisible(); // B's device record came back
 
   // A subsequent edit on A arrives on B over the open channel (client-side navigation only:
@@ -77,7 +77,7 @@ test('acceptance: device B receives device A’s vault and a subsequent edit', a
   // …and B's edits travel back to A.
   await b.getByRole('link', { name: en.nav.groceries }).click();
   await b.getByLabel(en.groceries.name, { exact: true }).fill('Goggles');
-  await b.getByRole('button', { name: en.groceries.add }).click();
+  await b.getByRole('button', { name: en.groceries.add, exact: true }).click();
   await a.getByRole('link', { name: en.nav.groceries }).click();
   await expect(a.getByText('Goggles')).toBeVisible();
 

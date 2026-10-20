@@ -9,7 +9,11 @@
     "cancel": "Annuleren",
     "remove": "Verwijderen",
     "add": "Toevoegen",
-    "optional": "optioneel"
+    "optional": "optioneel",
+    "close": "Sluiten",
+    "edit": "Bewerken",
+    "done": "Klaar",
+    "more": "Meer"
   },
   "nav": {
     "label": "Hoofdmenu",
@@ -17,7 +21,9 @@
     "settings": "Instellingen",
     "calendar": "Agenda",
     "tasks": "Taken",
-    "groceries": "Boodschappen"
+    "groceries": "Boodschappen",
+    "wallDisplay": "Wandscherm",
+    "menu": "Menu"
   },
   "roles": {
     "parent": "Ouder",
@@ -335,5 +341,25 @@
     "delete": "Alles verwijderen",
     "deleteHint": "Wis de gezinskluis, sleutels, opgeslagen app-bestanden en instellingen van dit apparaat. Dit kan niet ongedaan worden gemaakt.",
     "deleteConfirm": "ALLE gezinsgegevens van dit apparaat verwijderen? Dit kan niet ongedaan worden gemaakt."
+  },
+  "toast": {
+    "eventAdded": "Afspraak toegevoegd",
+    "saved": "Opgeslagen",
+    "deleted": "Verwijderd",
+    "taskAdded": "Taak toegevoegd",
+    "groceryAdded": "Op de lijst gezet",
+    "imported": "{count, plural, one {# afspraak} other {# afspraken}} toegevoegd"
+  },
+  "add": {
+    "label": "Toevoegen",
+    "title": "Iets toevoegen",
+    "event": "Afspraak",
+    "eventHint": "Afspraak, activiteit of verjaardag",
+    "task": "Taak of klusje",
+    "taskHint": "Met punten als je wilt",
+    "grocery": "Boodschappen",
+    "groceryHint": "Iets op de lijst zetten",
+    "import": "Datums importeren",
+    "importHint": "Uit een bericht, foto of spreadsheet"
   }
 }

@@ -4,6 +4,8 @@ import { I18nProvider } from '@/lib/i18n/I18nProvider';
 import { defaultLocale } from '@/lib/i18n/config';
 import { catalogues } from '@/lib/i18n/messages';
 import { withBase } from '@/lib/pwa/basePath';
+import { THEME_BOOT_SCRIPT } from '@/lib/theme';
+import { ThemeController } from './ThemeController';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -16,15 +18,24 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#111827',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4f6fb' },
+    { media: '(prefers-color-scheme: dark)', color: '#0b1020' },
+  ],
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={defaultLocale}>
+    <html lang={defaultLocale} suppressHydrationWarning>
+      <head>
+        {/* Applies a saved theme before first paint (no flash). */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+      </head>
       <body className="min-h-dvh antialiased">
+        <ThemeController />
         <I18nProvider>{children}</I18nProvider>
       </body>
     </html>

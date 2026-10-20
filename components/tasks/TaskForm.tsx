@@ -14,12 +14,14 @@ export function TaskForm({
   events = [],
   eventId,
   compact = false,
+  onAdded,
 }: {
   members: readonly FamilyMember[];
   events?: readonly FamilyEvent[];
   /** Fixed link (inside the event dialog). */
   eventId?: string;
   compact?: boolean;
+  onAdded?: () => void;
 }) {
   const t = useTranslations('tasks');
   const zone = useTimeZone() ?? 'UTC';
@@ -41,6 +43,7 @@ export function TaskForm({
     setSubmitted(false);
     try {
       await createTask(getRepositories().core, withPoints);
+      onAdded?.();
     } catch {
       setDraft(draft);
       setPointsText(typedPoints);

@@ -25,6 +25,15 @@ export default defineConfig({
         ...(executablePath ? { launchOptions: { executablePath } } : {}),
       },
     },
+    {
+      // Phone layout with a touch pointer: bottom tabs, compact month, 48 px targets.
+      name: 'mobile',
+      grep: /@mobile/,
+      use: {
+        ...devices['Pixel 7'],
+        ...(executablePath ? { launchOptions: { executablePath } } : {}),
+      },
+    },
   ],
   webServer: {
     // e2e covers the flagged pairing (Phase 6) and AI intake (Phase 7) flows too.

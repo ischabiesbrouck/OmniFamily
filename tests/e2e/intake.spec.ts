@@ -48,12 +48,12 @@ test('acceptance: with /api/intake answering 503, every other feature still work
 
   await page.getByRole('link', { name: en.nav.groceries }).click();
   await page.getByLabel(en.groceries.name, { exact: true }).fill('Goggles');
-  await page.getByRole('button', { name: en.groceries.add }).click();
+  await page.getByRole('button', { name: en.groceries.add, exact: true }).click();
   await expect(page.getByText('Goggles')).toBeVisible();
 
   await page.getByRole('link', { name: en.nav.settings }).click();
   await page.getByLabel(en.onboarding.memberName, { exact: true }).fill('Daan');
-  await page.getByRole('button', { name: en.common.add }).click();
+  await page.getByRole('button', { name: en.common.add, exact: true }).click();
   await expect(page.locator('li', { hasText: 'Daan' })).toBeVisible();
 });
 

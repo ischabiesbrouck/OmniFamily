@@ -4,7 +4,7 @@ import { en, onboard } from './helpers';
 
 test.use({ locale: 'en-GB', timezoneId: 'Europe/Amsterdam' });
 
-test('every screen passes axe (WCAG 2.2 AA + AAA contrast) with ≥ 48 px targets', async ({
+test('every screen passes axe (WCAG 2.2 AA + AAA contrast) with large enough targets @mobile', async ({
   page,
 }) => {
   await page.goto('/onboarding');
@@ -29,7 +29,7 @@ test('every screen passes axe (WCAG 2.2 AA + AAA contrast) with ≥ 48 px target
   await expect(page.getByText('Feed the cat')).toBeVisible();
   await page.goto('/groceries');
   await page.getByLabel(en.groceries.name, { exact: true }).fill('Milk');
-  await page.getByRole('button', { name: en.groceries.add }).click();
+  await page.getByRole('button', { name: en.groceries.add, exact: true }).click();
   await expect(page.getByText('Milk')).toBeVisible();
 
   for (const [url, ready] of [
@@ -50,5 +50,5 @@ test('every screen passes axe (WCAG 2.2 AA + AAA contrast) with ≥ 48 px target
   await page.goto('/kiosk');
   await expect(page.getByRole('heading', { name: en.kiosk.chores })).toBeVisible();
   await expectAccessible(page, 'kiosk');
-  await expectLargeTargets(page, 'kiosk');
+  await expectLargeTargets(page, 'kiosk', true);
 });

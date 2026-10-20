@@ -13,9 +13,11 @@ import { useDeviceStore } from '@/stores/deviceStore';
 export function GroceryForm({
   eventId,
   fallbackMemberId,
+  onAdded,
 }: {
   eventId?: string;
   fallbackMemberId: string;
+  onAdded?: () => void;
 }) {
   const t = useTranslations('groceries');
   const activeMemberId = useDeviceStore((s) => s.activeMemberId);
@@ -42,6 +44,7 @@ export function GroceryForm({
         addedByMemberId: activeMemberId ?? fallbackMemberId,
         associatedEventId: eventId,
       });
+      onAdded?.();
     } catch {
       setName(name);
       setQuantity(quantity);

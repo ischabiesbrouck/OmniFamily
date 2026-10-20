@@ -12,12 +12,12 @@ export function Select({
   const id = useId();
   return (
     <div className={`flex flex-col gap-1 ${className}`}>
-      <label htmlFor={id} className="font-medium">
+      <label htmlFor={id} className="text-sm font-semibold">
         {label}
       </label>
       <select
         id={id}
-        className="min-h-12 rounded-lg border border-ink/40 bg-surface px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus"
+        className="min-h-12 w-full rounded-xl border border-line-strong bg-surface px-3.5 pr-8 text-base text-ink transition placeholder:text-muted focus:border-accent aria-invalid:border-danger"
         {...props}
       >
         {options.map((o) => (

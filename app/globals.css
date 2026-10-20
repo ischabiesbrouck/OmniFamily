@@ -1,15 +1,88 @@
 @import 'tailwindcss';
 
-/* Text tokens hold ≥ 7:1 against --color-surface (WCAG 2.2 AAA, SPEC §6). */
-@theme {
-  --color-surface: #ffffff;
-  --color-ink: #111827;
-  --color-muted: #374151;
-  --color-danger: #991b1b;
-  --color-focus: #1e40af;
+/*
+ * Design tokens. Every colour is defined once with light-dark(), so dark mode follows the
+ * OS unless the person picks a theme (<html data-theme>). Text tokens keep ≥ 7:1 against
+ * every surface in both themes (WCAG 2.2 AAA, SPEC §6); tests/unit/contrast.test.ts checks it.
+ */
+:root {
+  color-scheme: light dark;
+  --canvas: light-dark(#f4f6fb, #0b1020);
+  --surface: light-dark(#ffffff, #141b2d);
+  --surface-2: light-dark(#eceff6, #1d2640);
+  --line: light-dark(#d5dbe7, #2c3858);
+  --line-strong: light-dark(#5b6476, #8f9bb6);
+  --ink: light-dark(#0f172a, #f1f5f9);
+  --muted: light-dark(#334155, #c3ccdb);
+  --accent: light-dark(#3730a3, #a5b4fc);
+  --on-accent: light-dark(#ffffff, #0b1020);
+  --accent-soft: light-dark(#e3e8ff, #262f5e);
+  --accent-soft-ink: light-dark(#312e81, #dfe5ff);
+  --danger: light-dark(#991b1b, #fca5a5);
+  --on-danger: light-dark(#ffffff, #0b1020);
+  --danger-soft: light-dark(#fde8e8, #3b1820);
+  --success: light-dark(#14532d, #86efac);
+  --success-soft: light-dark(#e2f5e8, #12301f);
+  --warning: light-dark(#713f12, #fde68a);
+  --warning-soft: light-dark(#fdf3d7, #352a10);
+  --now: light-dark(#b91c1c, #f87171);
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif;
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-ink: var(--accent-soft-ink);
+  --color-danger: var(--danger);
+  --color-on-danger: var(--on-danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-now: var(--now);
+  --color-focus: var(--accent);
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.06), 0 1px 3px rgb(15 23 42 / 0.08);
+  --shadow-float: 0 10px 30px -10px rgb(15 23 42 / 0.35);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background-color: var(--color-surface);
-  color: var(--color-ink);
+  background-color: var(--canvas);
+  color: var(--ink);
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

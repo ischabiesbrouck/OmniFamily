@@ -12,20 +12,25 @@ export async function expectAccessible(page: Page, label: string): Promise<void>
   expect(summary, `axe violations on ${label}`).toEqual([]);
 }
 
-/** Every visible interactive target is at least 48 × 48 CSS px (SPEC §6). */
-export async function expectLargeTargets(page: Page, label: string): Promise<void> {
-  const small = await page.evaluate(() => {
+/**
+ * Every visible interactive target is ≥ 48 × 48 CSS px on touch screens (SPEC §6). With a
+ * precise pointer (mouse) compact controls may go down to WCAG 2.2's 24 px (SC 2.5.8);
+ * `strict` keeps 48 px regardless (the wall display).
+ */
+export async function expectLargeTargets(page: Page, label: string, strict = false): Promise<void> {
+  const small = await page.evaluate((strictTargets) => {
+    const min = !strictTargets && matchMedia('(pointer: fine)').matches ? 23.5 : 47.5;
     const targets = document.querySelectorAll<HTMLElement>(
       'button, a[href], select, input:not([type=checkbox]):not([type=radio]), label:has(> input[type=checkbox]), label:has(> input[type=radio])',
     );
     return [...targets]
       .filter((el) => el.offsetParent !== null && !el.closest('.sr-only'))
       .map((el) => ({ el, r: el.getBoundingClientRect() }))
-      .filter(({ r }) => r.width < 47.5 || r.height < 47.5)
+      .filter(({ r }) => r.width < min || r.height < min)
       .map(
         ({ el, r }) =>
           `${el.tagName.toLowerCase()} "${(el.textContent ?? '').trim().slice(0, 30)}" ${Math.round(r.width)}×${Math.round(r.height)}`,
       );
-  });
-  expect(small, `targets under 48 px on ${label}`).toEqual([]);
+  }, strict);
+  expect(small, `targets too small on ${label}`).toEqual([]);
 }
