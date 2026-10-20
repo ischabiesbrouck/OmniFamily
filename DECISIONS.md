@@ -231,3 +231,40 @@ None.
 **D-8.4 — Every visitor's data stays in their own browser.** The public site is the same zero-account, local-only app; nothing a visitor enters is visible to anyone else.
 
 **D-8.5 — Add-forms clear their fields immediately and restore them only if the write fails** (groceries, tasks, members). They used to clear after the IndexedDB write resolved, which wiped anything typed in the meantime (found by an intermittent e2e failure).
+
+## Phase 9 — Import, redesign, everything on (2026-10-20)
+
+Owner's request: "turn on all options as easy as possible but sturdy and working and also free; add date extraction by photo, copied text messages and xlsx and similar files; professionalise UI/UX and responsiveness."
+
+**D-9.1 — Date extraction runs on the device, not through `/api/intake`.** "Free" rules out a paid LLM (D-7.1 still applies), and on-device parsing is also private, offline-capable and needs no consent dialog (nothing leaves the device). `chrono-node` (MIT) parses English and Dutch; both parsers run per line and the one recognising the most text wins. Day-first dates everywhere except `en-US`. Only results that pin a day or weekday count ("next week" is dropped); wrapped lines ("…24 October" / "2026 at 10:00") are re-joined. The AI route and its consent gate remain for a future provider.
+
+**D-9.2 — Spreadsheets:** `.xlsx` via `read-excel-file` (MIT), `.csv/.tsv` via `papaparse` (MIT), `.ods` via a small reader on `fflate` + `DOMParser`. Header words (en + nl: Date/Datum, Time/Tijd, What/Wat, Who/Wie, …) map columns; Excel serials, time fractions and ranges like `19:00 - 20:30` are understood; without a header, rows are parsed as text. Legacy `.xls` is not supported: the only free parser (SheetJS on npm, 0.18.5) has unfixed security advisories, and the fixed builds are only on a CDN this project does not use.
+
+**D-9.3 — Photo OCR: `tesseract.js` 7 with self-hosted assets.** `scripts/copy-ocr-assets.mjs` (run before dev/build) copies the worker, the three LSTM WASM cores and the English/Dutch `best_int` language data (~17 MB) into `public/ocr`. Photos are scaled to ≤ 2 000 px first. No CDN is contacted, which matters under GDPR. Tesseract's own IndexedDB cache is disabled so "Delete everything" stays complete.
+
+**D-9.4 — The OCR assets are not precached** (`globPublicPatterns: ['icons/**/*']`): a 17 MB download for every visitor would be unreasonable. The service worker caches them `CacheFirst` (`ocr-assets`) on first use, so photo import works offline afterwards.
+
+**D-9.5 — The public site enables device pairing** (`NEXT_PUBLIC_FEATURE_SYNC` in the Pages workflow). It stays LAN-only, as D3 requires; there is no free relay that this project can operate or test, and adding public STUN/relays would change the privacy model.
+
+**D-9.6 — Every extracted entry goes through a review list** (edit title, date, times, people; untick to skip) before anything is saved, and is then created through the normal event path (outbox, HLC).
+
+**D-9.7 — Design system.** Colour tokens use CSS `light-dark()` (one definition for both themes); every text and background pair is ≥ 7:1 in both themes and borders are ≥ 3:1, checked by `tests/unit/contrast.test.ts`. The theme is System, Light or Dark (stored in the device store) and is applied before first paint by an inline script. The system font stack keeps it native-looking with nothing to download.
+
+**D-9.8 — Responsive shell:** one `<nav>`, which is a bottom tab bar on phones and a sidebar from `lg`, plus a floating "+" with an Add sheet (event, task, groceries, import). The event editor is global (UI store) instead of one per page.
+
+**D-9.9 — Calendar:** week and day use a time grid (wall-clock minutes, so DST days line up) with overlap columns, a now line and tap-to-create on an hour. Phones show the month as dots with the picked day's agenda, and the week as a day list.
+
+**D-9.10 — Touch targets:** 48 px wherever the pointer is coarse; with a precise pointer (mouse), compact controls may go down to WCAG 2.2's 24 px minimum (SC 2.5.8) via Tailwind's `pointer-fine` variant. The wall display stays strictly at 48 px. The e2e audit applies the matching bar and also runs on a Pixel 7 profile (`mobile` project, `@mobile` tag).
+
+**D-9.11 — Chores ticked today stay listed (struck through) on Today and the wall display** instead of disappearing, so a tick gives feedback and can be undone.
+
+**D-9.12 — Toasts are non-interactive status messages** (`role="status"`, click-through), so they never cover controls.
+
+### Dependencies added in Phase 9
+
+| Package                                                                  | Justification                                                                             |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `chrono-node`                                                            | Natural-language date parsing (en, nl), on-device.                                        |
+| `tesseract.js`, `@tesseract.js-data/eng`, `@tesseract.js-data/nld` (dev) | On-device OCR; the data packages are copied into `public/ocr` at build time.              |
+| `read-excel-file`, `papaparse`, `fflate`                                 | `.xlsx`, `.csv/.tsv`, `.ods` reading (fflate is already a dependency of read-excel-file). |
+| `@radix-ui/react-tabs`                                                   | Accessible tabs in the import sheet (Radix is in SPEC §2).                                |

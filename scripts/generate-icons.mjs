@@ -19,7 +19,7 @@ for (const { file, size, inset } of targets) {
   const page = await browser.newPage({ viewport: { width: size, height: size } });
   const pad = Math.round(size * inset);
   await page.setContent(
-    `<body style="margin:0;background:#111827"><div style="padding:${pad}px;width:${size - 2 * pad}px;height:${size - 2 * pad}px">${svg.replace('<svg ', '<svg width="100%" height="100%" ')}</div></body>`,
+    `<body style="margin:0;background:#3730a3"><div style="padding:${pad}px;width:${size - 2 * pad}px;height:${size - 2 * pad}px">${svg.replace('<svg ', '<svg width="100%" height="100%" ')}</div></body>`,
   );
   await page.screenshot({ path: `public/icons/${file}`, omitBackground: inset === 0 });
   await page.close();

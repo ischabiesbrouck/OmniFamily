@@ -13,7 +13,10 @@ An offline-first family calendar, task, chore and grocery app (PWA) with **zero-
 - A wall-display kiosk (`/kiosk`): Wake Lock, burn-in shift, idle reset, parent-PIN exit
 - Installable and fully offline (service worker precache, IndexedDB); local reminders
 - English and Dutch
-- Optional, behind flags: QR pairing with encrypted LAN sync (`NEXT_PUBLIC_FEATURE_SYNC=true`) and AI quick add (`NEXT_PUBLIC_FEATURE_INTAKE=true`; needs a provider, see `DECISIONS.md` D-7.1)
+- **Import dates** from a pasted message, a photo (on-device OCR) or a spreadsheet (.xlsx, .ods, .csv): reviewed before saving, nothing uploaded
+- Light and dark themes; phone, tablet and desktop layouts
+- QR pairing with encrypted LAN sync (on in the public demo; `NEXT_PUBLIC_FEATURE_SYNC=true`)
+- Optional AI quick add (`NEXT_PUBLIC_FEATURE_INTAKE=true`; needs a provider, see `DECISIONS.md` D-7.1)
 
 ## Develop
 

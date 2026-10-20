@@ -6,6 +6,10 @@ OmniFamily Nexus stores your family's data **only on your own devices**. There a
 
 Calendar events, tasks, chores, points, groceries, family members, PIN hashes, device keys and settings are kept in this browser's IndexedDB. IndexedDB is not encrypted at rest in v1; protect the device with its own encryption and lock screen (see `SECURITY.md`).
 
+## Import dates from messages, photos and spreadsheets
+
+Pasted text, photos and spreadsheet files are read **on this device**: the text recognition engine and its language data are downloaded once from this app's own website and then run in your browser. Nothing you import is uploaded or sent to anyone, and every found date is shown for review before it is saved.
+
 ## AI quick add (optional, off by default)
 
 - **Opt-in.** Before the first use the app asks for consent in plain language. You can withdraw it at any time in Settings → Privacy & data; quick add then asks again before it sends anything.

@@ -32,6 +32,9 @@ jobs:
         env:
           NEXT_OUTPUT: export
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          # Device pairing on (D-9.5). AI quick add stays off: it needs a paid provider and
+          # a server, while on-device import covers messages, photos and spreadsheets.
+          NEXT_PUBLIC_FEATURE_SYNC: 'true'
       - run: touch out/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
