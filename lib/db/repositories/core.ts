@@ -4,6 +4,7 @@ import {
   NexusDB,
   type EntityRecordMap,
   type OutboxEntity,
+  type HouseholdContext,
   type OutboxOp,
   type Syncable,
 } from '../schema';
@@ -38,6 +39,9 @@ export interface Writer {
   ): Promise<RecordOf<E>>;
   remove<E extends Entity>(entity: E, id: string): Promise<RecordOf<E>>;
   get<E extends Entity>(entity: E, id: string): Promise<RecordOf<E> | undefined>;
+  /** Device-local rows written in the same transaction; never enqueued for sync. */
+  setHousehold(context: HouseholdContext): Promise<void>;
+  setSetting(key: string, value: unknown): Promise<void>;
 }
 
 export interface CoreOptions {
@@ -86,6 +90,11 @@ export class RepositoryCore {
     this.randomId = options.randomId ?? (() => crypto.randomUUID());
   }
 
+  /** Injected wall clock, so callers and tests share one notion of "now". */
+  time(): number {
+    return this.now();
+  }
+
   clock(): Promise<HybridLogicalClock> {
     this.clockPromise ??= this.loadClock();
     return this.clockPromise;
@@ -114,7 +123,7 @@ export class RepositoryCore {
     const tables = [...new Set(entities)].map((e) => this.db.tableFor(e));
     const { db } = this;
 
-    return db.transaction('rw', [...tables, db.outbox, db.settings], async () => {
+    return db.transaction('rw', [...tables, db.outbox, db.settings, db.household], async () => {
       // Another tab may have advanced the clock; never issue a timestamp behind it.
       const persisted = await db.settings.get(HLC_STATE_KEY);
       if (isHlcState(persisted?.value)) clock.observe(persisted.value);
@@ -139,6 +148,12 @@ export class RepositoryCore {
       const writer: Writer = {
         now,
         deviceId: clock.deviceId,
+        setHousehold: async (context) => {
+          await db.household.put(context);
+        },
+        setSetting: async (key, value) => {
+          await db.settings.put({ key, value });
+        },
         get: async (entity, id) => table(entity).get(id),
         insert: async (entity, input) => {
           const record = withoutUndefined({
