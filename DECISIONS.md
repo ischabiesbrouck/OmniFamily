@@ -197,3 +197,25 @@ Deviations from, and clarifications of, SPEC.md. Newest phase last. Format: **ID
 | ------------------ | ----------------------------------------------------------------------------------- |
 | `qrcode-generator` | Draws the pairing QR (MIT, no dependencies); loaded only on the pairing screens.    |
 | `jsqr`             | QR decoding where `BarcodeDetector` is missing (Firefox, Safari); loaded on demand. |
+
+## Phase 7 — AI intake and consent (2026-10-20)
+
+**D-7.1 — STOP CONDITION §10.9(a): no AI provider is implemented.** A working intake needs a paid LLM service and an API key; choosing them is the owner's decision. `lib/intake/provider.ts#getIntakeProvider()` returns `null`, so `/api/intake` answers `503 intake_unavailable` — which is exactly the Phase 7 acceptance scenario, verified against the real route in e2e. Adding a provider means implementing `IntakeProvider.parse()` (send the anonymised request, return JSON) and naming the provider and its retention terms in `PRIVACY.md` and the consent dialog.
+
+**D-7.2 — `/api/intake` is a pure function of its request** (`lib/intake/handler.ts`): body size limit, strict input validation, a 20 s provider timeout, and strict validation of the provider's answer (an invalid answer becomes 502, never reaches the client). There is no storage and no logging; `no-console` is an ESLint error for the route and handler, and a unit test spies on `console`. `Cache-Control: no-store`.
+
+**D-7.3 — The quick-add UI ships behind `NEXT_PUBLIC_FEATURE_INTAKE` (default off),** guarded like the sync flag (D-6.9), so the feature appears only once a provider exists. No request is ever made automatically, so S5 and the offline spec are unaffected. Manual "New event" stays the default and works offline.
+
+**D-7.4 — Consent is opt-in, device-local and versioned** (`settings.intakeConsent = { version, grantedAt }`). It is asked before the first call; declining sends nothing. It can be withdrawn in Settings → Privacy & data, and bumping `CONSENT_VERSION` asks again. The dialog covers what is sent, zero retention, children's data (Art. 8) and how to withdraw.
+
+**D-7.5 — Data minimisation:** member names are replaced, whole word, case-insensitive and longest first, by tokens P1, P2, … numbered only for names that occur (so the tokens reveal nothing about family size). The provider sees only tokens; titles, locations and assignees are mapped back on the device. An e2e test asserts the outgoing body contains no name.
+
+**D-7.6 — Parsed entries are always reviewed before saving.** "Add" creates the event plus the ticked linked tasks and groceries; "Edit first" opens the normal event dialog prefilled (linked suggestions are then skipped); low confidence (< 0.6) shows a warning.
+
+**D-7.7 — Export and erasure (§7.4) are in Settings → Privacy & data, behind the parent gate.** The export is JSON of every live record without PIN hashes, salts, identity keys or the household key. "Delete everything" deletes the IndexedDB database (records, keys, settings), all Cache Storage, the service worker registration and local/session storage, then reopens onboarding.
+
+**D-7.8 — E2E robustness.** Pages are static HTML hydrated by React; interacting before hydration races React's event replay. The app sets `<html data-hydrated>` after hydration and a shared fixture (`tests/e2e/fixtures.ts`) makes every `goto`/`reload` wait for it. Tests also wait for a write to show up before a full navigation, because unloading the page aborts an uncommitted IndexedDB transaction. The per-test timeout is 60 s, and CI runs 2 workers.
+
+### Dependencies added in Phase 7
+
+None.
