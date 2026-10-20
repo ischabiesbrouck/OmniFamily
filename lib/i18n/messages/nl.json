@@ -87,7 +87,18 @@
       "nl": "Nederlands"
     },
     "parentGate": "Instellingen zijn voor ouders. Kies een ouder om te ontgrendelen.",
-    "unlockAs": "Ontgrendelen als {name}"
+    "unlockAs": "Ontgrendelen als {name}",
+    "reminders": {
+      "title": "Herinneringen",
+      "description": "Krijg 15 minuten voor elke afspraak een melding. Herinneringen worden op dit apparaat gemaakt; er gaat niets naar een server.",
+      "enable": "Herinneringen aanzetten",
+      "disable": "Uitzetten",
+      "enabled": "Herinneringen staan aan.",
+      "unsupported": "Deze browser kan geen meldingen tonen.",
+      "denied": "Meldingen zijn geblokkeerd voor deze app. Sta ze toe in de browserinstellingen.",
+      "foregroundOnly": "Deze browser controleert niet op de achtergrond, dus herinneringen komen alleen als de app open is.",
+      "iosNote": "Op iPhone en iPad werken herinneringen alleen als de app op het beginscherm staat, en alleen terwijl hij open is."
+    }
   },
   "pin": {
     "prompt": "Voer de pincode van {name} in",
@@ -213,5 +224,18 @@
     "addTask": "Taak toevoegen",
     "addGrocery": "Artikel toevoegen",
     "badge": "{done}/{total} taken klaar"
+  },
+  "kiosk": {
+    "title": "Gezinsoverzicht",
+    "today": "Vandaag",
+    "tomorrow": "Morgen",
+    "chores": "Klusjes",
+    "noChores": "Alles klaar!",
+    "nothing": "Niets gepland.",
+    "exit": "Wandscherm verlaten",
+    "setup": "Dit apparaat heeft nog geen gezin.",
+    "setupLink": "Gezin instellen",
+    "open": "Wandscherm openen",
+    "openHint": "Overzicht op het hele scherm voor een tablet aan de muur. Het scherm blijft aan; verlaten vraagt een ouder-pincode."
   }
 }

@@ -87,7 +87,18 @@
       "nl": "Nederlands"
     },
     "parentGate": "Settings are for parents. Choose a parent to unlock.",
-    "unlockAs": "Unlock as {name}"
+    "unlockAs": "Unlock as {name}",
+    "reminders": {
+      "title": "Reminders",
+      "description": "Get a notification 15 minutes before each event. Reminders are created on this device; nothing is sent to a server.",
+      "enable": "Turn on reminders",
+      "disable": "Turn off",
+      "enabled": "Reminders are on.",
+      "unsupported": "This browser cannot show notifications.",
+      "denied": "Notifications are blocked for this app. Allow them in the browser settings.",
+      "foregroundOnly": "This browser has no background checks, so reminders arrive while the app is open.",
+      "iosNote": "On iPhone and iPad, reminders need the app added to the Home Screen and arrive only while it is open."
+    }
   },
   "pin": {
     "prompt": "Enter the PIN for {name}",
@@ -213,5 +224,18 @@
     "addTask": "Add task",
     "addGrocery": "Add item",
     "badge": "{done}/{total} tasks done"
+  },
+  "kiosk": {
+    "title": "Family overview",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "chores": "Chores",
+    "noChores": "All done!",
+    "nothing": "Nothing planned.",
+    "exit": "Exit wall display",
+    "setup": "This device has no family yet.",
+    "setupLink": "Set up the family",
+    "open": "Open wall display",
+    "openHint": "Full-screen overview for a tablet on the wall. The screen stays on; leaving it needs a parent PIN."
   }
 }

@@ -1,14 +1,17 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { MemberSettings } from '@/components/members/MemberSettings';
 import { ParentGate } from '@/components/shell/ParentGate';
+import { ReminderSettings } from '@/components/shell/ReminderSettings';
 import { Select } from '@/components/ui/Select';
 import { isLocale, locales } from '@/lib/i18n/config';
 import { useDeviceStore } from '@/stores/deviceStore';
 
 export default function SettingsPage() {
   const t = useTranslations('settings');
+  const tKiosk = useTranslations('kiosk');
   const locale = useDeviceStore((s) => s.locale);
   const setLocale = useDeviceStore((s) => s.setLocale);
 
@@ -25,6 +28,19 @@ export default function SettingsPage() {
         ]}
         onChange={(e) => setLocale(isLocale(e.target.value) ? e.target.value : null)}
       />
+      <section aria-labelledby="kiosk-heading" className="flex flex-col gap-2">
+        <h2 id="kiosk-heading" className="text-xl font-semibold">
+          {tKiosk('title')}
+        </h2>
+        <p>{tKiosk('openHint')}</p>
+        <Link
+          href="/kiosk"
+          className="inline-flex min-h-12 items-center self-start rounded-lg bg-ink px-4 font-medium text-surface"
+        >
+          {tKiosk('open')}
+        </Link>
+      </section>
+      <ReminderSettings />
       <ParentGate>
         <section aria-labelledby="members-heading" className="flex flex-col gap-4">
           <h2 id="members-heading" className="text-xl font-semibold">

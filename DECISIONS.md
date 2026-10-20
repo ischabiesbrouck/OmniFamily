@@ -138,3 +138,35 @@ Deviations from, and clarifications of, SPEC.md. Newest phase last. Format: **ID
 **D-4.6 — "Clear ticked items" tombstones purchased groceries;** the 90-day sweep purges them later (§5.4).
 
 **D-4.7 — Prettier's Tailwind plugin reads `app/globals.css` (`tailwindStylesheet`)** so v4 theme classes sort correctly.
+
+## Phase 5 — PWA and kiosk (2026-10-20)
+
+**D-5.1 — "Lighthouse PWA ≥ 95" is replaced by explicit checks.** Lighthouse removed its PWA category in v12 (2024), so the score no longer exists. `tests/e2e/offline.spec.ts` asserts what the category used to check: a valid manifest (`standalone`, start URL, `any` + `maskable` icons that load), a service worker whose scope is `/` and which controls the start URL, and full offline operation. `pnpm lighthouse` enforces accessibility = 100, FCP < 1.5 s and TTI < 3.0 s on `/onboarding` and `/kiosk`.
+
+**D-5.2 — Every page is precached by path.** `next.config.ts` adds all routes (and the manifest) to Serwist's precache with a per-build revision. The service worker ignores every query parameter except `_rsc` when matching, so `/calendar?view=day&date=…` opens offline, while React Server Component fetches still go to the network; offline, Next.js falls back to a document navigation that the precache answers. `reloadOnOnline` is off so a reconnect never discards a half-filled form.
+
+**D-5.3 — S5 is asserted, not assumed.** The offline spec fails if any response not served by the service worker reaches the page, or any request other than an optional `_rsc` fetch fails.
+
+**D-5.4 — Reminders: the page polls every 30 s; the service worker polls via Periodic Background Sync where supported.** Both call `claimDueReminders`, which reads due occurrences and marks them notified in one IndexedDB transaction, so a reminder is never shown twice. Reminders cover timed, family-visible events 15 minutes ahead. The on/off flag lives in IndexedDB (the worker cannot read `localStorage`). The iOS limitation (installed PWA only, no background sync) is stated in Settings, per D8.
+
+**D-5.5 — The kiosk is split for its 150 kB budget.** The shell (clock, Wake Lock, burn-in shift, idle timer) is in the initial bundle; the data panels (Dexie, recurrence, tasks) load with `next/dynamic` straight after, from the service-worker cache. The event dialog on the main routes is also lazy. `pnpm budget` enforces §9 in CI (gzip of each route's initial JS from `.next/app-build-manifest.json`).
+
+**D-5.6 — Burn-in mitigation uses `transform: translate()` in an 8-step 0–2 px cycle every 5 minutes.** A transform moves pixels without triggering layout, so it costs nothing on the 60 fps budget. The clock re-renders exactly at minute boundaries with `tabular-nums`, so it never shifts the layout.
+
+**D-5.7 — Kiosk rules: only family-visible events show; anyone may tick chores; nobody can delete there; leaving goes through `ParentGate` (parent PIN); 60 s idle closes the exit prompt and scrolls to the top.**
+
+**D-5.8 — `framer-motion` is not used.** CSS transitions ≤ 200 ms cover v1 and keep it out of the bundle. It remains allowed by §2 if a later screen needs it.
+
+**D-5.9 — Accessibility is enforced in e2e with axe-core** (WCAG 2.2 A/AA plus the AAA 7:1 contrast rule) and a custom check that every visible target is ≥ 48 × 48 px, on every screen including the kiosk and the event dialog. Checkbox hit areas are `<label>`s so the whole 48 px area toggles.
+
+**D-5.10 — Icons are drawn once as SVG and rendered to PNG with Playwright's Chromium (`pnpm icons`)** — no image-processing dependency.
+
+**D-5.11 — S3 note.** Lighthouse measures FCP ≈ 0.8 s and TTI ≈ 2.2–2.6 s under mobile throttling. That meets §9 (FCP < 1.5 s, TTI < 3 s). S3's "< 1.5 s to interactive calendar" is met for first paint but not for TTI; closing that gap needs the main routes to load less JavaScript up front (deferring Dexie behind the first paint, as on the kiosk). This is tracked, not hidden.
+
+### Dependencies added in Phase 5
+
+| Package                               | Justification                                                                                                                      |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `@serwist/next`, `serwist`            | Listed in SPEC §2 (service worker, precache).                                                                                      |
+| `@axe-core/playwright` (dev)          | Automated WCAG audit of every screen in e2e.                                                                                       |
+| `lighthouse`, `chrome-launcher` (dev) | Lighthouse CI budget (SPEC D9 / §9); `chrome-launcher` is Lighthouse's own launcher, made explicit because pnpm does not hoist it. |

@@ -7,6 +7,7 @@ import { useEffect, type ReactNode } from 'react';
 import { getRepositories } from '@/lib/db/repositories';
 import { useHousehold } from '@/lib/db/repositories/hooks';
 import { maybeSweepTombstones } from '@/lib/db/repositories/maintenance';
+import { useReminderScheduler } from './useReminderScheduler';
 
 const NAV = [
   { href: '/', key: 'today' },
@@ -22,6 +23,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const household = useHousehold();
   const router = useRouter();
   const pathname = usePathname();
+  useReminderScheduler();
 
   useEffect(() => {
     if (household === null) router.replace('/onboarding');
