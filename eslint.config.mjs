@@ -23,6 +23,8 @@ const config = [
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
+      // `const { secret, ...rest } = x` is how we drop fields; that is not an unused variable.
+      '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
       '@typescript-eslint/ban-ts-comment': [
         'error',
         { 'ts-ignore': true, 'ts-nocheck': true, 'ts-expect-error': 'allow-with-description' },
@@ -60,6 +62,11 @@ const config = [
         },
       ],
     },
+  },
+  {
+    // D2: the intake proxy logs nothing.
+    files: ['app/api/**/*.ts', 'lib/intake/handler.ts', 'lib/intake/provider.ts'],
+    rules: { 'no-console': 'error' },
   },
   prettier,
 ];
