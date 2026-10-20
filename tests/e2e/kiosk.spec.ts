@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import { en, onboard } from './helpers';
 
 test.use({ locale: 'en-GB', timezoneId: 'Europe/Amsterdam' });
@@ -11,6 +11,8 @@ test('kiosk: chores can be ticked by anyone; leaving needs the parent PIN', asyn
   await page.getByLabel(en.tasks.assignee, { exact: true }).selectOption({ label: 'Lotte' });
   await page.getByRole('textbox', { name: en.tasks.points }).fill('3');
   await page.getByRole('button', { name: en.tasks.add }).click();
+  // Navigating before the IndexedDB write commits would abort it; wait for it to land.
+  await expect(page.getByText('Water the plants')).toBeVisible();
 
   await page.goto('/kiosk');
   await expect(page.getByRole('heading', { name: en.kiosk.chores })).toBeVisible();

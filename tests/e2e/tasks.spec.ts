@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import { en, onboard } from './helpers';
 
 test.use({ locale: 'en-GB', timezoneId: 'Europe/Amsterdam' });

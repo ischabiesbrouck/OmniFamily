@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import { expectAccessible, expectLargeTargets } from './a11y';
 import { en, onboard } from './helpers';
 
@@ -21,13 +21,16 @@ test('every screen passes axe (WCAG 2.2 AA + AAA contrast) with ≥ 48 px target
   await dialog.getByLabel(en.calendar.form.title).fill('Swimming');
   await expectAccessible(page, 'event dialog');
   await dialog.getByRole('button', { name: en.common.save }).click();
+  await expect(page.getByRole('button', { name: /Swimming/ })).toBeVisible();
   await page.goto('/tasks');
   await page.getByLabel(en.tasks.name, { exact: true }).fill('Feed the cat');
   await page.getByRole('textbox', { name: en.tasks.points }).fill('2');
   await page.getByRole('button', { name: en.tasks.add }).click();
+  await expect(page.getByText('Feed the cat')).toBeVisible();
   await page.goto('/groceries');
   await page.getByLabel(en.groceries.name, { exact: true }).fill('Milk');
   await page.getByRole('button', { name: en.groceries.add }).click();
+  await expect(page.getByText('Milk')).toBeVisible();
 
   for (const [url, ready] of [
     ['/', 'Hello, Lotte'],

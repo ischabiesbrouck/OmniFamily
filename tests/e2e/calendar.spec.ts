@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, newAppContext, test } from './fixtures';
 import { en, onboard } from './helpers';
 
 const f = en.calendar.form;
@@ -59,7 +59,10 @@ test('acceptance: 2026-10-24 19:00 Europe/Amsterdam still renders 19:00 after th
 });
 
 test('an event seen from another time zone shows the converted time', async ({ browser }) => {
-  const amsterdam = await browser.newContext({ locale: 'en-GB', timezoneId: 'Europe/Amsterdam' });
+  const amsterdam = await newAppContext(browser, {
+    locale: 'en-GB',
+    timezoneId: 'Europe/Amsterdam',
+  });
   const page = await amsterdam.newPage();
   await onboard(page);
   await page.goto('/calendar?view=day&date=2026-10-24');

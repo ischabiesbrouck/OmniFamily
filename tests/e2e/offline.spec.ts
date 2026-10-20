@@ -1,4 +1,5 @@
-import { expect, test, type BrowserContext, type Page } from '@playwright/test';
+import { type BrowserContext, type Page } from '@playwright/test';
+import { expect, test } from './fixtures';
 import { en, onboard } from './helpers';
 
 test.use({ locale: 'en-GB', timezoneId: 'Europe/Amsterdam' });
@@ -27,7 +28,11 @@ function trackNetwork(context: BrowserContext) {
       leaked.push(response.url());
   });
   const failed: string[] = [];
-  context.on('requestfailed', (request) => failed.push(request.url()));
+  context.on('requestfailed', (request) => {
+    // A navigation cancels in-flight requests (net::ERR_ABORTED); they never reached the network.
+    const error = request.failure()?.errorText ?? '';
+    if (!error.includes('ERR_ABORTED')) failed.push(`${request.url()} ${error}`);
+  });
   return { leaked, failed };
 }
 
@@ -95,7 +100,9 @@ test('S1 + S5: every core feature works with the network disabled', async ({ pag
   // S5: nothing was answered by the network; the only failures are optional RSC fetches
   // that Next.js replaces with a precached document navigation.
   expect(network.leaked).toEqual([]);
-  expect(network.failed.filter((url) => !new URL(url).searchParams.has('_rsc'))).toEqual([]);
+  expect(
+    network.failed.filter((entry) => !new URL(entry.split(' ')[0] ?? '').searchParams.has('_rsc')),
+  ).toEqual([]);
 });
 
 test('installable: manifest, icons and a service worker controlling the start URL', async ({

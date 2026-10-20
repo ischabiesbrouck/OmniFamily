@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, newAppContext, test } from './fixtures';
 import { en } from './helpers';
 
 test.use({ locale: 'en-US' });
@@ -37,7 +37,7 @@ test('first run: onboarding → Today, then a parent PIN gates Settings', async 
 });
 
 test('Dutch browsers get Dutch copy', async ({ browser }) => {
-  const context = await browser.newContext({ locale: 'nl-NL' });
+  const context = await newAppContext(browser, { locale: 'nl-NL' });
   const page = await context.newPage();
   await page.goto('/onboarding');
   await expect(page.getByRole('heading', { name: 'Stel je gezin in' })).toBeVisible();

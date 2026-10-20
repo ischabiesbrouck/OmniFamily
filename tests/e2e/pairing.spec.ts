@@ -1,4 +1,5 @@
-import { expect, test, type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { expect, newAppContext, test } from './fixtures';
 import { en, onboard } from './helpers';
 
 const s = en.sync;
@@ -13,8 +14,8 @@ test('acceptance: device B receives device A’s vault and a subsequent edit', a
   browser,
 }) => {
   const options = { locale: 'en-GB', timezoneId: 'Europe/Amsterdam' };
-  const contextA = await browser.newContext(options);
-  const contextB = await browser.newContext(options);
+  const contextA = await newAppContext(browser, options);
+  const contextB = await newAppContext(browser, options);
   const a = await contextA.newPage();
   const b = await contextB.newPage();
 
@@ -36,6 +37,9 @@ test('acceptance: device B receives device A’s vault and a subsequent edit', a
   // …B (fresh: no account, no household) reads it and shows its answer…
   await b.goto('/onboarding');
   await b.getByRole('button', { name: s.join.button }).click();
+  // The onboarding form has a same-named "Name of this device" field; type only once the
+  // join form has replaced it (a click before hydration is replayed by React a moment later).
+  await expect(b.getByRole('heading', { name: s.join.title })).toBeVisible();
   await b.getByLabel(s.join.deviceName).fill('Daan’s phone');
   await b.getByLabel(s.pasteLabel).fill(offer);
   await expect(b.getByLabel(s.join.deviceName)).toHaveValue('Daan’s phone');

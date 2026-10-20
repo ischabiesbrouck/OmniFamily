@@ -6,7 +6,10 @@ const executablePath = process.env.PW_CHROMIUM_PATH;
 
 export default defineConfig({
   testDir: 'tests/e2e',
+  // Multi-step flows (onboarding + PBKDF2 + several screens) can exceed 30 s under parallel load.
+  timeout: 60_000,
   fullyParallel: true,
+  workers: process.env.CI ? 2 : undefined,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? 'github' : 'list',
@@ -24,8 +27,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    // e2e covers the flagged pairing flow too (SPEC §8 Phase 6).
-    command: `NEXT_PUBLIC_FEATURE_SYNC=true pnpm build && pnpm start --port ${port}`,
+    // e2e covers the flagged pairing (Phase 6) and AI intake (Phase 7) flows too.
+    command: `NEXT_PUBLIC_FEATURE_SYNC=true NEXT_PUBLIC_FEATURE_INTAKE=true pnpm build && pnpm start --port ${port}`,
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
