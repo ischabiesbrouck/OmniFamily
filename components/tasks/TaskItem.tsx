@@ -15,9 +15,12 @@ import { useDeviceStore } from '@/stores/deviceStore';
 export function TaskItem({
   task,
   members,
+  hideDelete = false,
 }: {
   task: FamilyTask;
   members: readonly FamilyMember[];
+  /** The wall display lets anyone tick chores but not delete them. */
+  hideDelete?: boolean;
 }) {
   const t = useTranslations('tasks');
   const format = useFormatter();
@@ -57,13 +60,15 @@ export function TaskItem({
         </span>
       </div>
       {assignee && <MemberAvatar member={assignee} size="sm" />}
-      <Button
-        variant="ghost"
-        aria-label={t('delete', { title: task.title })}
-        onClick={() => void deleteTask(core, task.id)}
-      >
-        <Trash2 aria-hidden="true" className="size-5" />
-      </Button>
+      {!hideDelete && (
+        <Button
+          variant="ghost"
+          aria-label={t('delete', { title: task.title })}
+          onClick={() => void deleteTask(core, task.id)}
+        >
+          <Trash2 aria-hidden="true" className="size-5" />
+        </Button>
+      )}
     </li>
   );
 }
