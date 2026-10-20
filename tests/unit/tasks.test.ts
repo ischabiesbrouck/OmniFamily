@@ -91,7 +91,7 @@ describe('tasks and points ledger', () => {
     expect(again.ledger).toBeUndefined();
     await setTaskCompleted(repos.core, task.id, false, 'kid');
 
-    const entries = await repos.points.list();
+    const entries = (await repos.points.list()).sort((a, b) => (a.hlc < b.hlc ? -1 : 1));
     expect(entries.map((e) => e.delta)).toEqual([3, -3]);
     expect(balances(entries).get('kid')).toBe(0);
     expect((await repos.tasks.get(task.id))?.completedAt).toBeUndefined();
