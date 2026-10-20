@@ -35,3 +35,11 @@ export function useMembers(): FamilyMember[] | undefined {
 export function useLiveEvents(): FamilyEvent[] | undefined {
   return useLiveRecords('event');
 }
+
+/** A device-local setting; `undefined` while loading. */
+export function useSetting(key: string): unknown {
+  return useLiveQuery(
+    async () => (await getRepositories().core.db.settings.get(key))?.value ?? null,
+    [key],
+  );
+}
