@@ -71,7 +71,7 @@ function AddMemberForm({ nextColor }: { nextColor: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="border-ink/20 flex flex-col gap-3 rounded-lg border p-4">
+    <form onSubmit={onSubmit} className="flex flex-col gap-3 rounded-lg border border-ink/20 p-4">
       <h3 className="font-semibold">{t('settings.addMember')}</h3>
       <div className="flex flex-wrap items-end gap-2">
         <TextField
@@ -130,19 +130,19 @@ export function MemberSettings() {
       />
 
       {notice && (
-        <p role="alert" className="text-danger font-medium">
+        <p role="alert" className="font-medium text-danger">
           {notice}
         </p>
       )}
 
       <ul className="flex flex-col gap-3">
         {members.map((m) => (
-          <li key={m.id} className="border-ink/20 flex flex-col gap-2 rounded-lg border p-3">
+          <li key={m.id} className="flex flex-col gap-2 rounded-lg border border-ink/20 p-3">
             <div className="flex flex-wrap items-center gap-3">
               <MemberAvatar member={m} />
               <div className="flex flex-1 flex-col">
                 <span className="font-semibold">{m.name}</span>
-                <span className="text-muted text-sm">
+                <span className="text-sm text-muted">
                   {t(`roles.${m.role}`)} ·{' '}
                   {hasPin(m) ? t('settings.pinSet') : t('settings.pinNone')}
                 </span>

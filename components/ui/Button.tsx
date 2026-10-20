@@ -19,7 +19,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={`focus-visible:outline-focus inline-flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-lg px-4 font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60 ${VARIANTS[variant]} ${className}`}
+      className={`inline-flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-lg px-4 font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-60 ${VARIANTS[variant]} ${className}`}
       {...props}
     />
   );

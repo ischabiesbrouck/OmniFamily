@@ -15,7 +15,9 @@
     "label": "Hoofdmenu",
     "today": "Vandaag",
     "settings": "Instellingen",
-    "calendar": "Agenda"
+    "calendar": "Agenda",
+    "tasks": "Taken",
+    "groceries": "Boodschappen"
   },
   "roles": {
     "parent": "Ouder",
@@ -150,5 +152,66 @@
         "invalidTimeZone": "Kies een geldige tijdzone."
       }
     }
+  },
+  "tasks": {
+    "title": "Taken & klusjes",
+    "add": "Taak toevoegen",
+    "name": "Taak",
+    "assignee": "Voor",
+    "nobody": "Iedereen",
+    "due": "Uiterlijk",
+    "dueTime": "Tijd",
+    "points": "Punten",
+    "event": "Gekoppelde afspraak",
+    "noEvent": "Geen",
+    "open": "Te doen",
+    "done": "Klaar",
+    "empty": "Niets te doen.",
+    "markDone": "“{title}” afvinken",
+    "markOpen": "“{title}” weer openzetten",
+    "delete": "“{title}” verwijderen",
+    "dueOn": "Uiterlijk {date}",
+    "pointsValue": "{points, plural, one {# punt} other {# punten}}",
+    "leaderboard": "Punten",
+    "balance": "{name}: {points, plural, one {# punt} other {# punten}}",
+    "filter": "Taken tonen voor",
+    "everyone": "Iedereen",
+    "errors": {
+      "titleRequired": "Vul een taak in.",
+      "invalidDue": "Vul een geldige datum in.",
+      "invalidPoints": "Punten zijn een heel getal van 0 tot 1000."
+    }
+  },
+  "groceries": {
+    "title": "Boodschappen",
+    "add": "Toevoegen",
+    "name": "Artikel",
+    "category": "Afdeling",
+    "quantity": "Hoeveelheid",
+    "empty": "De lijst is leeg.",
+    "clearPurchased": "Afgevinkte artikelen wissen",
+    "markBought": "“{name}” gekocht",
+    "markNeeded": "“{name}” nog nodig",
+    "delete": "“{name}” verwijderen",
+    "forEvent": "voor {title}",
+    "categories": {
+      "Produce": "Groente & fruit",
+      "Dairy": "Zuivel",
+      "Pantry": "Voorraadkast",
+      "Frozen": "Diepvries",
+      "Household": "Huishouden",
+      "Other": "Overig"
+    },
+    "errors": {
+      "nameRequired": "Vul een artikel in."
+    }
+  },
+  "linked": {
+    "title": "Gekoppeld aan deze afspraak",
+    "tasks": "Taken",
+    "groceries": "Boodschappen",
+    "addTask": "Taak toevoegen",
+    "addGrocery": "Artikel toevoegen",
+    "badge": "{done}/{total} taken klaar"
   }
 }

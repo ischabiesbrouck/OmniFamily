@@ -8,7 +8,7 @@ import { todayIn } from '@/lib/time/zoned';
 import { useDeviceStore } from '@/stores/deviceStore';
 import { DayAgenda } from './DayAgenda';
 import { EventDialog, type EditorState } from './EventDialog';
-import { useOccurrences } from './useOccurrences';
+import { useOccurrences, useTaskProgress } from './useOccurrences';
 
 export function TodayAgenda() {
   const zone = useTimeZone() ?? 'UTC';
@@ -18,6 +18,7 @@ export function TodayAgenda() {
   const today = todayIn(zone);
   const window = useMemo(() => windowFor('day', today, zone), [today, zone]);
   const occurrences = useOccurrences(window, zone, activeMemberId);
+  const progress = useTaskProgress();
 
   if (!occurrences) return null;
   return (
@@ -25,6 +26,7 @@ export function TodayAgenda() {
       <DayAgenda
         occurrences={occurrences}
         members={members}
+        progress={progress}
         onOpen={(occurrence) => setEditor({ mode: 'edit', occurrence })}
       />
       <EventDialog

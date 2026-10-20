@@ -143,7 +143,7 @@ export function EventForm({
           {members.map((m) => (
             <label
               key={m.id}
-              className="border-ink/20 flex min-h-12 items-center gap-2 rounded-lg border px-3"
+              className="flex min-h-12 items-center gap-2 rounded-lg border border-ink/20 px-3"
             >
               <input
                 type="checkbox"
@@ -198,7 +198,7 @@ export function EventForm({
       )}
 
       {error === 'invalidTimeZone' && (
-        <p role="alert" className="text-danger font-medium">
+        <p role="alert" className="font-medium text-danger">
           {t('errors.invalidTimeZone')}
         </p>
       )}

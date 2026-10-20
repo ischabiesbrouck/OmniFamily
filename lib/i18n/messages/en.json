@@ -15,7 +15,9 @@
     "label": "Main",
     "today": "Today",
     "settings": "Settings",
-    "calendar": "Calendar"
+    "calendar": "Calendar",
+    "tasks": "Tasks",
+    "groceries": "Groceries"
   },
   "roles": {
     "parent": "Parent",
@@ -150,5 +152,66 @@
         "invalidTimeZone": "Choose a valid time zone."
       }
     }
+  },
+  "tasks": {
+    "title": "Tasks & chores",
+    "add": "Add task",
+    "name": "Task",
+    "assignee": "For",
+    "nobody": "Anyone",
+    "due": "Due date",
+    "dueTime": "Time",
+    "points": "Points",
+    "event": "Linked event",
+    "noEvent": "None",
+    "open": "To do",
+    "done": "Done",
+    "empty": "Nothing to do.",
+    "markDone": "Mark “{title}” done",
+    "markOpen": "Mark “{title}” not done",
+    "delete": "Delete “{title}”",
+    "dueOn": "Due {date}",
+    "pointsValue": "{points, plural, one {# point} other {# points}}",
+    "leaderboard": "Points",
+    "balance": "{name}: {points, plural, one {# point} other {# points}}",
+    "filter": "Show tasks for",
+    "everyone": "Everyone",
+    "errors": {
+      "titleRequired": "Enter a task.",
+      "invalidDue": "Enter a valid due date.",
+      "invalidPoints": "Points must be a whole number from 0 to 1000."
+    }
+  },
+  "groceries": {
+    "title": "Groceries",
+    "add": "Add",
+    "name": "Item",
+    "category": "Aisle",
+    "quantity": "Amount",
+    "empty": "The list is empty.",
+    "clearPurchased": "Clear ticked items",
+    "markBought": "Mark “{name}” bought",
+    "markNeeded": "Mark “{name}” needed",
+    "delete": "Delete “{name}”",
+    "forEvent": "for {title}",
+    "categories": {
+      "Produce": "Fruit & veg",
+      "Dairy": "Dairy",
+      "Pantry": "Pantry",
+      "Frozen": "Frozen",
+      "Household": "Household",
+      "Other": "Other"
+    },
+    "errors": {
+      "nameRequired": "Enter an item."
+    }
+  },
+  "linked": {
+    "title": "Linked to this event",
+    "tasks": "Tasks",
+    "groceries": "Shopping",
+    "addTask": "Add task",
+    "addGrocery": "Add item",
+    "badge": "{done}/{total} tasks done"
   }
 }

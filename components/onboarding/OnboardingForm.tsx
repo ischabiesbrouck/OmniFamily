@@ -158,7 +158,7 @@ export function OnboardingForm() {
 
       <section
         aria-labelledby="security-title"
-        className="border-ink/20 rounded-lg border p-4 text-sm"
+        className="rounded-lg border border-ink/20 p-4 text-sm"
       >
         <h2 id="security-title" className="mb-1 font-semibold">
           {t('securityTitle')}
@@ -168,7 +168,7 @@ export function OnboardingForm() {
       </section>
 
       {failure && (
-        <p role="alert" className="text-danger font-medium">
+        <p role="alert" className="font-medium text-danger">
           {failure}
         </p>
       )}

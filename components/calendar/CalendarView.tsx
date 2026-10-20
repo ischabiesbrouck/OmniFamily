@@ -14,6 +14,7 @@ import {
   type CalendarView as View,
 } from '@/lib/calendar/grid';
 import { useMembers } from '@/lib/db/repositories/hooks';
+import { progressFor, type TaskProgress } from '@/lib/db/repositories/tasks';
 import type { FamilyMember } from '@/lib/db/schema';
 import { occurrencesOnDay, type Occurrence } from '@/lib/recurrence/expand';
 import { floatingDateToUtc, parseFloatingDate, todayIn, type FloatingDate } from '@/lib/time/zoned';
@@ -21,7 +22,7 @@ import { useDeviceStore } from '@/stores/deviceStore';
 import { DayAgenda } from './DayAgenda';
 import { EventDialog, type EditorState } from './EventDialog';
 import { OccurrenceChip } from './OccurrenceChip';
-import { useOccurrences } from './useOccurrences';
+import { useOccurrences, useTaskProgress } from './useOccurrences';
 
 const MONTH_CELL_LIMIT = 3;
 
@@ -51,6 +52,7 @@ export function CalendarView() {
   const anchor = validDate(params.get('date')) ?? today;
   const window = useMemo(() => windowFor(view, anchor, zone), [view, anchor, zone]);
   const occurrences = useOccurrences(window, zone, activeMemberId) ?? [];
+  const progress = useTaskProgress();
 
   const navigate = (nextView: View, nextAnchor: FloatingDate) =>
     router.replace(`${pathname}?view=${nextView}&date=${nextAnchor}`, { scroll: false });
@@ -95,7 +97,7 @@ export function CalendarView() {
         <div
           role="group"
           aria-label={t('views.label')}
-          className="border-ink/30 flex rounded-lg border"
+          className="flex rounded-lg border border-ink/30"
         >
           {VIEWS.map((v) => (
             <Button
@@ -118,6 +120,7 @@ export function CalendarView() {
           occurrences={occurrencesOnDay(occurrences, anchor, zone)}
           members={members}
           onOpen={open}
+          progress={progress}
         />
       ) : (
         <Grid
@@ -129,6 +132,7 @@ export function CalendarView() {
           occurrences={occurrences}
           members={members}
           onOpen={open}
+          progress={progress}
           onOpenDay={(date) => navigate('day', date)}
           label={label}
           more={(count) => t('more', { count })}
@@ -158,6 +162,7 @@ function Grid({
   occurrences,
   members,
   onOpen,
+  progress,
   onOpenDay,
   label,
   more,
@@ -171,6 +176,7 @@ function Grid({
   occurrences: Occurrence[];
   members: readonly FamilyMember[];
   onOpen: (o: Occurrence) => void;
+  progress: Map<string, TaskProgress>;
   onOpenDay: (date: FloatingDate) => void;
   label: (date: FloatingDate, options: DateTimeFormatOptions) => string;
   more: (count: number) => string;
@@ -179,7 +185,7 @@ function Grid({
   const month = anchor.slice(0, 7);
   return (
     <div className="overflow-x-auto">
-      <div role="grid" className="bg-ink/15 grid min-w-[42rem] grid-cols-7 gap-px rounded-lg p-px">
+      <div role="grid" className="grid min-w-[42rem] grid-cols-7 gap-px rounded-lg bg-ink/15 p-px">
         <div role="row" className="contents">
           {dates.slice(0, 7).map((d) => (
             <div
@@ -201,14 +207,14 @@ function Grid({
                 <div
                   key={d}
                   role="gridcell"
-                  className={`bg-surface flex flex-col gap-1 p-1 ${view === 'month' ? 'min-h-32' : 'min-h-64'} ${outside ? 'text-muted' : ''}`}
+                  className={`flex flex-col gap-1 bg-surface p-1 ${view === 'month' ? 'min-h-32' : 'min-h-64'} ${outside ? 'text-muted' : ''}`}
                 >
                   <button
                     type="button"
                     onClick={() => onOpenDay(d)}
                     aria-label={openDayLabel(d)}
                     aria-current={d === today ? 'date' : undefined}
-                    className="hover:bg-ink/10 aria-[current=date]:bg-ink aria-[current=date]:text-surface inline-flex size-12 items-center justify-center self-start rounded-full font-semibold"
+                    className="inline-flex size-12 items-center justify-center self-start rounded-full font-semibold hover:bg-ink/10 aria-[current=date]:bg-ink aria-[current=date]:text-surface"
                   >
                     {label(d, { day: 'numeric' })}
                   </button>
@@ -218,6 +224,7 @@ function Grid({
                       occurrence={o}
                       members={members}
                       onOpen={onOpen}
+                      progress={progressFor(o.event, progress)}
                       compact
                     />
                   ))}

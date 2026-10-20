@@ -15,6 +15,7 @@ import type { FamilyMember } from '@/lib/db/schema';
 import type { Occurrence } from '@/lib/recurrence/expand';
 import type { FloatingDate } from '@/lib/time/zoned';
 import { EventForm } from './EventForm';
+import { LinkedItems } from './LinkedItems';
 
 export type EditorState =
   { mode: 'new'; date: FloatingDate } | { mode: 'edit'; occurrence: Occurrence } | null;
@@ -59,10 +60,10 @@ export function EventDialog({
   return (
     <Dialog.Root open={state !== null} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-ink/50 fixed inset-0" />
+        <Dialog.Overlay className="fixed inset-0 bg-ink/50" />
         <Dialog.Content
           aria-describedby={undefined}
-          className="bg-surface fixed inset-x-0 bottom-0 max-h-[90dvh] overflow-y-auto rounded-t-2xl p-5 shadow-xl sm:inset-auto sm:top-1/2 sm:left-1/2 sm:w-full sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl"
+          className="fixed inset-x-0 bottom-0 max-h-[90dvh] overflow-y-auto rounded-t-2xl bg-surface p-5 shadow-xl sm:inset-auto sm:top-1/2 sm:left-1/2 sm:w-full sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl"
         >
           <Dialog.Title className="mb-4 text-xl font-semibold">
             {state?.mode === 'edit' ? t('editTitle') : t('newTitle')}
@@ -88,6 +89,11 @@ export function EventDialog({
                   : undefined
               }
             />
+          )}
+          {state?.mode === 'edit' && (
+            <div className="mt-4">
+              <LinkedItems eventId={state.occurrence.seriesId} members={members} />
+            </div>
           )}
         </Dialog.Content>
       </Dialog.Portal>

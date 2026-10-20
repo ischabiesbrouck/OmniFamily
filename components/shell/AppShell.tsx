@@ -11,6 +11,8 @@ import { maybeSweepTombstones } from '@/lib/db/repositories/maintenance';
 const NAV = [
   { href: '/', key: 'today' },
   { href: '/calendar', key: 'calendar' },
+  { href: '/tasks', key: 'tasks' },
+  { href: '/groceries', key: 'groceries' },
   { href: '/settings', key: 'settings' },
 ] as const;
 
@@ -41,9 +43,9 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-5xl flex-col">
-      <header className="border-ink/15 flex items-center justify-between gap-4 border-b px-4 py-2">
+      <header className="flex items-center justify-between gap-4 border-b border-ink/15 px-4 py-2">
         <span className="text-lg font-semibold">{household.householdName}</span>
-        <nav aria-label={t('nav.label')}>
+        <nav aria-label={t('nav.label')} className="overflow-x-auto">
           <ul className="flex gap-1">
             {NAV.map((item) => (
               <li key={item.href}>
@@ -54,7 +56,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                       ? 'page'
                       : undefined
                   }
-                  className="hover:bg-ink/5 aria-[current=page]:bg-ink aria-[current=page]:text-surface inline-flex min-h-12 items-center rounded-lg px-3 font-medium"
+                  className="inline-flex min-h-12 items-center rounded-lg px-3 font-medium hover:bg-ink/5 aria-[current=page]:bg-ink aria-[current=page]:text-surface"
                 >
                   {t(`nav.${item.key}`)}
                 </Link>
