@@ -32,10 +32,12 @@ export interface Writer {
   readonly now: number;
   readonly deviceId: string;
   insert<E extends Entity>(entity: E, input: NewRecord<RecordOf<E>>): Promise<RecordOf<E>>;
+  /** `stamp` names fields that receive this update's own HLC (e.g. `completedHlc`). */
   update<E extends Entity>(
     entity: E,
     id: string,
     patch: RecordPatch<RecordOf<E>>,
+    stamp?: readonly string[],
   ): Promise<RecordOf<E>>;
   remove<E extends Entity>(entity: E, id: string): Promise<RecordOf<E>>;
   get<E extends Entity>(entity: E, id: string): Promise<RecordOf<E> | undefined>;
@@ -60,7 +62,7 @@ export function decodePayload(payload: ArrayBuffer): unknown {
   return JSON.parse(new TextDecoder().decode(payload));
 }
 
-function isHlcState(value: unknown): value is HlcState {
+export function isHlcState(value: unknown): value is HlcState {
   if (typeof value !== 'object' || value === null) return false;
   const v = value as Record<string, unknown>;
   return typeof v.pt === 'number' && typeof v.c === 'number';
@@ -167,14 +169,16 @@ export class RepositoryCore {
           await enqueue(entity, 'insert', record);
           return record;
         },
-        update: async (entity, id, patch) => {
+        update: async (entity, id, patch, stamp = []) => {
           const current = await table(entity).get(id);
           if (!isLive(current)) throw new RecordNotFoundError(entity, id);
+          const hlc = clock.send();
           const record = withoutUndefined({
             ...current,
             ...patch,
+            ...Object.fromEntries(stamp.map((field) => [field, hlc])),
             id,
-            hlc: clock.send(),
+            hlc,
             updatedAt: now,
             syncStatus:
               current.syncStatus === 'pending_insert' ? 'pending_insert' : 'pending_update',

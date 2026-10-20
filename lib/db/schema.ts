@@ -70,6 +70,10 @@ export interface FamilyTask extends Syncable {
   completedBy?: string;
   pointsValue?: number;
   eventId?: string;
+  /** HLC of the last completion change: `completed*` fields merge on this, per field (§5.3). */
+  completedHlc?: string;
+  /** Bumped on every completion toggle; makes ledger entry ids deterministic (D-6.4). */
+  completionGen?: number;
 }
 
 export const GROCERY_CATEGORIES = [

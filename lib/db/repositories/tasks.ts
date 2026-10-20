@@ -97,11 +97,18 @@ export function setTaskCompleted(
     if (!task || task.deletedAt !== undefined) throw new RecordNotFoundError('task', taskId);
     if (task.completed === completed) return { task };
 
-    const updated = await w.update('task', taskId, {
-      completed,
-      completedAt: completed ? w.now : undefined,
-      completedBy: completed ? byMemberId : undefined,
-    });
+    const generation = (task.completionGen ?? 0) + 1;
+    const updated = await w.update(
+      'task',
+      taskId,
+      {
+        completed,
+        completedAt: completed ? w.now : undefined,
+        completedBy: completed ? byMemberId : undefined,
+        completionGen: generation,
+      },
+      ['completedHlc'],
+    );
 
     const points = task.pointsValue ?? 0;
     const memberId = completed
@@ -109,7 +116,12 @@ export function setTaskCompleted(
       : (task.assigneeId ?? task.completedBy);
     if (points <= 0 || !memberId) return { task: updated };
 
+    // Deterministic id: two devices completing the same chore while apart produce the SAME
+    // entry, which merges by LWW instead of paying out twice (D-6.4).
+    const ledgerId = `${taskId}:${generation}`;
+    if (await w.get('points', ledgerId)) return { task: updated };
     const ledger = await w.insert('points', {
+      id: ledgerId,
       memberId,
       delta: completed ? points : -points,
       reason: 'task_completed',
