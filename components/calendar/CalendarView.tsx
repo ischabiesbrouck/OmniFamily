@@ -20,7 +20,8 @@ import { occurrencesOnDay, type Occurrence } from '@/lib/recurrence/expand';
 import { floatingDateToUtc, parseFloatingDate, todayIn, type FloatingDate } from '@/lib/time/zoned';
 import { useDeviceStore } from '@/stores/deviceStore';
 import { DayAgenda } from './DayAgenda';
-import { EventDialog, type EditorState } from './EventDialog';
+import type { EditorState } from './EventDialog';
+import { LazyEventDialog as EventDialog } from './LazyEventDialog';
 import { OccurrenceChip } from './OccurrenceChip';
 import { useOccurrences, useTaskProgress } from './useOccurrences';
 

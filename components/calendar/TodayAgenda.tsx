@@ -7,7 +7,8 @@ import { useMembers } from '@/lib/db/repositories/hooks';
 import { todayIn } from '@/lib/time/zoned';
 import { useDeviceStore } from '@/stores/deviceStore';
 import { DayAgenda } from './DayAgenda';
-import { EventDialog, type EditorState } from './EventDialog';
+import type { EditorState } from './EventDialog';
+import { LazyEventDialog as EventDialog } from './LazyEventDialog';
 import { useOccurrences, useTaskProgress } from './useOccurrences';
 
 export function TodayAgenda() {
