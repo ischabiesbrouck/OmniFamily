@@ -31,6 +31,8 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
     NEXT_PUBLIC_FEATURE_SYNC: process.env.NEXT_PUBLIC_FEATURE_SYNC === 'true' ? 'true' : 'false',
+    // Relays for internet sync (D-10.1); empty means the built-in public list.
+    NEXT_PUBLIC_SYNC_RELAYS: process.env.NEXT_PUBLIC_SYNC_RELAYS ?? '',
     NEXT_PUBLIC_FEATURE_INTAKE:
       process.env.NEXT_PUBLIC_FEATURE_INTAKE === 'true' ? 'true' : 'false',
   },

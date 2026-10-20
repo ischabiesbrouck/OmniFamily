@@ -9,6 +9,7 @@ import { OnboardingForm } from '@/components/onboarding/OnboardingForm';
 import { BrandMark } from '@/components/shell/BrandMark';
 import { Button } from '@/components/ui/Button';
 import { useHousehold } from '@/lib/db/repositories/hooks';
+import { parseInviteCode } from '@/lib/sync/relay/inviteCode';
 
 // Flag inlined at build time; webpack drops the dead import() when off (D-6.9).
 const JoinFamily =
@@ -29,6 +30,17 @@ export default function OnboardingPage() {
   const household = useHousehold();
   const router = useRouter();
   const [joining, setJoining] = useState(false);
+  const [inviteCode, setInviteCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    // An invite link (D-10.4) carries its secret in the fragment; take it and wipe the URL.
+    if (!JoinFamily || !window.location.hash.startsWith('#join=')) return;
+    const code = parseInviteCode(window.location.hash);
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    if (!code) return;
+    setInviteCode(code);
+    setJoining(true);
+  }, []);
 
   useEffect(() => {
     // While joining, the household appears mid-transfer; JoinFamily navigates when done.
@@ -62,7 +74,13 @@ export default function OnboardingPage() {
 
       <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6 sm:px-6 lg:py-12">
         {joining && JoinFamily ? (
-          <JoinFamily onBack={() => setJoining(false)} />
+          <JoinFamily
+            initialCode={inviteCode}
+            onBack={() => {
+              setInviteCode(null);
+              setJoining(false);
+            }}
+          />
         ) : (
           <>
             <div>

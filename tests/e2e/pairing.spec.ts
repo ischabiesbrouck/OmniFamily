@@ -30,6 +30,7 @@ test('acceptance: device B receives device A’s vault and a subsequent edit', a
 
   // A shows the offer code…
   await a.getByRole('link', { name: en.nav.settings }).click();
+  await a.getByText(s.lanTitle).click();
   await a.getByRole('button', { name: s.connect }).click();
   const offer = await codeFrom(a);
   expect(offer).toMatch(/^OF1\/1\/\d+\//);

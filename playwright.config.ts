@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const port = 3000;
+const relayPort = 7777;
 // Lets CI or a cloud sandbox point at a preinstalled Chromium instead of downloading one.
 const executablePath = process.env.PW_CHROMIUM_PATH;
 
@@ -35,11 +36,19 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
-    // e2e covers the flagged pairing (Phase 6) and AI intake (Phase 7) flows too.
-    command: `NEXT_PUBLIC_FEATURE_SYNC=true NEXT_PUBLIC_FEATURE_INTAKE=true pnpm build && pnpm start --port ${port}`,
-    url: `http://localhost:${port}`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
-  },
+  webServer: [
+    {
+      // e2e covers the flagged pairing (Phase 6) and AI intake (Phase 7) flows too, and
+      // points internet sync at a local relay instead of the public ones (D-10.1).
+      command: `NEXT_PUBLIC_FEATURE_SYNC=true NEXT_PUBLIC_FEATURE_INTAKE=true NEXT_PUBLIC_SYNC_RELAYS=ws://127.0.0.1:${relayPort} pnpm build && pnpm start --port ${port}`,
+      url: `http://localhost:${port}`,
+      reuseExistingServer: !process.env.CI,
+      timeout: 180_000,
+    },
+    {
+      command: `node tests/e2e/relay-server.mjs ${relayPort}`,
+      port: relayPort,
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 });

@@ -276,8 +276,8 @@
   "sync": {
     "devices": "Devices",
     "thisDevice": "This device",
-    "connect": "Connect another device",
-    "lanNote": "Devices sync directly with each other over the same Wi-Fi network. This version has no cloud relay, so both devices must be on the same network with the app open.",
+    "connect": "Connect on the same Wi-Fi",
+    "lanNote": "No internet? Devices on the same Wi-Fi can also sync directly. Both need the app open, and you scan a code on each device.",
     "defaultDeviceName": "New device",
     "hostStep1": "On the other device, open the app, choose “Join an existing family” and scan this code.",
     "hostStep2": "Then scan the code that appears on the other device.",
@@ -285,7 +285,7 @@
     "textCode": "No camera? Copy this code to the other device:",
     "copy": "Copy code",
     "copied": "Copied",
-    "pasteLabel": "Code from the other device",
+    "pasteLabel": "Code or invite link from the other device",
     "useCode": "Use this code",
     "scan": "Scan with camera",
     "stopScan": "Stop camera",
@@ -318,15 +318,50 @@
       "button": "Join an existing family",
       "title": "Join an existing family",
       "intro": "Bring this device into a family that already uses OmniFamily on another device.",
-      "step1": "On the device that already has the family, open Settings → Devices → “Connect another device”, then scan its code here.",
+      "step1": "On a device that already has the family, open Settings → Devices → “Add a device”. Scan its code here or paste the invite link.",
       "step2": "Now show this code to the other device.",
       "waiting": "Waiting for the other device…",
       "back": "Set up a new family instead",
-      "deviceName": "Name of this device"
+      "deviceName": "Name of this device",
+      "submit": "Join family",
+      "joining": "Joining… this takes a few seconds.",
+      "joined": "You’re in! Your family’s calendar is arriving now.",
+      "fromLink": "You opened an invite link. Give this device a name and join."
     },
     "done": "Done",
     "continue": "Continue",
-    "connected": "Connected. If the numbers match on both screens, you’re done."
+    "connected": "Connected. If the numbers match on both screens, you’re done.",
+    "intro": "Your devices keep each other up to date over the internet. Everything is encrypted on the device first, so the free relays that pass it on cannot read it.",
+    "lanTitle": "Without internet (same Wi-Fi)",
+    "online": {
+      "label": "Sync over the internet",
+      "hint": "Changes reach your other devices within seconds, even ones that are switched off now. Turn off to sync only on the same Wi-Fi."
+    },
+    "relay": {
+      "online": "Synced",
+      "connecting": "Connecting…",
+      "offline": "Offline · syncs later"
+    },
+    "invite": {
+      "button": "Add a device",
+      "title": "Scan this code with the new device",
+      "hint": "Open the camera on the new phone or tablet and scan the code, or send it the link. The invite works for 15 minutes.",
+      "qrLabel": "Invite code",
+      "link": "Invite link",
+      "copy": "Copy link",
+      "copied": "Copied",
+      "share": "Share link",
+      "shareTitle": "Join our family on OmniFamily",
+      "waiting": "Waiting for the new device…",
+      "joined": "{name} has joined your family.",
+      "failed": "Could not reach the sync service. Check the internet connection and try again."
+    },
+    "inviteErrors": {
+      "invalid": "That invite link is not valid.",
+      "not_found": "Invite not found. Check the internet connection, or create a new invite on the other device.",
+      "expired": "This invite has expired. Create a new one on the other device.",
+      "publish_failed": "Could not reach the sync service. Check the internet connection and try again."
+    }
   },
   "intake": {
     "label": "Quick add",

@@ -7,32 +7,72 @@ import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { getRepositories } from '@/lib/db/repositories';
 import { joinWithOfferCode } from '@/lib/sync/pairingFlow';
+import { relayUrls } from '@/lib/sync/relay/config';
+import { parseInviteCode } from '@/lib/sync/relay/inviteCode';
 import { useSyncStore } from '@/stores/syncStore';
 import { CodeInput } from './CodeInput';
 import { errorKey, type SyncErrorKey } from './errors';
 import { QrCode } from './QrCode';
 import { SyncStatus } from './SyncStatus';
 
+type InviteErrorKey = 'invalid' | 'not_found' | 'expired' | 'publish_failed';
+
 type Step =
   | { s: 'scan' }
+  | { s: 'joining' }
   | { s: 'answer'; frames: string[]; checkCode: string }
-  | { s: 'joined'; checkCode: string }
-  | { s: 'error'; key: SyncErrorKey };
+  | { s: 'joined'; checkCode: string | null }
+  | { s: 'error'; message: `errors.${SyncErrorKey}` | `inviteErrors.${InviteErrorKey}` };
 
-/** Onboarding → "Join an existing family" (joining side of D3). */
-export default function JoinFamily({ onBack }: { onBack: () => void }) {
+/**
+ * Onboarding → "Join an existing family". An invite link or code (D-10.4) joins in one step
+ * over the internet; a LAN pairing code (D3) starts the two-code exchange.
+ */
+export default function JoinFamily({
+  onBack,
+  initialCode = null,
+}: {
+  onBack: () => void;
+  initialCode?: string | null;
+}) {
   const t = useTranslations('sync');
   const router = useRouter();
   const [deviceName, setDeviceName] = useState(() => t('defaultDeviceName'));
   const [step, setStep] = useState<Step>({ s: 'scan' });
-  const [busy, setBusy] = useState(false);
   const store = useSyncStore.getState;
+  const name = () => deviceName.trim() || t('defaultDeviceName');
 
-  async function acceptOffer(text: string) {
-    setBusy(true);
+  async function joinByInvite(code: string) {
+    setStep({ s: 'joining' });
+    const [{ RelayPool }, { acceptInvite, InviteError }] = await Promise.all([
+      import('@/lib/sync/relay/pool'),
+      import('@/lib/sync/relay/invite'),
+    ]);
+    const pool = new RelayPool(relayUrls());
+    try {
+      await acceptInvite(getRepositories().core, pool, code, name());
+      setStep({ s: 'joined', checkCode: null });
+    } catch (error) {
+      setStep({
+        s: 'error',
+        message:
+          error instanceof InviteError ? `inviteErrors.${error.code}` : 'inviteErrors.not_found',
+      });
+    } finally {
+      pool.close();
+    }
+  }
+
+  async function acceptCode(text: string) {
+    const invite = parseInviteCode(text);
+    if (invite) {
+      await joinByInvite(invite);
+      return;
+    }
+    setStep({ s: 'joining' });
     try {
       const join = await joinWithOfferCode(getRepositories().core, text, {
-        deviceName: deviceName.trim() || t('defaultDeviceName'),
+        deviceName: name(),
         onState: (state, error) => store().update(state, error?.code),
       });
       setStep({ s: 'answer', frames: join.frames, checkCode: join.checkCode });
@@ -41,9 +81,7 @@ export default function JoinFamily({ onBack }: { onBack: () => void }) {
       await connected.ready;
       setStep({ s: 'joined', checkCode: join.checkCode });
     } catch (error) {
-      setStep({ s: 'error', key: errorKey(error) });
-    } finally {
-      setBusy(false);
+      setStep({ s: 'error', message: `errors.${errorKey(error)}` });
     }
   }
 
@@ -52,8 +90,7 @@ export default function JoinFamily({ onBack }: { onBack: () => void }) {
       <h2 id="join-heading" className="text-2xl font-semibold">
         {t('join.title')}
       </h2>
-      <p>{t('join.intro')}</p>
-      <p className="text-sm text-muted">{t('lanNote')}</p>
+      <p>{initialCode ? t('join.fromLink') : t('join.intro')}</p>
 
       {step.s === 'scan' && (
         <>
@@ -62,9 +99,23 @@ export default function JoinFamily({ onBack }: { onBack: () => void }) {
             value={deviceName}
             onChange={(e) => setDeviceName(e.target.value)}
           />
-          <p className="font-medium">{t('join.step1')}</p>
-          <CodeInput onCode={(text) => void acceptOffer(text)} disabled={busy} />
+          {initialCode ? (
+            <Button className="self-start" onClick={() => void joinByInvite(initialCode)}>
+              {t('join.submit')}
+            </Button>
+          ) : (
+            <>
+              <p className="font-medium">{t('join.step1')}</p>
+              <CodeInput onCode={(text) => void acceptCode(text)} />
+            </>
+          )}
         </>
+      )}
+
+      {step.s === 'joining' && (
+        <p role="status" className="font-medium">
+          {t('join.joining')}
+        </p>
       )}
 
       {step.s === 'answer' && (
@@ -79,8 +130,16 @@ export default function JoinFamily({ onBack }: { onBack: () => void }) {
 
       {step.s === 'joined' && (
         <>
-          <p className="text-lg font-semibold">{t('checkCode', { code: step.checkCode })}</p>
-          <p>{t('connected')}</p>
+          {step.checkCode ? (
+            <>
+              <p className="text-lg font-semibold">{t('checkCode', { code: step.checkCode })}</p>
+              <p>{t('connected')}</p>
+            </>
+          ) : (
+            <p role="status" className="text-lg font-semibold">
+              {t('join.joined')}
+            </p>
+          )}
           <SyncStatus />
           <Button className="self-start" onClick={() => router.replace('/')}>
             {t('continue')}
@@ -91,7 +150,7 @@ export default function JoinFamily({ onBack }: { onBack: () => void }) {
       {step.s === 'error' && (
         <div className="flex flex-col gap-2">
           <p role="alert" className="font-medium text-danger">
-            {t(`errors.${step.key}`)}
+            {t(step.message)}
           </p>
           <Button variant="secondary" className="self-start" onClick={() => setStep({ s: 'scan' })}>
             {t('cancel')}

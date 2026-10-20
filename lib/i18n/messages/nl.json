@@ -276,8 +276,8 @@
   "sync": {
     "devices": "Apparaten",
     "thisDevice": "Dit apparaat",
-    "connect": "Ander apparaat koppelen",
-    "lanNote": "Apparaten synchroniseren rechtstreeks met elkaar via hetzelfde wifi-netwerk. Deze versie heeft geen cloudserver, dus beide apparaten moeten op hetzelfde netwerk zitten met de app open.",
+    "connect": "Koppelen via hetzelfde wifi",
+    "lanNote": "Geen internet? Apparaten op hetzelfde wifi kunnen ook rechtstreeks synchroniseren. Beide hebben de app open en je scant op elk apparaat een code.",
     "defaultDeviceName": "Nieuw apparaat",
     "hostStep1": "Open de app op het andere apparaat, kies “Aansluiten bij een bestaand gezin” en scan deze code.",
     "hostStep2": "Scan daarna de code die op het andere apparaat verschijnt.",
@@ -285,7 +285,7 @@
     "textCode": "Geen camera? Kopieer deze code naar het andere apparaat:",
     "copy": "Code kopiëren",
     "copied": "Gekopieerd",
-    "pasteLabel": "Code van het andere apparaat",
+    "pasteLabel": "Code of uitnodigingslink van het andere apparaat",
     "useCode": "Deze code gebruiken",
     "scan": "Scannen met camera",
     "stopScan": "Camera stoppen",
@@ -318,15 +318,50 @@
       "button": "Aansluiten bij een bestaand gezin",
       "title": "Aansluiten bij een bestaand gezin",
       "intro": "Voeg dit apparaat toe aan een gezin dat OmniFamily al op een ander apparaat gebruikt.",
-      "step1": "Open op het apparaat met het gezin Instellingen → Apparaten → “Ander apparaat koppelen” en scan de code hier.",
+      "step1": "Open op een apparaat met het gezin Instellingen → Apparaten → “Apparaat toevoegen”. Scan de code hier of plak de uitnodigingslink.",
       "step2": "Laat deze code nu aan het andere apparaat zien.",
       "waiting": "Wachten op het andere apparaat…",
       "back": "Toch een nieuw gezin instellen",
-      "deviceName": "Naam van dit apparaat"
+      "deviceName": "Naam van dit apparaat",
+      "submit": "Aansluiten",
+      "joining": "Aansluiten… dit duurt een paar seconden.",
+      "joined": "Gelukt! De gezinsagenda komt nu binnen.",
+      "fromLink": "Je hebt een uitnodigingslink geopend. Geef dit apparaat een naam en sluit aan."
     },
     "done": "Klaar",
     "continue": "Verder",
-    "connected": "Verbonden. Als de cijfers op beide schermen gelijk zijn, ben je klaar."
+    "connected": "Verbonden. Als de cijfers op beide schermen gelijk zijn, ben je klaar.",
+    "intro": "Je apparaten houden elkaar via internet op de hoogte. Alles wordt eerst op het apparaat versleuteld, zodat de gratis doorgeefservers het niet kunnen lezen.",
+    "lanTitle": "Zonder internet (zelfde wifi)",
+    "online": {
+      "label": "Synchroniseren via internet",
+      "hint": "Wijzigingen bereiken je andere apparaten binnen enkele seconden, ook apparaten die nu uit staan. Zet uit om alleen via hetzelfde wifi te synchroniseren."
+    },
+    "relay": {
+      "online": "Gesynchroniseerd",
+      "connecting": "Verbinden…",
+      "offline": "Offline · synchroniseert later"
+    },
+    "invite": {
+      "button": "Apparaat toevoegen",
+      "title": "Scan deze code met het nieuwe apparaat",
+      "hint": "Open de camera op de nieuwe telefoon of tablet en scan de code, of stuur de link. De uitnodiging werkt 15 minuten.",
+      "qrLabel": "Uitnodigingscode",
+      "link": "Uitnodigingslink",
+      "copy": "Link kopiëren",
+      "copied": "Gekopieerd",
+      "share": "Link delen",
+      "shareTitle": "Doe mee met ons gezin in OmniFamily",
+      "waiting": "Wachten op het nieuwe apparaat…",
+      "joined": "{name} is lid geworden van je gezin.",
+      "failed": "De synchronisatiedienst is niet bereikbaar. Controleer de internetverbinding en probeer het opnieuw."
+    },
+    "inviteErrors": {
+      "invalid": "Die uitnodigingslink is niet geldig.",
+      "not_found": "Uitnodiging niet gevonden. Controleer de internetverbinding of maak een nieuwe uitnodiging op het andere apparaat.",
+      "expired": "Deze uitnodiging is verlopen. Maak een nieuwe op het andere apparaat.",
+      "publish_failed": "De synchronisatiedienst is niet bereikbaar. Controleer de internetverbinding en probeer het opnieuw."
+    }
   },
   "intake": {
     "label": "Snel toevoegen",

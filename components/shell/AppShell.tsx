@@ -28,6 +28,10 @@ const SyncStatus =
   process.env.NEXT_PUBLIC_FEATURE_SYNC === 'true'
     ? dynamic(() => import('@/components/sync/SyncStatus').then((m) => m.SyncStatus))
     : null;
+const RelaySyncRunner =
+  process.env.NEXT_PUBLIC_FEATURE_SYNC === 'true'
+    ? dynamic(() => import('@/components/sync/RelaySyncRunner'), { ssr: false })
+    : null;
 // Sheets load on first use; the shell itself stays light (SPEC §9).
 const AddSheet = dynamic(() => import('./AddSheet').then((m) => m.AddSheet), { ssr: false });
 const ImportSheet = dynamic(
@@ -140,6 +144,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {sheet !== null && sheet !== 'import' && <AddSheet />}
       {sheet === 'import' && <ImportSheet />}
       <EventEditorHost />
+      {RelaySyncRunner && <RelaySyncRunner />}
       <Toaster />
     </div>
   );

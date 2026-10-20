@@ -48,3 +48,39 @@ export async function open(
   );
   return JSON.parse(new TextDecoder().decode(plaintext));
 }
+
+/** Byte variant of `seal` for large payloads (relay snapshots): IV ‖ ciphertext. */
+export async function sealBytes(
+  key: CryptoKey,
+  plaintext: Uint8Array<ArrayBuffer>,
+  additionalData: string,
+): Promise<Uint8Array<ArrayBuffer>> {
+  const iv = crypto.getRandomValues(new Uint8Array(IV_BYTES));
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv, additionalData: new TextEncoder().encode(additionalData) },
+    key,
+    plaintext,
+  );
+  const out = new Uint8Array(IV_BYTES + ciphertext.byteLength);
+  out.set(iv, 0);
+  out.set(new Uint8Array(ciphertext), IV_BYTES);
+  return out;
+}
+
+export async function openBytes(
+  key: CryptoKey,
+  sealed: Uint8Array<ArrayBuffer>,
+  additionalData: string,
+): Promise<Uint8Array<ArrayBuffer>> {
+  if (sealed.length <= IV_BYTES) throw new Error('Sealed message too short');
+  const plaintext = await crypto.subtle.decrypt(
+    {
+      name: 'AES-GCM',
+      iv: sealed.slice(0, IV_BYTES),
+      additionalData: new TextEncoder().encode(additionalData),
+    },
+    key,
+    sealed.slice(IV_BYTES),
+  );
+  return new Uint8Array(plaintext);
+}

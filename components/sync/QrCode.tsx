@@ -10,7 +10,8 @@ const FRAME_MS = 700;
 
 function matrixPath(text: string): { size: number; d: string } {
   const qr = qrcode(0, 'M');
-  qr.addData(text, 'Alphanumeric');
+  // Pairing frames are Base45 (alphanumeric mode, denser); invite links need byte mode.
+  qr.addData(text, /^[0-9A-Z $%*+\-./:]*$/.test(text) ? 'Alphanumeric' : 'Byte');
   qr.make();
   const n = qr.getModuleCount();
   let d = '';
@@ -20,7 +21,17 @@ function matrixPath(text: string): { size: number; d: string } {
 }
 
 /** Shows one static QR, or cycles through frames as an animated QR (SPEC D3). */
-export function QrCode({ frames }: { frames: readonly string[] }) {
+export function QrCode({
+  frames,
+  label,
+  textLabel,
+  copyLabel,
+}: {
+  frames: readonly string[];
+  label?: string;
+  textLabel?: string;
+  copyLabel?: string;
+}) {
   const t = useTranslations('sync');
   const [index, setIndex] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -39,7 +50,7 @@ export function QrCode({ frames }: { frames: readonly string[] }) {
       {current && (
         <svg
           role="img"
-          aria-label={t('qrLabel')}
+          aria-label={label ?? t('qrLabel')}
           viewBox={`0 0 ${current.size} ${current.size}`}
           className="aspect-square w-full max-w-72 bg-white"
           shapeRendering="crispEdges"
@@ -53,7 +64,7 @@ export function QrCode({ frames }: { frames: readonly string[] }) {
         </p>
       )}
       <label className="flex flex-col gap-1 text-sm">
-        {t('textCode')}
+        {textLabel ?? t('textCode')}
         <textarea
           readOnly
           value={text}
@@ -68,7 +79,7 @@ export function QrCode({ frames }: { frames: readonly string[] }) {
           void navigator.clipboard?.writeText(text).then(() => setCopied(true));
         }}
       >
-        {copied ? t('copied') : t('copy')}
+        {copied ? t('copied') : (copyLabel ?? t('copy'))}
       </Button>
     </div>
   );

@@ -4,13 +4,17 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button } from '@/components/ui/Button';
 import { FrameCollector, framesToText } from '@/lib/sync/qrPayload';
+import { parseInviteCode } from '@/lib/sync/relay/inviteCode';
 
 interface BarcodeDetectorLike {
   detect(source: CanvasImageSource): Promise<Array<{ rawValue: string }>>;
 }
 type BarcodeDetectorCtor = new (options: { formats: string[] }) => BarcodeDetectorLike;
 
-/** Camera scan (BarcodeDetector, else jsQR) with a paste fallback; reassembles multi-frame codes. */
+/**
+ * Camera scan (BarcodeDetector, else jsQR) with a paste fallback; reassembles multi-frame
+ * pairing codes and accepts invite links as they are.
+ */
 export function CodeInput({
   onCode,
   disabled = false,
@@ -67,6 +71,12 @@ export function CodeInput({
           for (const value of values) {
             if (seen.has(value)) continue;
             seen.add(value);
+            if (parseInviteCode(value)) {
+              // An invite (D-10.4) is a single code: done at once.
+              setScanning(false);
+              onCode(value);
+              return;
+            }
             try {
               setProgress(collector.add(value));
             } catch {
