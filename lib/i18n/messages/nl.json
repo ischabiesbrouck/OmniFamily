@@ -14,7 +14,8 @@
   "nav": {
     "label": "Hoofdmenu",
     "today": "Vandaag",
-    "settings": "Instellingen"
+    "settings": "Instellingen",
+    "calendar": "Agenda"
   },
   "roles": {
     "parent": "Ouder",
@@ -61,7 +62,8 @@
   "today": {
     "greeting": "Hallo, {name}",
     "greetingAnonymous": "Hallo",
-    "members": "Gezin"
+    "members": "Gezin",
+    "agenda": "Vandaag"
   },
   "settings": {
     "title": "Instellingen",
@@ -93,5 +95,60 @@
     "throttled": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
     "locked": "Vergrendeld na te veel pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
     "noPin": "Deze persoon heeft geen pincode."
+  },
+  "calendar": {
+    "title": "Agenda",
+    "views": {
+      "label": "Weergave",
+      "month": "Maand",
+      "week": "Week",
+      "day": "Dag"
+    },
+    "previous": "Vorige",
+    "next": "Volgende",
+    "today": "Vandaag",
+    "newEvent": "Nieuwe afspraak",
+    "allDay": "Hele dag",
+    "more": "+{count} meer",
+    "noEvents": "Niets gepland.",
+    "openDay": "{date} openen",
+    "timeRange": "{start}–{end}",
+    "form": {
+      "newTitle": "Nieuwe afspraak",
+      "editTitle": "Afspraak bewerken",
+      "title": "Titel",
+      "description": "Notities",
+      "location": "Locatie",
+      "allDay": "Hele dag",
+      "date": "Datum",
+      "startDate": "Begindatum",
+      "endDate": "Einddatum",
+      "startTime": "Begint",
+      "endTime": "Eindigt",
+      "timeZone": "Tijdzone",
+      "members": "Wie",
+      "visibility": "Zichtbaar voor",
+      "visibilityFamily": "Hele gezin",
+      "visibilityPrivate": "Alleen de betrokkenen",
+      "repeat": "Herhaalt",
+      "repeatNone": "Herhaalt niet",
+      "repeatDAILY": "Elke dag",
+      "repeatWEEKLY": "Elke week",
+      "repeatMONTHLY": "Elke maand",
+      "repeatYEARLY": "Elk jaar",
+      "scope": "Toepassen op",
+      "scopeThis": "Alleen deze keer",
+      "scopeAll": "Alle keren",
+      "delete": "Verwijderen",
+      "deleteConfirm": "Deze afspraak verwijderen?",
+      "close": "Sluiten",
+      "errors": {
+        "titleRequired": "Vul een titel in.",
+        "invalidDate": "Vul een geldige datum in.",
+        "invalidTime": "Vul een geldige tijd in.",
+        "endBeforeStart": "Het einde moet na het begin liggen.",
+        "invalidTimeZone": "Kies een geldige tijdzone."
+      }
+    }
   }
 }

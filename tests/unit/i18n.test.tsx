@@ -53,3 +53,13 @@ describe('i18n', () => {
     expect(screen.getByText(catalogues.en.app.tagline)).toBeInTheDocument();
   });
 });
+
+describe('formatting locale', () => {
+  it('keeps the regional tag of the chosen language', async () => {
+    const { formattingLocale } = await import('@/lib/i18n/config');
+    expect(formattingLocale('en', ['en-GB', 'nl'])).toBe('en-GB');
+    expect(formattingLocale('nl', ['en-GB', 'nl-BE'])).toBe('nl-BE');
+    expect(formattingLocale('nl', ['en-GB'])).toBe('nl');
+    expect(formattingLocale('en', [])).toBe('en');
+  });
+});

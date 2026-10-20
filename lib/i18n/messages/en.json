@@ -14,7 +14,8 @@
   "nav": {
     "label": "Main",
     "today": "Today",
-    "settings": "Settings"
+    "settings": "Settings",
+    "calendar": "Calendar"
   },
   "roles": {
     "parent": "Parent",
@@ -61,7 +62,8 @@
   "today": {
     "greeting": "Hello, {name}",
     "greetingAnonymous": "Hello",
-    "members": "Family"
+    "members": "Family",
+    "agenda": "Today"
   },
   "settings": {
     "title": "Settings",
@@ -93,5 +95,60 @@
     "throttled": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
     "locked": "Locked after too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
     "noPin": "This person has no PIN."
+  },
+  "calendar": {
+    "title": "Calendar",
+    "views": {
+      "label": "View",
+      "month": "Month",
+      "week": "Week",
+      "day": "Day"
+    },
+    "previous": "Previous",
+    "next": "Next",
+    "today": "Today",
+    "newEvent": "New event",
+    "allDay": "All day",
+    "more": "+{count} more",
+    "noEvents": "Nothing planned.",
+    "openDay": "Open {date}",
+    "timeRange": "{start}–{end}",
+    "form": {
+      "newTitle": "New event",
+      "editTitle": "Edit event",
+      "title": "Title",
+      "description": "Notes",
+      "location": "Location",
+      "allDay": "All day",
+      "date": "Date",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "startTime": "Starts",
+      "endTime": "Ends",
+      "timeZone": "Time zone",
+      "members": "Who",
+      "visibility": "Visible to",
+      "visibilityFamily": "Whole family",
+      "visibilityPrivate": "Only the people involved",
+      "repeat": "Repeats",
+      "repeatNone": "Does not repeat",
+      "repeatDAILY": "Every day",
+      "repeatWEEKLY": "Every week",
+      "repeatMONTHLY": "Every month",
+      "repeatYEARLY": "Every year",
+      "scope": "Apply to",
+      "scopeThis": "This occurrence",
+      "scopeAll": "All occurrences",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this event?",
+      "close": "Close",
+      "errors": {
+        "titleRequired": "Enter a title.",
+        "invalidDate": "Enter a valid date.",
+        "invalidTime": "Enter a valid time.",
+        "endBeforeStart": "The end must be after the start.",
+        "invalidTimeZone": "Choose a valid time zone."
+      }
+    }
   }
 }

@@ -14,3 +14,19 @@ export function resolveLocale(preferred: readonly string[]): Locale {
   }
   return defaultLocale;
 }
+
+/**
+ * Full BCP-47 tag used for date/number formatting: the first browser preference in the
+ * chosen catalogue's language (so `en-GB` keeps a 24-hour clock), else the catalogue locale.
+ */
+export function formattingLocale(catalogue: Locale, preferred: readonly string[]): string {
+  for (const tag of preferred) {
+    if (tag.toLowerCase().split('-')[0] !== catalogue) continue;
+    try {
+      return Intl.getCanonicalLocales(tag)[0] ?? catalogue;
+    } catch {
+      continue;
+    }
+  }
+  return catalogue;
+}
