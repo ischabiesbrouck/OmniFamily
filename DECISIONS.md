@@ -122,3 +122,19 @@ Deviations from, and clarifications of, SPEC.md. Newest phase last. Format: **ID
 | ------------------------ | -------------------------------------------------------------------------------------- |
 | `@radix-ui/react-dialog` | Accessible modal (focus trap, Escape, aria) for the event editor; Radix is in SPEC §2. |
 | `lucide-react`           | Icons, listed in SPEC §2.                                                              |
+
+## Phase 4 — Tasks, points, groceries, linking (2026-10-20)
+
+**D-4.1 — The points ledger is append-only.** Completing a task with points inserts a `task_completed` entry for the assignee (or, if the task is unassigned, whoever ticked it), in the same transaction as the task update. Reopening inserts a reversal with the same reason and a negative delta; repeat completions are no-ops. Balances are always the sum of entries.
+
+**D-4.2 — A date-only due date is stored as 23:59 on that day in the task's zone** (`dueInstant` + `timeZone`, per D6).
+
+**D-4.3 — `FamilyTask.eventId` / `GroceryItem.associatedEventId` are the source of truth for links; `FamilyEvent.linkedTaskIds` / `linkedGroceryIds` are kept in step in the same transaction.** Tasks for a recurring event link to the series master, so the badge shows on every occurrence.
+
+**D-4.4 — "Chores" are tasks with points; no separate entity and no recurring tasks in v1.** SPEC §4 has no recurrence fields on `FamilyTask`; recurring chores are a v2 candidate.
+
+**D-4.5 — Toggles paint optimistically (`useOptimisticToggle`).** The checkbox shows the new state at once and hands back to the live IndexedDB value when it catches up; a failed write rolls back. This meets §2's "optimistic render" and S2.
+
+**D-4.6 — "Clear ticked items" tombstones purchased groceries;** the 90-day sweep purges them later (§5.4).
+
+**D-4.7 — Prettier's Tailwind plugin reads `app/globals.css` (`tailwindStylesheet`)** so v4 theme classes sort correctly.
