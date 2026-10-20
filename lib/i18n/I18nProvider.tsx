@@ -2,6 +2,7 @@
 
 import { NextIntlClientProvider } from 'next-intl';
 import { useEffect, useSyncExternalStore, type ReactNode } from 'react';
+import { useDeviceStore } from '@/stores/deviceStore';
 import { defaultLocale, isLocale, resolveLocale, type Locale } from './config';
 import { catalogues } from './messages';
 
@@ -26,7 +27,8 @@ export function I18nProvider({
   locale?: Locale | undefined;
 }) {
   const detected = useSyncExternalStore(subscribe, browserLocale, serverLocale);
-  const locale = isLocale(override) ? override : detected;
+  const chosen = useDeviceStore((s) => s.locale);
+  const locale = isLocale(override) ? override : isLocale(chosen) ? chosen : detected;
   const timeZone = useSyncExternalStore(subscribe, browserTimeZone, () => 'UTC');
 
   useEffect(() => {

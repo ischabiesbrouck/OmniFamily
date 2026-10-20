@@ -1,8 +1,12 @@
 @import 'tailwindcss';
 
+/* Text tokens hold ≥ 7:1 against --color-surface (WCAG 2.2 AAA, SPEC §6). */
 @theme {
   --color-surface: #ffffff;
   --color-ink: #111827;
+  --color-muted: #374151;
+  --color-danger: #991b1b;
+  --color-focus: #1e40af;
 }
 
 body {

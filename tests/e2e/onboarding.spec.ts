@@ -1,0 +1,45 @@
+import { expect, test } from '@playwright/test';
+import en from '../../lib/i18n/messages/en.json' with { type: 'json' };
+
+test.use({ locale: 'en-US' });
+
+test('first run: onboarding → Today, then a parent PIN gates Settings', async ({ page }) => {
+  await page.goto('/');
+  await expect(page).toHaveURL(/\/onboarding$/);
+  await expect(page.getByText(en.onboarding.pinDisclosure)).toBeVisible();
+
+  await page.getByLabel(en.onboarding.yourName).fill('Lotte');
+  await page.getByRole('button', { name: en.onboarding.submit }).click();
+
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole('heading', { name: 'Hello, Lotte' })).toBeVisible();
+
+  // The vault survives a reload: no account, nothing on a server.
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Hello, Lotte' })).toBeVisible();
+
+  await page.getByRole('link', { name: en.nav.settings }).click();
+  await page.getByRole('button', { name: en.settings.setPin }).click();
+  await page.getByLabel(en.settings.newPin).fill('2580');
+  await page.getByRole('button', { name: en.common.save }).click();
+  await expect(page.getByText(en.settings.pinSet)).toBeVisible();
+
+  // Leaving and returning re-locks Settings behind the parent PIN.
+  await page.getByRole('link', { name: en.nav.today }).click();
+  await page.getByRole('link', { name: en.nav.settings }).click();
+  await page.getByRole('button', { name: 'Unlock as Lotte' }).click();
+  await page.getByLabel('Enter the PIN for Lotte').fill('1111');
+  await page.getByRole('button', { name: en.pin.submit }).click();
+  await expect(page.getByText(en.pin.wrong)).toBeVisible();
+  await page.getByLabel('Enter the PIN for Lotte').fill('2580');
+  await page.getByRole('button', { name: en.pin.submit }).click();
+  await expect(page.getByRole('heading', { name: en.settings.members })).toBeVisible();
+});
+
+test('Dutch browsers get Dutch copy', async ({ browser }) => {
+  const context = await browser.newContext({ locale: 'nl-NL' });
+  const page = await context.newPage();
+  await page.goto('/onboarding');
+  await expect(page.getByRole('heading', { name: 'Stel je gezin in' })).toBeVisible();
+  await context.close();
+});

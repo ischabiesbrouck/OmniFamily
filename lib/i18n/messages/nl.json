@@ -4,6 +4,94 @@
     "tagline": "Je gezinsagenda, taken en klusjes — op dit apparaat, zonder account."
   },
   "common": {
-    "loading": "Laden…"
+    "loading": "Laden…",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "remove": "Verwijderen",
+    "add": "Toevoegen",
+    "optional": "optioneel"
+  },
+  "nav": {
+    "label": "Hoofdmenu",
+    "today": "Vandaag",
+    "settings": "Instellingen"
+  },
+  "roles": {
+    "parent": "Ouder",
+    "child": "Kind",
+    "guest": "Gast"
+  },
+  "colors": {
+    "label": "Kleur",
+    "blue": "Blauw",
+    "red": "Rood",
+    "green": "Groen",
+    "purple": "Paars",
+    "orange": "Oranje",
+    "teal": "Blauwgroen",
+    "brown": "Bruin",
+    "slate": "Leigrijs"
+  },
+  "onboarding": {
+    "title": "Stel je gezin in",
+    "intro": "Alles blijft op dit apparaat. Geen e-mail, geen wachtwoord, geen account.",
+    "householdName": "Gezinsnaam",
+    "defaultHouseholdName": "Ons gezin",
+    "yourName": "Je naam",
+    "deviceName": "Naam van dit apparaat",
+    "defaultDeviceName": "Gezinstablet",
+    "pin": "Ouder-pincode",
+    "pinHint": "4–8 cijfers. Laat leeg om over te slaan; je kunt er later een instellen bij Instellingen.",
+    "otherMembers": "Andere gezinsleden",
+    "memberName": "Naam",
+    "role": "Rol",
+    "addMember": "Gezinslid toevoegen",
+    "removeMember": "{name} verwijderen",
+    "submit": "Beginnen",
+    "creating": "Bezig met instellen…",
+    "errors": {
+      "nameRequired": "Vul een naam in.",
+      "pinInvalid": "Een pincode bestaat uit 4 tot 8 cijfers.",
+      "failed": "Instellen mislukt: {message}"
+    },
+    "securityTitle": "Goed om te weten",
+    "pinDisclosure": "Een pincode van 4 cijfers heeft ~10⁴ entropie en is een drempel op een gedeeld scherm, geen beveiligingsgrens.",
+    "storageDisclosure": "IndexedDB is in v1 niet versleuteld opgeslagen; de app vertrouwt op de apparaatversleuteling van het besturingssysteem."
+  },
+  "today": {
+    "greeting": "Hallo, {name}",
+    "greetingAnonymous": "Hallo",
+    "members": "Gezin"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "members": "Gezinsleden",
+    "thisDevice": "Dit apparaat wordt gebruikt door",
+    "addMember": "Gezinslid toevoegen",
+    "pinSet": "Pincode ingesteld",
+    "pinNone": "Geen pincode",
+    "setPin": "Pincode instellen",
+    "changePin": "Pincode wijzigen",
+    "clearPin": "Pincode verwijderen",
+    "newPin": "Nieuwe pincode",
+    "removeMemberConfirm": "{name} uit het gezin verwijderen?",
+    "lastParent": "De laatste ouder kan niet worden verwijderd.",
+    "language": "Taal",
+    "languageAuto": "Zelfde als dit apparaat",
+    "languages": {
+      "en": "English",
+      "nl": "Nederlands"
+    },
+    "parentGate": "Instellingen zijn voor ouders. Kies een ouder om te ontgrendelen.",
+    "unlockAs": "Ontgrendelen als {name}"
+  },
+  "pin": {
+    "prompt": "Voer de pincode van {name} in",
+    "label": "Pincode",
+    "submit": "Ontgrendelen",
+    "wrong": "Onjuiste pincode.",
+    "throttled": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
+    "locked": "Vergrendeld na te veel pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+    "noPin": "Deze persoon heeft geen pincode."
   }
 }

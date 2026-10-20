@@ -4,6 +4,94 @@
     "tagline": "Your family calendar, tasks and chores — on this device, no account needed."
   },
   "common": {
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "remove": "Remove",
+    "add": "Add",
+    "optional": "optional"
+  },
+  "nav": {
+    "label": "Main",
+    "today": "Today",
+    "settings": "Settings"
+  },
+  "roles": {
+    "parent": "Parent",
+    "child": "Child",
+    "guest": "Guest"
+  },
+  "colors": {
+    "label": "Colour",
+    "blue": "Blue",
+    "red": "Red",
+    "green": "Green",
+    "purple": "Purple",
+    "orange": "Orange",
+    "teal": "Teal",
+    "brown": "Brown",
+    "slate": "Slate"
+  },
+  "onboarding": {
+    "title": "Set up your family",
+    "intro": "Everything stays on this device. No email, no password, no account.",
+    "householdName": "Family name",
+    "defaultHouseholdName": "Our family",
+    "yourName": "Your name",
+    "deviceName": "Name of this device",
+    "defaultDeviceName": "Family tablet",
+    "pin": "Parent PIN",
+    "pinHint": "4–8 digits. Leave empty to skip; you can add one later in Settings.",
+    "otherMembers": "Other family members",
+    "memberName": "Name",
+    "role": "Role",
+    "addMember": "Add family member",
+    "removeMember": "Remove {name}",
+    "submit": "Start",
+    "creating": "Setting up…",
+    "errors": {
+      "nameRequired": "Enter a name.",
+      "pinInvalid": "A PIN is 4 to 8 digits.",
+      "failed": "Setup failed: {message}"
+    },
+    "securityTitle": "Good to know",
+    "pinDisclosure": "A 4-digit PIN has ~10⁴ entropy and is a UX speed bump on a shared screen, not a security boundary.",
+    "storageDisclosure": "IndexedDB is not encrypted at rest in v1; the app relies on OS-level device encryption."
+  },
+  "today": {
+    "greeting": "Hello, {name}",
+    "greetingAnonymous": "Hello",
+    "members": "Family"
+  },
+  "settings": {
+    "title": "Settings",
+    "members": "Family members",
+    "thisDevice": "This device is used by",
+    "addMember": "Add family member",
+    "pinSet": "PIN set",
+    "pinNone": "No PIN",
+    "setPin": "Set PIN",
+    "changePin": "Change PIN",
+    "clearPin": "Remove PIN",
+    "newPin": "New PIN",
+    "removeMemberConfirm": "Remove {name} from the family?",
+    "lastParent": "The last parent cannot be removed.",
+    "language": "Language",
+    "languageAuto": "Same as this device",
+    "languages": {
+      "en": "English",
+      "nl": "Nederlands"
+    },
+    "parentGate": "Settings are for parents. Choose a parent to unlock.",
+    "unlockAs": "Unlock as {name}"
+  },
+  "pin": {
+    "prompt": "Enter the PIN for {name}",
+    "label": "PIN",
+    "submit": "Unlock",
+    "wrong": "Wrong PIN.",
+    "throttled": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
+    "locked": "Locked after too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+    "noPin": "This person has no PIN."
   }
 }
