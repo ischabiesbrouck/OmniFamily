@@ -16,6 +16,7 @@ const config = [
       'test-results/**',
       'next-env.d.ts',
       'public/sw.js',
+      'public/ocr/**',
       'public/swe-worker-*.js',
     ],
   },

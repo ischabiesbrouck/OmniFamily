@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileUp, Plus } from 'lucide-react';
 import { useFormatter, useTimeZone, useTranslations, type DateTimeFormatOptions } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -56,6 +56,7 @@ export function CalendarView() {
   const members = useMembers() ?? [];
   const activeMemberId = useDeviceStore((s) => s.activeMemberId);
   const openEditor = useUiStore((s) => s.openEditor);
+  const openSheet = useUiStore((s) => s.openSheet);
   const wide = useMediaQuery('(min-width: 768px)');
   const now = useMinuteClock();
 
@@ -142,6 +143,10 @@ export function CalendarView() {
           options={VIEWS.map((v) => ({ value: v, label: t(`views.${v}`) }))}
           onChange={(v) => navigate(v, anchor)}
         />
+        <Button variant="secondary" onClick={() => openSheet('import')}>
+          <FileUp aria-hidden="true" className="size-5" />
+          {t('import')}
+        </Button>
         <Button onClick={() => openEditor({ mode: 'new', date: newEventDate })}>
           <Plus aria-hidden="true" className="size-5" />
           {t('newEvent')}

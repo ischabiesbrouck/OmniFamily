@@ -17,6 +17,9 @@ const withSerwist = withSerwistInit({
     ...APP_ROUTES.map((route) => (staticExport && route !== '/' ? `${route}/` : route)),
     '/manifest.webmanifest',
   ].map((url) => ({ url: `${basePath}${url}`, revision })),
+  // Only the icons are precached from public/; the 17 MB OCR engine in public/ocr is
+  // fetched on first photo import and then cached at runtime (app/sw.ts, D-9.4).
+  globPublicPatterns: ['icons/**/*'],
   // A reload would discard half-typed forms and interrupt the kiosk.
   reloadOnOnline: false,
   disable: process.env.NODE_ENV === 'development',

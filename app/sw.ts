@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 import { defaultCache } from '@serwist/next/worker';
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist';
-import { Serwist } from 'serwist';
+import { CacheFirst, ExpirationPlugin, Serwist } from 'serwist';
 import { handlePeriodicReminders } from '@/lib/notifications/worker';
 
 declare global {
@@ -24,7 +24,17 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: false,
-  runtimeCaching: defaultCache,
+  runtimeCaching: [
+    {
+      // The self-hosted OCR engine and language data: fetched once, then offline (D-9.4).
+      matcher: ({ url, sameOrigin }) => sameOrigin && url.pathname.includes('/ocr/'),
+      handler: new CacheFirst({
+        cacheName: 'ocr-assets',
+        plugins: [new ExpirationPlugin({ maxEntries: 16, maxAgeSeconds: 60 * 60 * 24 * 365 })],
+      }),
+    },
+    ...defaultCache,
+  ],
 });
 
 handlePeriodicReminders(self);

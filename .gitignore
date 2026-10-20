@@ -28,3 +28,6 @@ blob-report/
 public/sw.js
 public/sw.js.map
 public/swe-worker-*.js
+
+# generated OCR assets (scripts/copy-ocr-assets.mjs)
+public/ocr/

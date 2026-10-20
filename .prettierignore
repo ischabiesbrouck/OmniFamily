@@ -9,3 +9,4 @@ next-env.d.ts
 SPEC.md
 public/sw.js
 public/swe-worker-*.js
+public/ocr/

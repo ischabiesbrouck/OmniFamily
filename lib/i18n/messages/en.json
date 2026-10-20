@@ -193,7 +193,8 @@
         "endBeforeStart": "The end must be after the start.",
         "invalidTimeZone": "Choose a valid time zone."
       }
-    }
+    },
+    "import": "Import"
   },
   "tasks": {
     "title": "Tasks & chores",
@@ -389,5 +390,34 @@
     "groceryHint": "Put something on the list",
     "import": "Import dates",
     "importHint": "From a message, photo or spreadsheet"
+  },
+  "import": {
+    "title": "Import dates",
+    "intro": "Everything is read on this device. Nothing is uploaded.",
+    "tabs": {
+      "label": "Source",
+      "text": "Message",
+      "photo": "Photo",
+      "file": "Spreadsheet"
+    },
+    "textLabel": "Paste a message, e-mail or list",
+    "textPlaceholder": "e.g. Swimming Saturday 24 October 10:00 for Sem",
+    "find": "Find dates",
+    "takePhoto": "Take a photo",
+    "choosePhoto": "Choose an image",
+    "photoHint": "A school letter, invitation or screenshot. The first photo downloads the text reader once (about 17 MB); after that it works offline.",
+    "reading": "Reading text… {percent}%",
+    "recognised": "Text found in the photo (you can correct it)",
+    "chooseFile": "Choose a spreadsheet",
+    "fileHint": "Excel (.xlsx), LibreOffice (.ods) or CSV. A first row with headers such as Date, Time, What, Who works best.",
+    "unsupported": "This file type can’t be read. Save it as .xlsx or .csv and try again.",
+    "fileError": "This file could not be read.",
+    "found": "{count, plural, =0 {No dates found} one {# date found} other {# dates found}}",
+    "noneHint": "Try other text, or add the event yourself.",
+    "include": "Add “{title}”",
+    "from": "From: {source}",
+    "allDay": "All day",
+    "addSelected": "{count, plural, =0 {Nothing selected} one {Add # event} other {Add # events}}",
+    "ocrFailed": "The photo could not be read. Try a sharper photo or paste the text instead."
   }
 }

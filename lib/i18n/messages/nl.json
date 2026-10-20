@@ -193,7 +193,8 @@
         "endBeforeStart": "Het einde moet na het begin liggen.",
         "invalidTimeZone": "Kies een geldige tijdzone."
       }
-    }
+    },
+    "import": "Importeren"
   },
   "tasks": {
     "title": "Taken & klusjes",
@@ -389,5 +390,34 @@
     "groceryHint": "Iets op de lijst zetten",
     "import": "Datums importeren",
     "importHint": "Uit een bericht, foto of spreadsheet"
+  },
+  "import": {
+    "title": "Datums importeren",
+    "intro": "Alles wordt op dit apparaat gelezen. Er wordt niets geüpload.",
+    "tabs": {
+      "label": "Bron",
+      "text": "Bericht",
+      "photo": "Foto",
+      "file": "Spreadsheet"
+    },
+    "textLabel": "Plak een bericht, e-mail of lijst",
+    "textPlaceholder": "bijv. Zwemmen zaterdag 24 oktober 10:00 voor Sem",
+    "find": "Datums zoeken",
+    "takePhoto": "Foto maken",
+    "choosePhoto": "Afbeelding kiezen",
+    "photoHint": "Een schoolbrief, uitnodiging of schermafbeelding. De eerste foto downloadt eenmalig de tekstlezer (ongeveer 17 MB); daarna werkt het offline.",
+    "reading": "Tekst lezen… {percent}%",
+    "recognised": "Tekst uit de foto (je kunt hem verbeteren)",
+    "chooseFile": "Spreadsheet kiezen",
+    "fileHint": "Excel (.xlsx), LibreOffice (.ods) of CSV. Een eerste rij met kopjes zoals Datum, Tijd, Wat, Wie werkt het best.",
+    "unsupported": "Dit bestandstype kan niet worden gelezen. Sla het op als .xlsx of .csv en probeer het opnieuw.",
+    "fileError": "Dit bestand kon niet worden gelezen.",
+    "found": "{count, plural, =0 {Geen datums gevonden} one {# datum gevonden} other {# datums gevonden}}",
+    "noneHint": "Probeer andere tekst, of voeg de afspraak zelf toe.",
+    "include": "“{title}” toevoegen",
+    "from": "Uit: {source}",
+    "allDay": "Hele dag",
+    "addSelected": "{count, plural, =0 {Niets geselecteerd} one {# afspraak toevoegen} other {# afspraken toevoegen}}",
+    "ocrFailed": "De foto kon niet worden gelezen. Probeer een scherpere foto of plak de tekst."
   }
 }

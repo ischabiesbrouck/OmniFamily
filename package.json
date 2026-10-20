@@ -20,7 +20,10 @@
     "test:e2e": "playwright test",
     "budget": "node scripts/check-budget.mjs",
     "icons": "node scripts/generate-icons.mjs",
-    "lighthouse": "node scripts/lighthouse.mjs"
+    "lighthouse": "node scripts/lighthouse.mjs",
+    "ocr-assets": "node scripts/copy-ocr-assets.mjs",
+    "predev": "node scripts/copy-ocr-assets.mjs",
+    "prebuild": "node scripts/copy-ocr-assets.mjs"
   },
   "dependencies": {
     "@date-fns/tz": "1.5.0",
@@ -31,6 +34,7 @@
     "date-fns": "4.4.0",
     "dexie": "4.4.6",
     "dexie-react-hooks": "4.4.0",
+    "fflate": "0.8.3",
     "jsqr": "1.4.0",
     "lucide-react": "1.59.0",
     "next": "15.5.28",
