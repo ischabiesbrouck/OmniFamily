@@ -2,7 +2,10 @@ import { publicKeyOf } from './nostr';
 
 const SALT = new TextEncoder().encode('omnifamily-relay-v1');
 
-async function hkdfBits(ikm: Uint8Array<ArrayBuffer>, info: string): Promise<Uint8Array<ArrayBuffer>> {
+async function hkdfBits(
+  ikm: Uint8Array<ArrayBuffer>,
+  info: string,
+): Promise<Uint8Array<ArrayBuffer>> {
   const base = await crypto.subtle.importKey('raw', ikm, 'HKDF', false, ['deriveBits']);
   const bits = await crypto.subtle.deriveBits(
     { name: 'HKDF', hash: 'SHA-256', salt: SALT, info: new TextEncoder().encode(info) },

@@ -16,7 +16,10 @@ export interface Chunk {
   c: string;
 }
 
-async function pipe(bytes: Uint8Array<ArrayBuffer>, transform: CompressionStream | DecompressionStream) {
+async function pipe(
+  bytes: Uint8Array<ArrayBuffer>,
+  transform: CompressionStream | DecompressionStream,
+) {
   const stream = new Blob([bytes]).stream().pipeThrough(transform);
   return new Uint8Array(await new Response(stream).arrayBuffer());
 }
@@ -45,7 +48,10 @@ export async function decodeSnapshot(
   householdId: string,
   chunks: readonly Chunk[],
 ): Promise<unknown> {
-  const data = [...chunks].sort((a, b) => a.i - b.i).map((c) => c.c).join('');
+  const data = [...chunks]
+    .sort((a, b) => a.i - b.i)
+    .map((c) => c.c)
+    .join('');
   const zipped = await openBytes(key, fromBase64(data), householdId);
   const json = await pipe(zipped, new DecompressionStream('gzip'));
   return JSON.parse(new TextDecoder().decode(json));

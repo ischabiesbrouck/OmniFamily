@@ -53,7 +53,10 @@ export async function eventId(pubkey: string, t: EventTemplate): Promise<string>
   return toHex(new Uint8Array(digest));
 }
 
-export async function signEvent(template: EventTemplate, secretKey: Uint8Array): Promise<NostrEvent> {
+export async function signEvent(
+  template: EventTemplate,
+  secretKey: Uint8Array,
+): Promise<NostrEvent> {
   const pubkey = publicKeyOf(secretKey);
   const id = await eventId(pubkey, template);
   const sig = toHex(schnorr.sign(fromHex(id), secretKey));

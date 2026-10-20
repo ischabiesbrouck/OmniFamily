@@ -268,3 +268,53 @@ Owner's request: "turn on all options as easy as possible but sturdy and working
 | `tesseract.js`, `@tesseract.js-data/eng`, `@tesseract.js-data/nld` (dev) | On-device OCR; the data packages are copied into `public/ocr` at build time.              |
 | `read-excel-file`, `papaparse`, `fflate`                                 | `.xlsx`, `.csv/.tsv`, `.ods` reading (fflate is already a dependency of read-excel-file). |
 | `@radix-ui/react-tabs`                                                   | Accessible tabs in the import sheet (Radix is in SPEC §2).                                |
+
+## Phase 10 — Internet sync without a server of our own
+
+**D-10.0 — Owner decision overriding N4, D3 and D-9.5.** The owner asked for "simple sync". A LAN-only sync where both phones must have the app open on the same Wi-Fi and swap two QR codes every time is not simple. The owner's request explicitly overrides non-goal N4 (no sync relay). The constraints stay the same: free, zero-account, no server operated by this project, and nothing readable leaves the device. LAN pairing (D3) stays available under "Without internet".
+
+**D-10.1 — Public Nostr relays as an encrypted mailbox.** Sync uses five free public relays, configured in `lib/sync/relay/config.ts` and overridable with `NEXT_PUBLIC_SYNC_RELAYS`. This choice is the free, account-less option that also works when the devices are never online at the same time:
+
+- Nostr relays are many, independent and free, and they store events.
+- Only WebSockets are needed, so there is no NAT traversal to solve.
+
+Every event goes to every relay, so a relay that is down or forgets data costs nothing. Internet sync is a **device-local** setting (the `relaySync` row in `settings`, never synced). It switches on automatically on both devices when one invites the other, and can be turned off in Settings → Devices. With it off, the app makes no network requests, as before (S5).
+
+**D-10.2 — Signing: secp256k1 Schnorr via `@noble/curves`, a deliberate, narrow exception to D5 ("Web Crypto only").** Relays accept only BIP-340-signed events, and Web Crypto has no secp256k1.
+
+- **What the signature is for.** It is transport plumbing only: every device derives the same signing key from the household data key (HKDF-SHA-256, Web Crypto), and relays are asked for that author's events.
+- **What protects the data.** Confidentiality and integrity still come from AES-GCM-256 under the household key, sealed with Web Crypto (AAD = household id).
+- **Library choice.** `@noble/curves` is audited, has no dependencies beyond `@noble/hashes`, and is lazy-loaded only on devices that sync over the internet.
+
+**D-10.3 — The protocol is "each device publishes its full state".**
+
+- **Encoding.** The snapshot is all syncable records, tombstones included, without the local `syncStatus`. It goes through JSON → gzip → AES-GCM and is cut into ≤ 30 000-character chunks. Each chunk is a NIP-78 addressable event (`kind 30078`, `d = of:<deviceId>:<n>`), so a newer snapshot replaces the older one on the relay.
+- **Receiving.** A receiver reassembles chunks with the same snapshot id and merges them with the existing `applyRemoteRecords` (LWW on `hlc`, per-field task completion). The same merge code serves LAN and internet sync.
+- **Publishing.** A device publishes when the content hash changes (debounced 1.5 s, triggered by outbox rows or by merged remote changes) and republishes every 12 h, in case relays dropped it.
+- **Confirmation.** Outbox rows are acknowledged only after every chunk was stored by at least one relay; if no relay stored it, the device retries after 30 s.
+- **Why full state.** Full-state publishing is idempotent and resumable (§5.6). It needs no per-peer bookkeeping and converges for any number of devices. For a family-sized vault it is tens of kB.
+
+**D-10.4 — One-scan invites.**
+
+- **Creating.** "Add a device" creates a random 128-bit secret. From it, HKDF derives an author key and an AES-GCM key. The household id, name and data key are sealed under that AES key and published as an event that expires in 15 minutes (NIP-40, and checked by the receiver).
+- **Delivering.** The secret travels only in the QR code or link, as `…/onboarding/#join=<code>`. A URL fragment is never sent to a web server, and the app removes it from the address bar right away. The in-app scanner and the paste box accept both invite links and LAN codes.
+- **Joining.** When the new device's own record arrives, the inviting device shows "<name> has joined your family." and overwrites the invitation with an empty one (best effort; expiry is the limit).
+- **Security.** Whoever holds the link within 15 minutes can join, just as whoever sees the screen could. There is no check code because the secret never touches the relays.
+
+**D-10.5 — Background runner.** `RelaySyncRunner` is mounted in the app shell and on the wall display, behind `NEXT_PUBLIC_FEATURE_SYNC` (as D-6.9). It loads the relay engine on demand. The pool reconnects with exponential backoff (1 s → 60 s), resubscribes and reconnects at once on the browser's `online` event. The status chip shows Synced, Connecting… or Offline · syncs later; a live LAN session takes precedence.
+
+**D-10.6 — Known limits (documented in PRIVACY.md and SECURITY.md).**
+
+- **Metadata.** Relay operators can see the household's random public key, event times and sizes, the device ids in `d` tags and the connecting IP address. They cannot read content.
+- **Retention.** Public relays promise no retention. Data lives on the devices, and relays are only a mailbox.
+- **Removed devices.** A removed device keeps the household key; key rotation is a v2 item.
+- **Untested public relays.** This build environment cannot reach the public relays. Unit tests use an in-memory relay, and the e2e test runs two browsers against a local NIP-01 relay (`tests/e2e/relay-server.mjs`). Behaviour against the public relays is therefore unverified here, and redundancy across five relays is the mitigation.
+
+**D-10.7 — AI with your own key is parked** at the owner's request ("skip ai for now"). D-7.1 still applies.
+
+### Dependencies added in Phase 10
+
+| Package                 | Justification                                                         |
+| ----------------------- | --------------------------------------------------------------------- |
+| `@noble/curves`         | BIP-340 Schnorr signatures that relays require (D-10.2); lazy-loaded. |
+| `ws`, `@types/ws` (dev) | Local NIP-01 relay for the e2e tests.                                 |

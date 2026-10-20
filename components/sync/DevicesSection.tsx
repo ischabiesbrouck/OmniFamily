@@ -9,12 +9,7 @@ import { Switch } from '@/components/ui/Switch';
 import { getRepositories } from '@/lib/db/repositories';
 import { useHousehold, useLiveRecords, useSetting } from '@/lib/db/repositories/hooks';
 import { withBase } from '@/lib/pwa/basePath';
-import {
-  isRelaySyncOn,
-  RELAY_SYNC_KEY,
-  relayUrls,
-  setRelaySync,
-} from '@/lib/sync/relay/config';
+import { isRelaySyncOn, RELAY_SYNC_KEY, relayUrls, setRelaySync } from '@/lib/sync/relay/config';
 import { inviteLink } from '@/lib/sync/relay/inviteCode';
 import type { Invite } from '@/lib/sync/relay/invite';
 import type { RelayPool } from '@/lib/sync/relay/pool';

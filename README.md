@@ -15,7 +15,7 @@ An offline-first family calendar, task, chore and grocery app (PWA) with **zero-
 - English and Dutch
 - **Import dates** from a pasted message, a photo (on-device OCR) or a spreadsheet (.xlsx, .ods, .csv): reviewed before saving, nothing uploaded
 - Light and dark themes; phone, tablet and desktop layouts
-- QR pairing with encrypted LAN sync (on in the public demo; `NEXT_PUBLIC_FEATURE_SYNC=true`)
+- **Automatic sync between devices**: add a device with one QR scan or link; end-to-end encrypted, through free public Nostr relays (no account, no server of ours); LAN pairing without internet also available (`NEXT_PUBLIC_FEATURE_SYNC=true`, on in the public demo)
 - Optional AI quick add (`NEXT_PUBLIC_FEATURE_INTAKE=true`; needs a provider, see `DECISIONS.md` D-7.1)
 
 ## Develop

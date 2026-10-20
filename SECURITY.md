@@ -20,7 +20,15 @@ Anyone who can open the browser profile on an unlocked device can read the house
 
 PIN throttling is local to each device: exponential backoff (1 s, 2 s, 4 s, 8 s, 16 s) after 5 consecutive failures and a 15-minute lockout from the 10th; a correct PIN resets the counter. PIN attempt counters are never synced.
 
-## Pairing and sync (behind `NEXT_PUBLIC_FEATURE_SYNC`)
+## Internet sync (behind `NEXT_PUBLIC_FEATURE_SYNC`, DECISIONS D-10.x)
+
+- Every device publishes its full state to public Nostr relays, sealed with AES-GCM-256 under the household data key (AAD = household id). Relays never receive a key or plaintext.
+- Events are signed with a secp256k1 key derived from the household key (HKDF-SHA-256). That signature only lets relays index the events; it is not a security boundary. A narrow exception to "Web Crypto only" (D5): signing uses `@noble/curves`.
+- Invites: a random 128-bit secret in the QR code or link (URL fragment) derives the key that seals the household key on the relays; invitations expire after 15 minutes. **Anyone who has an unexpired invite link can join — share it only with your own devices.**
+- Relays see metadata: the household's public key, timing, sizes, device ids and IP addresses.
+- A removed device keeps the household key (no key rotation in this version).
+
+## LAN pairing
 
 - Devices pair by exchanging two QR codes (or the same text by hand). There is no signalling server, relay or account. WebRTC uses no STUN/TURN servers, so only devices on the same local network can connect.
 - Both screens show a 6-digit check code derived from the pairing secret. If the numbers differ, someone substituted a code: cancel the pairing.

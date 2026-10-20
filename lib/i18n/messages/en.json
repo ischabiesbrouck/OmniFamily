@@ -395,7 +395,7 @@
   },
   "privacy": {
     "title": "Privacy & data",
-    "intro": "Your family’s data lives on this device. Nothing is stored on a server.",
+    "intro": "Your family’s data lives on your devices. With internet sync on, only encrypted copies pass through public relays, which cannot read them.",
     "intakeConsent": "AI quick add",
     "consentGiven": "Allowed since {date}.",
     "consentNone": "Not allowed. Quick add asks before it sends anything.",

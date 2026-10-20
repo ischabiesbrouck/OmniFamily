@@ -91,7 +91,10 @@ async function household(name = 'Kitchen') {
 describe('nostr events', () => {
   it('are NIP-01 ids signed with BIP-340 Schnorr', async () => {
     const sk = fromHex('0000000000000000000000000000000000000000000000000000000000000003');
-    const e = await signEvent({ created_at: 1, kind: 30078, tags: [['d', 'x']], content: 'hi' }, sk);
+    const e = await signEvent(
+      { created_at: 1, kind: 30078, tags: [['d', 'x']], content: 'hi' },
+      sk,
+    );
     expect(e.pubkey).toBe('f9308a019258c31049344f85f89d5229b531c845836f99b08601f113bce036f9');
     expect(e.id).toBe(await eventId(e.pubkey, e));
     expect(schnorr.verify(fromHex(e.sig), fromHex(e.id), fromHex(e.pubkey))).toBe(true);
@@ -101,7 +104,10 @@ describe('nostr events', () => {
 describe('snapshots', () => {
   it('round-trip through several chunks and fail under another key', async () => {
     const key = await generateHouseholdKey();
-    const value = Array.from({ length: 200 }, (_, i) => ({ i, title: `Event ${i} ${Math.random()}` }));
+    const value = Array.from({ length: 200 }, (_, i) => ({
+      i,
+      title: `Event ${i} ${Math.random()}`,
+    }));
     const chunks = await encodeSnapshot(key, 'hh', value, 500);
     expect(chunks.length).toBeGreaterThan(1);
     expect(new Set(chunks.map((c) => c.s)).size).toBe(1);

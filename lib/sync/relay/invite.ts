@@ -1,11 +1,7 @@
 import { open, seal } from '@/lib/crypto/aead';
 import { exportHouseholdKey, importHouseholdKey } from '@/lib/crypto/householdKey';
 import type { RepositoryCore } from '@/lib/db/repositories/core';
-import {
-  ensureHouseholdKey,
-  getHousehold,
-  joinHousehold,
-} from '@/lib/db/repositories/household';
+import { ensureHouseholdKey, getHousehold, joinHousehold } from '@/lib/db/repositories/household';
 import type { HouseholdContext } from '@/lib/db/schema';
 import { setRelaySync } from './config';
 export { inviteLink, parseInviteCode } from './inviteCode';
@@ -80,7 +76,12 @@ export async function createInvite(
     ['expiration', String(expiresAt)],
   ];
   const event = await signEvent(
-    { created_at: createdAt, kind: APP_DATA_KIND, tags, content: await seal(keys.aesKey, payload, AAD) },
+    {
+      created_at: createdAt,
+      kind: APP_DATA_KIND,
+      tags,
+      content: await seal(keys.aesKey, payload, AAD),
+    },
     keys.secretKey,
   );
   if ((await pool.publish(event)) === 0) throw new InviteError('publish_failed');

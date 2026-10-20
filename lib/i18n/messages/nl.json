@@ -395,7 +395,7 @@
   },
   "privacy": {
     "title": "Privacy & gegevens",
-    "intro": "De gegevens van je gezin staan op dit apparaat. Er wordt niets op een server bewaard.",
+    "intro": "De gegevens van je gezin staan op je apparaten. Met synchroniseren via internet gaan alleen versleutelde kopieën via openbare doorgeefservers, die ze niet kunnen lezen.",
     "intakeConsent": "AI snel toevoegen",
     "consentGiven": "Toegestaan sinds {date}.",
     "consentNone": "Niet toegestaan. Snel toevoegen vraagt het eerst voordat er iets wordt verstuurd.",
