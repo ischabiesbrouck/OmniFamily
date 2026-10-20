@@ -110,7 +110,7 @@ export default function QuickAdd({ onEdit }: { onEdit: (draft: EventDraft) => vo
     : '';
 
   return (
-    <section className="flex flex-col gap-3 rounded-lg border border-ink/20 p-3">
+    <section className="flex flex-col gap-3 rounded-2xl border border-line bg-surface-2/40 p-3">
       <form onSubmit={onSubmit} className="flex flex-wrap items-end gap-2">
         <TextField
           className="min-w-56 flex-1"
@@ -136,7 +136,7 @@ export default function QuickAdd({ onEdit }: { onEdit: (draft: EventDraft) => vo
       )}
 
       {entry && (
-        <div className="flex flex-col gap-2 rounded-lg bg-ink/5 p-3">
+        <div className="flex flex-col gap-2 rounded-lg bg-surface-2 p-3">
           <h2 className="font-semibold">{t('review')}</h2>
           {entry.confidenceScore < LOW_CONFIDENCE && (
             <p className="font-medium text-danger">{t('lowConfidence')}</p>

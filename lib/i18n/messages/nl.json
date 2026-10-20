@@ -65,13 +65,31 @@
     },
     "securityTitle": "Goed om te weten",
     "pinDisclosure": "Een pincode van 4 cijfers heeft ~10⁴ entropie en is een drempel op een gedeeld scherm, geen beveiligingsgrens.",
-    "storageDisclosure": "IndexedDB is in v1 niet versleuteld opgeslagen; de app vertrouwt op de apparaatversleuteling van het besturingssysteem."
+    "storageDisclosure": "IndexedDB is in v1 niet versleuteld opgeslagen; de app vertrouwt op de apparaatversleuteling van het besturingssysteem.",
+    "props": {
+      "accountTitle": "Geen account",
+      "account": "In een paar seconden klaar. Geen e-mail, geen wachtwoord.",
+      "offlineTitle": "Werkt offline",
+      "offline": "Alles werkt zonder internet, ook op de wandtablet.",
+      "privateTitle": "Privé vanaf het begin",
+      "private": "De gegevens van je gezin blijven op je eigen apparaten."
+    },
+    "aboutYou": "Over jou",
+    "yourFamily": "Je gezin",
+    "securityAndDevice": "Pincode en apparaat"
   },
   "today": {
     "greeting": "Hallo, {name}",
     "greetingAnonymous": "Hallo",
     "members": "Gezin",
-    "agenda": "Vandaag"
+    "agenda": "Vandaag",
+    "chores": "Klusjes voor vandaag",
+    "noChores": "Geen klusjes meer. Top!",
+    "points": "Punten",
+    "shopping": "Boodschappenlijst",
+    "shoppingCount": "{count, plural, =0 {Niets te kopen} one {# ding te kopen} other {# dingen te kopen}}",
+    "seeAll": "Alles bekijken",
+    "openCalendar": "Agenda openen"
   },
   "settings": {
     "title": "Instellingen",
@@ -104,6 +122,13 @@
       "denied": "Meldingen zijn geblokkeerd voor deze app. Sta ze toe in de browserinstellingen.",
       "foregroundOnly": "Deze browser controleert niet op de achtergrond, dus herinneringen komen alleen als de app open is.",
       "iosNote": "Op iPhone en iPad werken herinneringen alleen als de app op het beginscherm staat, en alleen terwijl hij open is."
+    },
+    "appearance": "Weergave",
+    "theme": "Thema",
+    "themes": {
+      "system": "Systeem",
+      "light": "Licht",
+      "dark": "Donker"
     }
   },
   "pin": {
@@ -197,7 +222,8 @@
       "titleRequired": "Vul een taak in.",
       "invalidDue": "Vul een geldige datum in.",
       "invalidPoints": "Punten zijn een heel getal van 0 tot 1000."
-    }
+    },
+    "newTask": "Nieuwe taak"
   },
   "groceries": {
     "title": "Boodschappen",
@@ -221,7 +247,9 @@
     },
     "errors": {
       "nameRequired": "Vul een artikel in."
-    }
+    },
+    "newItem": "Nieuw artikel",
+    "toBuy": "{count, plural, =0 {Niets te kopen} one {# artikel te kopen} other {# artikelen te kopen}}"
   },
   "linked": {
     "title": "Gekoppeld aan deze afspraak",

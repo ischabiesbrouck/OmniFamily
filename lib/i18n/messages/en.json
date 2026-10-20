@@ -65,13 +65,31 @@
     },
     "securityTitle": "Good to know",
     "pinDisclosure": "A 4-digit PIN has ~10⁴ entropy and is a UX speed bump on a shared screen, not a security boundary.",
-    "storageDisclosure": "IndexedDB is not encrypted at rest in v1; the app relies on OS-level device encryption."
+    "storageDisclosure": "IndexedDB is not encrypted at rest in v1; the app relies on OS-level device encryption.",
+    "props": {
+      "accountTitle": "No account",
+      "account": "Start in seconds. No email, no password.",
+      "offlineTitle": "Works offline",
+      "offline": "Everything works without internet, also on the wall tablet.",
+      "privateTitle": "Private by design",
+      "private": "Your family’s data stays on your own devices."
+    },
+    "aboutYou": "About you",
+    "yourFamily": "Your family",
+    "securityAndDevice": "PIN and device"
   },
   "today": {
     "greeting": "Hello, {name}",
     "greetingAnonymous": "Hello",
     "members": "Family",
-    "agenda": "Today"
+    "agenda": "Today",
+    "chores": "Chores for today",
+    "noChores": "No chores left. Nice!",
+    "points": "Points",
+    "shopping": "Shopping list",
+    "shoppingCount": "{count, plural, =0 {Nothing to buy} one {# item to buy} other {# items to buy}}",
+    "seeAll": "See all",
+    "openCalendar": "Open calendar"
   },
   "settings": {
     "title": "Settings",
@@ -104,6 +122,13 @@
       "denied": "Notifications are blocked for this app. Allow them in the browser settings.",
       "foregroundOnly": "This browser has no background checks, so reminders arrive while the app is open.",
       "iosNote": "On iPhone and iPad, reminders need the app added to the Home Screen and arrive only while it is open."
+    },
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "themes": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
     }
   },
   "pin": {
@@ -197,7 +222,8 @@
       "titleRequired": "Enter a task.",
       "invalidDue": "Enter a valid due date.",
       "invalidPoints": "Points must be a whole number from 0 to 1000."
-    }
+    },
+    "newTask": "New task"
   },
   "groceries": {
     "title": "Groceries",
@@ -221,7 +247,9 @@
     },
     "errors": {
       "nameRequired": "Enter an item."
-    }
+    },
+    "newItem": "New item",
+    "toBuy": "{count, plural, =0 {Nothing to buy} one {# item to buy} other {# items to buy}}"
   },
   "linked": {
     "title": "Linked to this event",

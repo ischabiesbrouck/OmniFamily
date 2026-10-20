@@ -1,9 +1,9 @@
 'use client';
 
-import { Trash2 } from 'lucide-react';
+import { CalendarClock, Star, Trash2 } from 'lucide-react';
 import { useFormatter, useTimeZone, useTranslations } from 'next-intl';
 import { MemberAvatar } from '@/components/members/MemberAvatar';
-import { Button } from '@/components/ui/Button';
+import { IconButton } from '@/components/ui/Button';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { useOptimisticToggle } from '@/components/ui/useOptimisticToggle';
 import { getRepositories } from '@/lib/db/repositories';
@@ -32,42 +32,50 @@ export function TaskItem({
   const [completed, setCompleted] = useOptimisticToggle(task.completed, (next) =>
     setTaskCompleted(core, task.id, next, activeMemberId ?? undefined),
   );
+  const overdue = !completed && due !== undefined && due < Date.now();
 
   return (
-    <li className="flex items-center gap-2 rounded-lg border border-ink/15 pr-2">
+    <li className="flex items-center gap-1 rounded-xl bg-surface-2 pr-1 transition">
       <Checkbox
         checked={completed}
         aria-label={
-          task.completed
-            ? t('markOpen', { title: task.title })
-            : t('markDone', { title: task.title })
+          completed ? t('markOpen', { title: task.title }) : t('markDone', { title: task.title })
         }
         onChange={(e) => setCompleted(e.target.checked)}
       />
-      <div className="flex min-w-0 flex-1 flex-col py-2">
-        <span className={`font-medium ${completed ? 'text-muted line-through' : ''}`}>
+      <div className="flex min-w-0 flex-1 flex-col gap-1 py-2.5">
+        <span className={`font-semibold ${completed ? 'text-muted line-through' : ''}`}>
           {task.title}
         </span>
-        <span className="flex flex-wrap gap-x-3 text-sm text-muted">
-          {due !== undefined && (
-            <span className={!completed && due < Date.now() ? 'font-semibold text-danger' : ''}>
-              {t('dueOn', {
-                date: format.dateTime(new Date(due), { dateStyle: 'medium', timeZone: zone }),
-              })}
-            </span>
-          )}
-          {task.pointsValue ? <span>{t('pointsValue', { points: task.pointsValue })}</span> : null}
-        </span>
+        {(due !== undefined || task.pointsValue) && (
+          <span className="flex flex-wrap gap-1.5 text-xs font-semibold">
+            {due !== undefined && (
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 ${overdue ? 'bg-danger-soft text-danger' : 'bg-surface text-muted'}`}
+              >
+                <CalendarClock aria-hidden="true" className="size-3.5" />
+                {t('dueOn', {
+                  date: format.dateTime(new Date(due), { dateStyle: 'medium', timeZone: zone }),
+                })}
+              </span>
+            )}
+            {task.pointsValue ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-warning-soft px-2 py-0.5 text-warning">
+                <Star aria-hidden="true" className="size-3.5" />
+                {t('pointsValue', { points: task.pointsValue })}
+              </span>
+            ) : null}
+          </span>
+        )}
       </div>
       {assignee && <MemberAvatar member={assignee} size="sm" />}
       {!hideDelete && (
-        <Button
-          variant="ghost"
-          aria-label={t('delete', { title: task.title })}
+        <IconButton
+          label={t('delete', { title: task.title })}
           onClick={() => void deleteTask(core, task.id)}
         >
           <Trash2 aria-hidden="true" className="size-5" />
-        </Button>
+        </IconButton>
       )}
     </li>
   );

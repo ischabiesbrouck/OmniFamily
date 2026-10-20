@@ -77,7 +77,10 @@ function AddMemberForm({ nextColor }: { nextColor: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-3 rounded-lg border border-ink/20 p-4">
+    <form
+      onSubmit={onSubmit}
+      className="flex flex-col gap-3 rounded-2xl border border-line bg-surface-2/40 p-4"
+    >
       <h3 className="font-semibold">{t('settings.addMember')}</h3>
       <div className="flex flex-wrap items-end gap-2">
         <TextField
@@ -143,7 +146,10 @@ export function MemberSettings() {
 
       <ul className="flex flex-col gap-3">
         {members.map((m) => (
-          <li key={m.id} className="flex flex-col gap-2 rounded-lg border border-ink/20 p-3">
+          <li
+            key={m.id}
+            className="flex flex-col gap-2 rounded-2xl border border-line bg-surface-2/40 p-3"
+          >
             <div className="flex flex-wrap items-center gap-3">
               <MemberAvatar member={m} />
               <div className="flex flex-1 flex-col">

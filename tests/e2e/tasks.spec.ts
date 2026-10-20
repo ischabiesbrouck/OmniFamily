@@ -47,11 +47,11 @@ test('grocery list: add by aisle, tick off, clear', async ({ page }) => {
   await page.getByRole('link', { name: en.nav.groceries }).click();
   await expect(page.getByText(en.groceries.empty)).toBeVisible();
 
-  await page.getByLabel(en.groceries.name).fill('Milk');
+  await page.getByLabel(en.groceries.name, { exact: true }).fill('Milk');
   await page.getByLabel(en.groceries.quantity).fill('2 L');
   await page.getByLabel(en.groceries.category).selectOption('Dairy');
   await page.getByRole('button', { name: en.groceries.add, exact: true }).click();
-  await page.getByLabel(en.groceries.name).fill('Apples');
+  await page.getByLabel(en.groceries.name, { exact: true }).fill('Apples');
   await page.getByLabel(en.groceries.category).selectOption('Produce');
   await page.getByRole('button', { name: en.groceries.add, exact: true }).click();
 

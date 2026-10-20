@@ -191,3 +191,26 @@ export function progressFor(
     (event.recurrenceParentId ? progress.get(event.recurrenceParentId) : undefined)
   );
 }
+
+/** Open tasks that matter today: no due date, or due before the end of today (overdue included). */
+export function openForToday(tasks: readonly FamilyTask[], endOfToday: number): FamilyTask[] {
+  return tasks
+    .filter((task) => !task.completed && task.deletedAt === undefined)
+    .filter((task) => !task.dueInstant || Date.parse(task.dueInstant) < endOfToday)
+    .sort((a, b) => (a.dueInstant ?? '￿').localeCompare(b.dueInstant ?? '￿'));
+}
+
+/**
+ * Today's chore list: open tasks for today (see openForToday), then the ones completed
+ * today, so a tick stays visible (and can be undone) instead of the row vanishing.
+ */
+export function choresForToday(
+  tasks: readonly FamilyTask[],
+  startOfToday: number,
+  endOfToday: number,
+): FamilyTask[] {
+  const doneToday = tasks
+    .filter((t) => t.completed && t.deletedAt === undefined && (t.completedAt ?? 0) >= startOfToday)
+    .sort((a, b) => (a.completedAt ?? 0) - (b.completedAt ?? 0));
+  return [...openForToday(tasks, endOfToday), ...doneToday];
+}

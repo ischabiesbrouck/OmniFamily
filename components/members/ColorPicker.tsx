@@ -33,7 +33,7 @@ export function ColorPicker({
             <span className="sr-only">{t(c.id)}</span>
             <span
               aria-hidden="true"
-              className="size-9 rounded-full ring-offset-2 peer-checked:ring-4 peer-checked:ring-ink peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-focus"
+              className="size-9 rounded-full ring-offset-2 peer-checked:ring-4 peer-checked:ring-accent peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-focus"
               style={{ backgroundColor: c.hex }}
             />
           </label>

@@ -34,8 +34,11 @@ export function PrivacySection({ intakeEnabled }: { intakeEnabled: boolean }) {
   }
 
   return (
-    <section aria-labelledby="privacy-heading" className="flex flex-col gap-4">
-      <h2 id="privacy-heading" className="text-xl font-semibold">
+    <section
+      aria-labelledby="privacy-heading"
+      className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-5"
+    >
+      <h2 id="privacy-heading" className="text-lg font-semibold tracking-tight">
         {t('title')}
       </h2>
       <p>{t('intro')}</p>

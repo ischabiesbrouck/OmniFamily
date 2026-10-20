@@ -216,3 +216,29 @@ describe('groceries', () => {
     expect((await db.groceries.get(item.id))?.deletedAt).toBeDefined();
   });
 });
+
+describe('today’s chore list', () => {
+  it('lists open chores for today first, then those completed today; drops later and older ones', async () => {
+    const { repos, clock } = setupRepositories(Date.parse('2026-10-24T08:00:00Z'));
+    const startOfToday = Date.parse('2026-10-23T22:00:00Z'); // Amsterdam midnight
+    const endOfToday = Date.parse('2026-10-24T22:00:00Z');
+    const open = await createTask(repos.core, { title: 'Open, no date', timeZone: AMS });
+    await createTask(repos.core, { title: 'Next week', timeZone: AMS, dueDate: '2026-10-31' });
+    const overdue = await createTask(repos.core, {
+      title: 'Overdue',
+      timeZone: AMS,
+      dueDate: '2026-10-20',
+    });
+    const done = await createTask(repos.core, { title: 'Done today', timeZone: AMS });
+    await setTaskCompleted(repos.core, done.id, true, 'kid');
+    clock.now = Date.parse('2026-10-22T08:00:00Z');
+    const old = await createTask(repos.core, { title: 'Done earlier', timeZone: AMS });
+    await setTaskCompleted(repos.core, old.id, true, 'kid');
+
+    const { choresForToday } = await import('@/lib/db/repositories/tasks');
+    const list = choresForToday(await repos.tasks.list(), startOfToday, endOfToday).map(
+      (t) => t.title,
+    );
+    expect(list).toEqual([overdue.title, open.title, done.title]);
+  });
+});

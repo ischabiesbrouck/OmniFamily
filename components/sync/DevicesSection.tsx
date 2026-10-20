@@ -57,9 +57,12 @@ export default function DevicesSection() {
   }
 
   return (
-    <section aria-labelledby="devices-heading" className="flex flex-col gap-4">
+    <section
+      aria-labelledby="devices-heading"
+      className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-5"
+    >
       <div className="flex flex-wrap items-center gap-3">
-        <h2 id="devices-heading" className="text-xl font-semibold">
+        <h2 id="devices-heading" className="text-lg font-semibold tracking-tight">
           {t('devices')}
         </h2>
         <SyncStatus />
@@ -90,7 +93,7 @@ export default function DevicesSection() {
       )}
 
       {step.s === 'offer' && (
-        <div className="flex flex-col gap-4 rounded-lg border border-ink/20 p-4">
+        <div className="flex flex-col gap-4 rounded-2xl border border-line bg-surface-2/40 p-4">
           <p className="font-medium">{t('hostStep1')}</p>
           <QrCode frames={step.pairing.frames} />
           <p className="font-medium">{t('hostStep2')}</p>
@@ -109,7 +112,7 @@ export default function DevicesSection() {
       )}
 
       {(step.s === 'connecting' || step.s === 'connected') && (
-        <div className="flex flex-col gap-2 rounded-lg border border-ink/20 p-4">
+        <div className="flex flex-col gap-2 rounded-2xl border border-line bg-surface-2/40 p-4">
           <p className="text-lg font-semibold">{t('checkCode', { code: step.checkCode })}</p>
           {step.s === 'connected' && (
             <>

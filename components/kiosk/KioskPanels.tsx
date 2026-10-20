@@ -10,11 +10,13 @@ import { MemberAvatar } from '@/components/members/MemberAvatar';
 import { ParentGate } from '@/components/shell/ParentGate';
 import { useReminderScheduler } from '@/components/shell/useReminderScheduler';
 import { TaskItem } from '@/components/tasks/TaskItem';
-import { Button } from '@/components/ui/Button';
+import { Button, BUTTON_BASE, BUTTON_VARIANTS } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 import { useHousehold, useLiveRecords, useMembers } from '@/lib/db/repositories/hooks';
 import { balances } from '@/lib/db/repositories/points';
+import { choresForToday } from '@/lib/db/repositories/tasks';
 import { occurrencesOnDay } from '@/lib/recurrence/expand';
-import { addDays, instantToEpoch, startOfDayEpoch, todayIn } from '@/lib/time/zoned';
+import { addDays, startOfDayEpoch, todayIn } from '@/lib/time/zoned';
 
 function LeaveKiosk() {
   const router = useRouter();
@@ -51,22 +53,15 @@ export default function KioskPanels({ now, resetKey }: { now: number; resetKey: 
   // The wall display is shared: only family-visible events (no active profile).
   const occurrences = useOccurrences(window2Days, zone, null) ?? [];
   const endOfToday = startOfDayEpoch(tomorrow, zone);
-  const chores = (tasks ?? [])
-    .filter(
-      (task) =>
-        !task.completed && (!task.dueInstant || instantToEpoch(task.dueInstant) < endOfToday),
-    )
-    .sort((a, b) => (a.dueInstant ?? '￿').localeCompare(b.dueInstant ?? '￿'));
+  const chores = choresForToday(tasks ?? [], startOfDayEpoch(today, zone), endOfToday);
+  const openChores = chores.filter((task) => !task.completed).length;
   const totals = balances(ledger ?? []);
 
   if (household === null) {
     return (
       <div className="flex flex-col items-start gap-4 text-2xl">
         <p>{t('setup')}</p>
-        <Link
-          href="/onboarding"
-          className="inline-flex min-h-12 items-center rounded-lg bg-ink px-6 text-surface"
-        >
+        <Link href="/onboarding" className={`${BUTTON_BASE} ${BUTTON_VARIANTS.primary}`}>
           {t('setupLink')}
         </Link>
       </div>
@@ -75,54 +70,47 @@ export default function KioskPanels({ now, resetKey }: { now: number; resetKey: 
 
   return (
     <>
-      <ul className="mb-8 flex flex-wrap gap-3" aria-label={tTasks('leaderboard')}>
+      <ul className="mb-6 flex flex-wrap gap-2" aria-label={tTasks('leaderboard')}>
         {members
           .filter((m) => m.role !== 'guest')
           .map((m) => (
-            <li key={m.id} className="flex items-center gap-2 text-lg">
+            <li
+              key={m.id}
+              className="flex items-center gap-2 rounded-full border border-line bg-surface py-1 pr-4 pl-1 text-lg font-semibold shadow-card"
+            >
               <MemberAvatar member={m} size="md" />
               {tTasks('balance', { name: m.name, points: totals.get(m.id) ?? 0 })}
             </li>
           ))}
       </ul>
 
-      <div className="grid gap-8 text-lg md:grid-cols-3">
-        <section aria-labelledby="k-today">
-          <h2 id="k-today" className="mb-3 text-3xl font-semibold">
-            {t('today')}
-          </h2>
+      <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
+        <Card title={t('today')} className="text-lg">
           <DayAgenda
             occurrences={occurrencesOnDay(occurrences, today, zone)}
             members={members}
             progress={progress}
             onOpen={() => {}}
           />
-        </section>
-        <section aria-labelledby="k-tomorrow">
-          <h2 id="k-tomorrow" className="mb-3 text-3xl font-semibold">
-            {t('tomorrow')}
-          </h2>
+        </Card>
+        <Card title={t('tomorrow')} className="text-lg">
           <DayAgenda
             occurrences={occurrencesOnDay(occurrences, tomorrow, zone)}
             members={members}
             progress={progress}
             onOpen={() => {}}
           />
-        </section>
-        <section aria-labelledby="k-chores">
-          <h2 id="k-chores" className="mb-3 text-3xl font-semibold">
-            {t('chores')}
-          </h2>
-          {chores.length === 0 ? (
-            <p>{t('noChores')}</p>
-          ) : (
+        </Card>
+        <Card title={t('chores')} className="text-lg">
+          {openChores === 0 && <p className="mb-2 font-semibold text-success">{t('noChores')}</p>}
+          {chores.length > 0 && (
             <ul className="flex flex-col gap-2">
               {chores.map((task) => (
                 <TaskItem key={task.id} task={task} members={members} hideDelete />
               ))}
             </ul>
           )}
-        </section>
+        </Card>
       </div>
 
       <footer className="mt-10 flex justify-end">

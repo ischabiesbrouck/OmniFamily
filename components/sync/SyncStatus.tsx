@@ -9,7 +9,10 @@ export function SyncStatus() {
   const peerName = useSyncStore((s) => s.peerName);
   if (state === 'idle') return null;
   return (
-    <span role="status" className="rounded-full border border-ink/30 px-3 py-1 text-sm font-medium">
+    <span
+      role="status"
+      className="rounded-full border border-line-strong px-3 py-1 text-sm font-medium"
+    >
       {state === 'live' ? t('live', { name: peerName ?? '' }) : t(state)}
     </span>
   );

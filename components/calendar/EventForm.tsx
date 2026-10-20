@@ -143,7 +143,7 @@ export function EventForm({
           {members.map((m) => (
             <label
               key={m.id}
-              className="flex min-h-12 items-center gap-2 rounded-lg border border-ink/20 px-3"
+              className="flex min-h-12 items-center gap-2 rounded-lg border border-line-strong px-3"
             >
               <input
                 type="checkbox"

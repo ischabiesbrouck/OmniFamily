@@ -121,7 +121,7 @@ export function CodeInput({
             ref={video}
             muted
             playsInline
-            className="aspect-square w-full max-w-72 rounded-lg bg-ink object-cover"
+            className="aspect-square w-full max-w-72 rounded-lg bg-black object-cover"
           />
           <p aria-live="polite">
             {progress && progress.count > 1 ? t('scanning', progress) : t('scanningOne')}
@@ -135,7 +135,7 @@ export function CodeInput({
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={3}
-            className="rounded-lg border border-ink/40 p-2 font-mono text-xs"
+            className="rounded-lg border border-line-strong p-2 font-mono text-xs"
           />
         </label>
         <Button type="submit" className="self-start" disabled={disabled || text.trim() === ''}>

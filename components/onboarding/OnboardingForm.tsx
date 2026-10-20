@@ -83,35 +83,33 @@ export function OnboardingForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
-      <TextField
-        label={t('yourName')}
-        value={yourName}
-        onChange={(e) => setYourName(e.target.value)}
-        autoComplete="given-name"
-        autoFocus
-        required
-        error={nameError}
-      />
-      <ColorPicker value={color} onChange={setColor} />
-      <TextField
-        label={t('householdName')}
-        value={householdName}
-        onChange={(e) => setHouseholdName(e.target.value)}
-      />
-      <TextField
-        label={`${t('pin')} (${tCommon('optional')})`}
-        hint={t('pinHint')}
-        value={pin}
-        onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 8))}
-        inputMode="numeric"
-        autoComplete="new-password"
-        type="password"
-        error={pinError}
-      />
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+      <fieldset className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-5">
+        <legend className="float-left mb-1 w-full text-lg font-semibold tracking-tight">
+          {t('aboutYou')}
+        </legend>
+        <TextField
+          label={t('yourName')}
+          value={yourName}
+          onChange={(e) => setYourName(e.target.value)}
+          autoComplete="given-name"
+          autoFocus
+          required
+          error={nameError}
+        />
+        <ColorPicker value={color} onChange={setColor} />
+        <TextField
+          label={t('householdName')}
+          value={householdName}
+          onChange={(e) => setHouseholdName(e.target.value)}
+        />
+      </fieldset>
 
-      <fieldset className="flex flex-col gap-4">
-        <legend className="mb-2 text-lg font-semibold">{t('otherMembers')}</legend>
+      <fieldset className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-5">
+        <legend className="float-left mb-1 w-full text-lg font-semibold tracking-tight">
+          {t('yourFamily')}
+        </legend>
+        <p className="-mt-2 text-sm text-muted">{t('otherMembers')}</p>
         {others.map((m, index) => (
           <div key={m.key} className="flex flex-wrap items-end gap-2">
             <TextField
@@ -150,29 +148,42 @@ export function OnboardingForm() {
         </Button>
       </fieldset>
 
-      <TextField
-        label={t('deviceName')}
-        value={deviceName}
-        onChange={(e) => setDeviceName(e.target.value)}
-      />
+      <fieldset className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-5">
+        <legend className="float-left mb-1 w-full text-lg font-semibold tracking-tight">
+          {t('securityAndDevice')}
+        </legend>
+        <TextField
+          label={`${t('pin')} (${tCommon('optional')})`}
+          hint={t('pinHint')}
+          value={pin}
+          onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 8))}
+          inputMode="numeric"
+          autoComplete="new-password"
+          type="password"
+          error={pinError}
+        />
 
-      <section
-        aria-labelledby="security-title"
-        className="rounded-lg border border-ink/20 p-4 text-sm"
-      >
-        <h2 id="security-title" className="mb-1 font-semibold">
-          {t('securityTitle')}
-        </h2>
-        <p>{t('pinDisclosure')}</p>
-        <p>{t('storageDisclosure')}</p>
-      </section>
+        <TextField
+          label={t('deviceName')}
+          value={deviceName}
+          onChange={(e) => setDeviceName(e.target.value)}
+        />
+
+        <section aria-labelledby="security-title" className="rounded-xl bg-surface-2 p-3 text-sm">
+          <h2 id="security-title" className="mb-1 font-semibold">
+            {t('securityTitle')}
+          </h2>
+          <p>{t('pinDisclosure')}</p>
+          <p>{t('storageDisclosure')}</p>
+        </section>
+      </fieldset>
 
       {failure && (
         <p role="alert" className="font-medium text-danger">
           {failure}
         </p>
       )}
-      <Button type="submit" disabled={busy} className="text-lg">
+      <Button type="submit" disabled={busy} className="min-h-14 w-full text-lg">
         {busy ? t('creating') : t('submit')}
       </Button>
     </form>

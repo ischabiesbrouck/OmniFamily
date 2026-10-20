@@ -58,7 +58,7 @@ export function QrCode({ frames }: { frames: readonly string[] }) {
           readOnly
           value={text}
           rows={3}
-          className="rounded-lg border border-ink/40 p-2 font-mono text-xs"
+          className="rounded-lg border border-line-strong p-2 font-mono text-xs"
         />
       </label>
       <Button

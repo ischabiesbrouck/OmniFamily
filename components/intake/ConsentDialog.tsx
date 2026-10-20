@@ -18,7 +18,7 @@ export function ConsentDialog({
   return (
     <Dialog.Root open={open} onOpenChange={(next) => !next && onDecline()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-ink/50" />
+        <Dialog.Overlay className="bg-surface-20 fixed inset-0" />
         <Dialog.Content className="fixed inset-x-0 bottom-0 flex max-h-[90dvh] flex-col gap-3 overflow-y-auto rounded-t-2xl bg-surface p-5 shadow-xl sm:inset-auto sm:top-1/2 sm:left-1/2 sm:w-full sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl">
           <Dialog.Title className="text-xl font-semibold">{t('title')}</Dialog.Title>
           <Dialog.Description>{t('intro')}</Dialog.Description>

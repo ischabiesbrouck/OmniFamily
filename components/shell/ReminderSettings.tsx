@@ -49,8 +49,11 @@ export function ReminderSettings() {
   }
 
   return (
-    <section aria-labelledby="reminders-heading" className="flex flex-col gap-3">
-      <h2 id="reminders-heading" className="text-xl font-semibold">
+    <section
+      aria-labelledby="reminders-heading"
+      className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-5"
+    >
+      <h2 id="reminders-heading" className="text-lg font-semibold tracking-tight">
         {t('title')}
       </h2>
       <p>{t('description')}</p>
