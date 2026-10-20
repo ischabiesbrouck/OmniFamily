@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { MemberSettings } from '@/components/members/MemberSettings';
+import { PrivacySection } from '@/components/privacy/PrivacySection';
 import { ParentGate } from '@/components/shell/ParentGate';
 import { ReminderSettings } from '@/components/shell/ReminderSettings';
 import { Select } from '@/components/ui/Select';
@@ -56,6 +57,7 @@ export default function SettingsPage() {
           </h2>
           <MemberSettings />
         </section>
+        <PrivacySection intakeEnabled={process.env.NEXT_PUBLIC_FEATURE_INTAKE === 'true'} />
       </ParentGate>
     </div>
   );
