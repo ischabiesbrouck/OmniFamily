@@ -1,8 +1,9 @@
 import type { FamilyMember, ParsedFamilyEntry } from '@/lib/db/schema';
+import { withBase } from '@/lib/pwa/basePath';
 import { minimize, restoreIds, restoreNames } from './minimize';
 import { validateParsedEntry, type IntakeRequest } from './schema';
 
-export const INTAKE_ENDPOINT = '/api/intake';
+export const INTAKE_ENDPOINT = withBase('/api/intake');
 const CLIENT_TIMEOUT_MS = 25_000;
 
 export type IntakeResult =

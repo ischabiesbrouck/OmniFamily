@@ -30,16 +30,22 @@ export function GroceryForm({
       setError(t('errors.nameRequired'));
       return;
     }
-    await addGrocery(getRepositories().core, {
-      name,
-      quantity,
-      category,
-      addedByMemberId: activeMemberId ?? fallbackMemberId,
-      associatedEventId: eventId,
-    });
+    // Clear at once so the next item can be typed while this one is written (D-8.5).
     setName('');
     setQuantity('');
     setError(undefined);
+    try {
+      await addGrocery(getRepositories().core, {
+        name,
+        quantity,
+        category,
+        addedByMemberId: activeMemberId ?? fallbackMemberId,
+        associatedEventId: eventId,
+      });
+    } catch {
+      setName(name);
+      setQuantity(quantity);
+    }
   }
 
   return (

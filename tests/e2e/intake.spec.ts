@@ -154,9 +154,33 @@ test('export vault downloads JSON without secrets; delete everything erases the 
   await page.getByRole('button', { name: en.privacy.delete }).click();
   await expect(page).toHaveURL(/\/onboarding$/);
   await expect(page.getByRole('heading', { name: en.onboarding.title })).toBeVisible();
-  const leftovers = await page.evaluate(async () => ({
-    caches: (await caches.keys()).length,
-    storage: localStorage.length,
-  }));
-  expect(leftovers).toEqual({ caches: 0, storage: 0 });
+  // The reloaded app reinstalls its (data-free) offline cache, so check for family data instead.
+  const leftovers = await page.evaluate(
+    () =>
+      new Promise<Record<string, number | string | null>>((resolve, reject) => {
+        const request = indexedDB.open('omnifamily-nexus');
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          const db = request.result;
+          const stores = ['members', 'events', 'tasks', 'household', 'settings'].filter((s) =>
+            db.objectStoreNames.contains(s),
+          );
+          const counts: Record<string, number | string | null> = {
+            device: localStorage.getItem('omnifamily-device'),
+          };
+          if (stores.length === 0) return resolve(counts);
+          const tx = db.transaction(stores);
+          for (const s of stores) {
+            const c = tx.objectStore(s).count();
+            c.onsuccess = () => (counts[s] = c.result);
+          }
+          tx.oncomplete = () => resolve(counts);
+        };
+      }),
+  );
+  expect(leftovers.members ?? 0).toBe(0);
+  expect(leftovers.events ?? 0).toBe(0);
+  expect(leftovers.household ?? 0).toBe(0);
+  expect(leftovers.settings ?? 0).toBe(0); // keys, PIN counters, consent
+  expect(String(leftovers.device ?? '')).not.toContain('"activeMemberId":"');
 });

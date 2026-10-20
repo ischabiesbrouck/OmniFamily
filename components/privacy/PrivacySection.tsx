@@ -6,6 +6,7 @@ import { getRepositories } from '@/lib/db/repositories';
 import { useSetting } from '@/lib/db/repositories/hooks';
 import { deleteEverything, exportVault } from '@/lib/db/repositories/vault';
 import { INTAKE_CONSENT_KEY, isConsent, revokeConsent } from '@/lib/intake/consent';
+import { withBase } from '@/lib/pwa/basePath';
 import { todayIn } from '@/lib/time/zoned';
 
 /** SPEC §7: consent withdrawal, data export (Art. 20) and erasure (Art. 17). */
@@ -29,7 +30,7 @@ export function PrivacySection({ intakeEnabled }: { intakeEnabled: boolean }) {
   async function erase() {
     if (!window.confirm(t('deleteConfirm'))) return;
     await deleteEverything(db);
-    window.location.replace('/onboarding');
+    window.location.replace(withBase('/onboarding'));
   }
 
   return (

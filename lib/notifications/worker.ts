@@ -7,6 +7,11 @@ interface PeriodicSyncEvent extends ExtendableEvent {
   readonly tag: string;
 }
 
+/** The app root (Today), from the worker's own scope: valid with or without a base path. */
+function dayView(scope: ServiceWorkerGlobalScope): string {
+  return scope.registration.scope;
+}
+
 async function showDueReminders(scope: ServiceWorkerGlobalScope): Promise<void> {
   const db = new NexusDB();
   try {
@@ -14,7 +19,7 @@ async function showDueReminders(scope: ServiceWorkerGlobalScope): Promise<void> 
       await scope.registration.showNotification(reminder.title, {
         body: reminderBody(reminder),
         tag: reminder.key,
-        data: { url: '/calendar?view=day' },
+        data: { url: dayView(scope) },
       });
     }
   } finally {
@@ -35,7 +40,7 @@ export function handlePeriodicReminders(scope: ServiceWorkerGlobalScope): void {
         const windows = await scope.clients.matchAll({ type: 'window', includeUncontrolled: true });
         const open = windows[0];
         if (open) await open.focus();
-        else await scope.clients.openWindow('/calendar?view=day');
+        else await scope.clients.openWindow(dayView(scope));
       })(),
     );
   });

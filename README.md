@@ -1,5 +1,7 @@
 # OmniFamily Nexus
 
+**Try it:** https://ischabiesbrouck.github.io/OmniFamily/ — everything you enter stays in your own browser.
+
 An offline-first family calendar, task, chore and grocery app (PWA) with **zero-account onboarding**: type your name and start. All data lives on your devices.
 
 - **Spec:** [`SPEC.md`](SPEC.md) · **Decisions and deviations:** [`DECISIONS.md`](DECISIONS.md) · **Security:** [`SECURITY.md`](SECURITY.md) · **Privacy:** [`PRIVACY.md`](PRIVACY.md) · **Agent guide:** [`CLAUDE.md`](CLAUDE.md)

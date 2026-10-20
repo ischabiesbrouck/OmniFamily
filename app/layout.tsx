@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { I18nProvider } from '@/lib/i18n/I18nProvider';
 import { defaultLocale } from '@/lib/i18n/config';
 import { catalogues } from '@/lib/i18n/messages';
+import { withBase } from '@/lib/pwa/basePath';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   description: catalogues[defaultLocale].app.tagline,
   applicationName: catalogues[defaultLocale].app.name,
   appleWebApp: { capable: true, title: 'OmniFamily', statusBarStyle: 'default' },
-  icons: { icon: '/icons/icon-192.png', apple: '/icons/apple-touch-icon.png' },
+  icons: { icon: withBase('/icons/icon-192.png'), apple: withBase('/icons/apple-touch-icon.png') },
   formatDetection: { telephone: false },
 };
 

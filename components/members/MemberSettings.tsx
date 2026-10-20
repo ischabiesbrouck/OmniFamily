@@ -65,9 +65,15 @@ function AddMemberForm({ nextColor }: { nextColor: string }) {
       setError(t('onboarding.errors.nameRequired'));
       return;
     }
-    await getRepositories().members.create({ name: name.trim(), role, colorHex: color });
+    // Clear at once so typing the next name is never overwritten (D-8.5).
+    const typed = name;
     setName('');
     setError(undefined);
+    try {
+      await getRepositories().members.create({ name: typed.trim(), role, colorHex: color });
+    } catch {
+      setName(typed);
+    }
   }
 
   return (

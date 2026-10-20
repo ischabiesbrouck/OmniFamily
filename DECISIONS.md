@@ -219,3 +219,15 @@ Deviations from, and clarifications of, SPEC.md. Newest phase last. Format: **ID
 ### Dependencies added in Phase 7
 
 None.
+
+## Public demo on GitHub Pages (2026-10-20)
+
+**D-8.1 — A static export of the app is deployed to GitHub Pages** (`.github/workflows/pages.yml`, default branch only), at `https://ischabiesbrouck.github.io/OmniFamily/`. `NEXT_OUTPUT=export` switches `next.config.ts` to `output: 'export'`. Pages has no server, so the workflow removes `app/api` before building; that is harmless because the intake route is dormant (D-7.1) and its UI flag is off. Production hosting with the route still uses `next start`.
+
+**D-8.2 — `NEXT_PUBLIC_BASE_PATH` (`/OmniFamily` on Pages, empty elsewhere) sets Next's `basePath`.** URLs that Next does not prefix itself — manifest fields, metadata icons, `window.location`, the intake endpoint — go through `withBase()`; service-worker URLs derive from `registration.scope`.
+
+**D-8.3 — The Pages build uses `trailingSlash: true`.** The service worker's scope is `/OmniFamily/`, and scope matching is a plain prefix test, so the bare `/OmniFamily` (where `router.replace('/')` lands without the option) would be outside it: the page was never claimed and did not work offline. Widening the scope would need a `Service-Worker-Allowed` header, which Pages cannot send. Precache URLs follow the same slashes. Verified locally with a server that mimics Pages (directory redirects, `404.html`): onboarding, calendar, service-worker control and offline navigation all work.
+
+**D-8.4 — Every visitor's data stays in their own browser.** The public site is the same zero-account, local-only app; nothing a visitor enters is visible to anyone else.
+
+**D-8.5 — Add-forms clear their fields immediately and restore them only if the write fails** (groceries, tasks, members). They used to clear after the IndexedDB write resolved, which wiped anything typed in the meantime (found by an intermittent e2e failure).

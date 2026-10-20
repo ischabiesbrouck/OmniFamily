@@ -34,10 +34,17 @@ export function TaskForm({
     event.preventDefault();
     setSubmitted(true);
     if (validateTaskDraft(withPoints)) return;
-    await createTask(getRepositories().core, withPoints);
+    // Clear at once so the next task can be typed while this one is written (D-8.5).
+    const typedPoints = pointsText;
     setDraft(empty);
     setPointsText('');
     setSubmitted(false);
+    try {
+      await createTask(getRepositories().core, withPoints);
+    } catch {
+      setDraft(draft);
+      setPointsText(typedPoints);
+    }
   }
 
   return (
