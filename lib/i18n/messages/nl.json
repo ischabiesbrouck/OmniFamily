@@ -292,5 +292,48 @@
     "done": "Klaar",
     "continue": "Verder",
     "connected": "Verbonden. Als de cijfers op beide schermen gelijk zijn, ben je klaar."
+  },
+  "intake": {
+    "label": "Snel toevoegen",
+    "placeholder": "bijv. Zwemmen zaterdag 10:00 voor Sem",
+    "submit": "Snel toevoegen",
+    "busy": "Bezig met lezen…",
+    "hint": "Optioneel. Zelf invoeren met “Nieuwe afspraak” werkt altijd, ook offline.",
+    "unavailable": "Snel toevoegen is nu niet beschikbaar. Gebruik “Nieuwe afspraak” — al het andere werkt zonder.",
+    "offline": "Je bent offline. Snel toevoegen heeft verbinding nodig; “Nieuwe afspraak” werkt offline.",
+    "failed": "Dat kon niet worden gelezen. Probeer andere woorden of gebruik “Nieuwe afspraak”.",
+    "declined": "Er is niets verstuurd. Je kunt “Nieuwe afspraak” gebruiken.",
+    "review": "Controleer voor het opslaan",
+    "lowConfidence": "Niet zeker over deze — controleer de gegevens.",
+    "when": "Wanneer",
+    "who": "Wie",
+    "alsoAdd": "Ook toevoegen",
+    "add": "Aan agenda toevoegen",
+    "edit": "Eerst bewerken",
+    "discard": "Weggooien",
+    "added": "Toegevoegd.",
+    "consent": {
+      "title": "AI snel toevoegen toestaan?",
+      "intro": "Snel toevoegen stuurt wat je typt naar een AI-dienst om er een agenda-item van te maken.",
+      "what": "Alleen de tekst die je typt wordt verstuurd. Namen van gezinsleden worden vervangen door codes zoals P1 voordat de tekst dit apparaat verlaat.",
+      "retention": "De dienst slaat de tekst niet op en logt hem niet; hij wordt één keer gebruikt en daarna weggegooid.",
+      "children": "Je invoer kan over je kinderen gaan. Als ouder of verzorger beslis jij of je dit toestaat.",
+      "revoke": "Je kunt dit altijd intrekken bij Instellingen → Privacy & gegevens.",
+      "allow": "Toestaan en doorgaan",
+      "decline": "Nee, bedankt"
+    }
+  },
+  "privacy": {
+    "title": "Privacy & gegevens",
+    "intro": "De gegevens van je gezin staan op dit apparaat. Er wordt niets op een server bewaard.",
+    "intakeConsent": "AI snel toevoegen",
+    "consentGiven": "Toegestaan sinds {date}.",
+    "consentNone": "Niet toegestaan. Snel toevoegen vraagt het eerst voordat er iets wordt verstuurd.",
+    "withdraw": "Toestemming intrekken",
+    "export": "Kluis exporteren (JSON)",
+    "exportHint": "Download alles wat dit apparaat over je gezin bewaart. Pincodes en sleutels blijven buiten de export.",
+    "delete": "Alles verwijderen",
+    "deleteHint": "Wis de gezinskluis, sleutels, opgeslagen app-bestanden en instellingen van dit apparaat. Dit kan niet ongedaan worden gemaakt.",
+    "deleteConfirm": "ALLE gezinsgegevens van dit apparaat verwijderen? Dit kan niet ongedaan worden gemaakt."
   }
 }

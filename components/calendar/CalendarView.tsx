@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useFormatter, useTimeZone, useTranslations, type DateTimeFormatOptions } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import {
@@ -26,6 +27,12 @@ import { OccurrenceChip } from './OccurrenceChip';
 import { useOccurrences, useTaskProgress } from './useOccurrences';
 
 const MONTH_CELL_LIMIT = 3;
+
+// Flag inlined at build time; webpack drops the dead import() when off (D-7.3).
+const QuickAdd =
+  process.env.NEXT_PUBLIC_FEATURE_INTAKE === 'true'
+    ? dynamic(() => import('@/components/intake/QuickAdd'))
+    : null;
 
 function validDate(value: string | null): FloatingDate | undefined {
   if (!value) return undefined;
@@ -115,6 +122,10 @@ export function CalendarView() {
           {t('newEvent')}
         </Button>
       </div>
+
+      {QuickAdd && (
+        <QuickAdd onEdit={(draft) => setEditor({ mode: 'new', date: draft.date, draft })} />
+      )}
 
       {view === 'day' ? (
         <DayAgenda

@@ -18,7 +18,9 @@ import { EventForm } from './EventForm';
 import { LinkedItems } from './LinkedItems';
 
 export type EditorState =
-  { mode: 'new'; date: FloatingDate } | { mode: 'edit'; occurrence: Occurrence } | null;
+  | { mode: 'new'; date: FloatingDate; draft?: EventDraft }
+  | { mode: 'edit'; occurrence: Occurrence }
+  | null;
 
 export function EventDialog({
   state,
@@ -38,6 +40,7 @@ export function EventDialog({
 
   let initial: EventDraft | undefined;
   if (state?.mode === 'edit') initial = draftFromOccurrence(state.occurrence);
+  else if (state?.mode === 'new' && state.draft) initial = state.draft;
   else if (state?.mode === 'new') {
     const creator = activeMemberId ?? members.find((m) => m.role === 'parent')?.id ?? '';
     initial = {

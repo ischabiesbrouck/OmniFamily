@@ -292,5 +292,48 @@
     "done": "Done",
     "continue": "Continue",
     "connected": "Connected. If the numbers match on both screens, you’re done."
+  },
+  "intake": {
+    "label": "Quick add",
+    "placeholder": "e.g. Swimming Saturday 10:00 for Sem",
+    "submit": "Quick add",
+    "busy": "Reading…",
+    "hint": "Optional. Typing it in yourself with “New event” always works, also offline.",
+    "unavailable": "Quick add isn’t available right now. Use “New event” instead — everything else works without it.",
+    "offline": "You’re offline. Quick add needs a connection; “New event” works offline.",
+    "failed": "That couldn’t be read. Try different words, or use “New event”.",
+    "declined": "Nothing was sent. You can use “New event” instead.",
+    "review": "Check before saving",
+    "lowConfidence": "Not sure about this one — please check the details.",
+    "when": "When",
+    "who": "Who",
+    "alsoAdd": "Also add",
+    "add": "Add to calendar",
+    "edit": "Edit first",
+    "discard": "Discard",
+    "added": "Added.",
+    "consent": {
+      "title": "Allow AI quick add?",
+      "intro": "Quick add sends what you type to an AI service to turn it into a calendar entry.",
+      "what": "Only the text you type is sent. Family members’ names are replaced by codes such as P1 before it leaves this device.",
+      "retention": "The text is not stored or logged by the service; it is used once to make the entry and then discarded.",
+      "children": "Your entries may be about your children. As a parent or guardian you decide whether to allow this.",
+      "revoke": "You can withdraw this at any time in Settings → Privacy & data.",
+      "allow": "Allow and continue",
+      "decline": "No thanks"
+    }
+  },
+  "privacy": {
+    "title": "Privacy & data",
+    "intro": "Your family’s data lives on this device. Nothing is stored on a server.",
+    "intakeConsent": "AI quick add",
+    "consentGiven": "Allowed since {date}.",
+    "consentNone": "Not allowed. Quick add asks before it sends anything.",
+    "withdraw": "Withdraw consent",
+    "export": "Export vault (JSON)",
+    "exportHint": "Download everything this device holds about your family. PINs and keys are left out.",
+    "delete": "Delete everything",
+    "deleteHint": "Erase the family vault, keys, cached app files and settings from this device. This cannot be undone.",
+    "deleteConfirm": "Delete ALL family data from this device? This cannot be undone."
   }
 }

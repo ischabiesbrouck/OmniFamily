@@ -41,6 +41,11 @@ export function I18nProvider({
     document.documentElement.lang = locale;
   }, [locale]);
 
+  useEffect(() => {
+    // Signals that React has hydrated and event handlers are live (used by e2e tests).
+    document.documentElement.dataset.hydrated = 'true';
+  }, []);
+
   return (
     <NextIntlClientProvider locale={formatLocale} messages={catalogues[locale]} timeZone={timeZone}>
       {children}
