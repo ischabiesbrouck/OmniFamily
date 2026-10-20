@@ -4,12 +4,11 @@ import qrcode from 'qrcode-generator';
 import { describe, expect, it } from 'vitest';
 import { open, seal } from '@/lib/crypto/aead';
 import {
-  createEphemeralKeys,
-  derivePairingSecret,
   exportHouseholdKey,
   generateHouseholdKey,
   importHouseholdKey,
-} from '@/lib/crypto/pairing';
+} from '@/lib/crypto/householdKey';
+import { createEphemeralKeys, derivePairingSecret } from '@/lib/crypto/pairing';
 import { decodeBase45, encodeBase45 } from '@/lib/sync/base45';
 import {
   decodeFrames,

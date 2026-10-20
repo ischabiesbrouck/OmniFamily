@@ -1,5 +1,5 @@
 import { generateIdentity, isDeviceIdentity, type DeviceIdentity } from '@/lib/crypto/identity';
-import { generateHouseholdKey } from '@/lib/crypto/pairing';
+import { generateHouseholdKey } from '@/lib/crypto/householdKey';
 import { hashPin, type PinHash } from '@/lib/crypto/pin';
 import type { FamilyMember, HouseholdContext, MemberRole, NexusDB } from '../schema';
 import type { RepositoryCore } from './core';
