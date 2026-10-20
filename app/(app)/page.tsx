@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { TodayAgenda } from '@/components/calendar/TodayAgenda';
 import { MemberAvatar } from '@/components/members/MemberAvatar';
 import { useMembers } from '@/lib/db/repositories/hooks';
 import { useDeviceStore } from '@/stores/deviceStore';
@@ -16,6 +17,12 @@ export default function TodayPage() {
       <h1 className="text-2xl font-semibold">
         {active ? t('greeting', { name: active.name }) : t('greetingAnonymous')}
       </h1>
+      <section aria-labelledby="agenda-heading" className="flex flex-col gap-2">
+        <h2 id="agenda-heading" className="text-lg font-semibold">
+          {t('agenda')}
+        </h2>
+        <TodayAgenda />
+      </section>
       <section aria-labelledby="family-heading">
         <h2 id="family-heading" className="mb-2 text-lg font-semibold">
           {t('members')}

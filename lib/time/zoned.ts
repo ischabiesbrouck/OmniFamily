@@ -151,3 +151,15 @@ export function diffDays(a: FloatingDate, b: FloatingDate): number {
       86_400_000,
   );
 }
+
+/** A floating date as a UTC midnight `Date`, for formatting with `timeZone: 'UTC'` only. */
+export function floatingDateToUtc(date: FloatingDate): Date {
+  const { year, month, day } = parseFloatingDate(date);
+  return new Date(Date.UTC(year, month - 1, day));
+}
+
+export function supportedTimeZones(current: string): string[] {
+  const zones =
+    typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : [];
+  return zones.includes(current) ? zones : [current, ...zones];
+}

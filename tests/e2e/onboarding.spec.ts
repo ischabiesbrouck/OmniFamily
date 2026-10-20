@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import en from '../../lib/i18n/messages/en.json' with { type: 'json' };
+import { en } from './helpers';
 
 test.use({ locale: 'en-US' });
 

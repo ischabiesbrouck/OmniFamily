@@ -1,7 +1,7 @@
 'use client';
 
 import { useLiveQuery } from 'dexie-react-hooks';
-import type { FamilyMember, HouseholdContext } from '../schema';
+import type { FamilyEvent, FamilyMember, HouseholdContext } from '../schema';
 import type { Entity, RecordOf } from './core';
 import { getHousehold } from './household';
 import { getRepositories } from './index';
@@ -30,4 +30,8 @@ export function useHousehold(): HouseholdContext | null | undefined {
 export function useMembers(): FamilyMember[] | undefined {
   const members = useLiveRecords('member');
   return members?.slice().sort((a, b) => (a.hlc < b.hlc ? -1 : 1));
+}
+
+export function useLiveEvents(): FamilyEvent[] | undefined {
+  return useLiveRecords('event');
 }

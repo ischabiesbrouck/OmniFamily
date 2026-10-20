@@ -10,6 +10,7 @@ import { maybeSweepTombstones } from '@/lib/db/repositories/maintenance';
 
 const NAV = [
   { href: '/', key: 'today' },
+  { href: '/calendar', key: 'calendar' },
   { href: '/settings', key: 'settings' },
 ] as const;
 
@@ -48,7 +49,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  aria-current={pathname === item.href ? 'page' : undefined}
+                  aria-current={
+                    (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href))
+                      ? 'page'
+                      : undefined
+                  }
                   className="hover:bg-ink/5 aria-[current=page]:bg-ink aria-[current=page]:text-surface inline-flex min-h-12 items-center rounded-lg px-3 font-medium"
                 >
                   {t(`nav.${item.key}`)}
