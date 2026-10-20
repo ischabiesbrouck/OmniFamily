@@ -1,6 +1,6 @@
 import { liveQuery, type Subscription } from 'dexie';
 import { open, seal } from '@/lib/crypto/aead';
-import { exportHouseholdKey, importHouseholdKey } from '@/lib/crypto/pairing';
+import { exportHouseholdKey, importHouseholdKey } from '@/lib/crypto/householdKey';
 import type { RepositoryCore } from '@/lib/db/repositories/core';
 import { ensureHouseholdKey, getHousehold, joinHousehold } from '@/lib/db/repositories/household';
 import type { Syncable } from '@/lib/db/schema';
