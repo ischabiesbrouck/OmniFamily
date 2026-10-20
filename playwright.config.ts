@@ -24,7 +24,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `pnpm build && pnpm start --port ${port}`,
+    // e2e covers the flagged pairing flow too (SPEC §8 Phase 6).
+    command: `NEXT_PUBLIC_FEATURE_SYNC=true pnpm build && pnpm start --port ${port}`,
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

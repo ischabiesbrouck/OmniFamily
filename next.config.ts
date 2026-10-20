@@ -20,6 +20,10 @@ const withSerwist = withSerwistInit({
 
 // D1: the product surface is client components only. Do not enable Server Actions.
 const nextConfig: NextConfig = {
+  // Always defined, so the inlined flag is a constant and dead sync code is dropped (D-6.9).
+  env: {
+    NEXT_PUBLIC_FEATURE_SYNC: process.env.NEXT_PUBLIC_FEATURE_SYNC === 'true' ? 'true' : 'false',
+  },
   reactStrictMode: true,
   poweredByHeader: false,
 };

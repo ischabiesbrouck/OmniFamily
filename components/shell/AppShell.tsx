@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
@@ -8,6 +9,12 @@ import { getRepositories } from '@/lib/db/repositories';
 import { useHousehold } from '@/lib/db/repositories/hooks';
 import { maybeSweepTombstones } from '@/lib/db/repositories/maintenance';
 import { useReminderScheduler } from './useReminderScheduler';
+
+// Flag inlined at build time; webpack drops the dead import() when off (D-6.9).
+const SyncStatus =
+  process.env.NEXT_PUBLIC_FEATURE_SYNC === 'true'
+    ? dynamic(() => import('@/components/sync/SyncStatus').then((m) => m.SyncStatus))
+    : null;
 
 const NAV = [
   { href: '/', key: 'today' },
@@ -46,7 +53,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="mx-auto flex min-h-dvh max-w-5xl flex-col">
       <header className="flex items-center justify-between gap-4 border-b border-ink/15 px-4 py-2">
-        <span className="text-lg font-semibold">{household.householdName}</span>
+        <span className="flex items-center gap-3">
+          <span className="text-lg font-semibold">{household.householdName}</span>
+          {SyncStatus && <SyncStatus />}
+        </span>
         <nav aria-label={t('nav.label')} className="overflow-x-auto">
           <ul className="flex gap-1">
             {NAV.map((item) => (

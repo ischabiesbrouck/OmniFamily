@@ -237,5 +237,60 @@
     "setupLink": "Gezin instellen",
     "open": "Wandscherm openen",
     "openHint": "Overzicht op het hele scherm voor een tablet aan de muur. Het scherm blijft aan; verlaten vraagt een ouder-pincode."
+  },
+  "sync": {
+    "devices": "Apparaten",
+    "thisDevice": "Dit apparaat",
+    "connect": "Ander apparaat koppelen",
+    "lanNote": "Apparaten synchroniseren rechtstreeks met elkaar via hetzelfde wifi-netwerk. Deze versie heeft geen cloudserver, dus beide apparaten moeten op hetzelfde netwerk zitten met de app open.",
+    "defaultDeviceName": "Nieuw apparaat",
+    "hostStep1": "Open de app op het andere apparaat, kies “Aansluiten bij een bestaand gezin” en scan deze code.",
+    "hostStep2": "Scan daarna de code die op het andere apparaat verschijnt.",
+    "qrLabel": "Koppelcode",
+    "textCode": "Geen camera? Kopieer deze code naar het andere apparaat:",
+    "copy": "Code kopiëren",
+    "copied": "Gekopieerd",
+    "pasteLabel": "Code van het andere apparaat",
+    "useCode": "Deze code gebruiken",
+    "scan": "Scannen met camera",
+    "stopScan": "Camera stoppen",
+    "scanning": "Richt de camera op de code ({received} van {count})",
+    "scanningOne": "Richt de camera op de code",
+    "noCamera": "Dit apparaat kan geen codes scannen. Plak de code in plaats daarvan.",
+    "frames": "Deel {index} van {count}",
+    "checkCode": "Controleer dat beide schermen {code} tonen",
+    "disconnect": "Verbinding verbreken",
+    "cancel": "Annuleren",
+    "state": {
+      "idle": "Niet verbonden",
+      "connecting": "Verbinden…",
+      "joining": "Gezin ontvangen…",
+      "transferring": "Synchroniseren…",
+      "live": "Live met {name}",
+      "closed": "Verbinding verbroken",
+      "failed": "Verbinden mislukt"
+    },
+    "errors": {
+      "unreadable": "Die code kon niet worden gelezen. Probeer het opnieuw.",
+      "wrong_code": "Dat is niet de juiste code voor deze stap.",
+      "household_mismatch": "Dat apparaat hoort bij een ander gezin.",
+      "no_household": "Geen van beide apparaten heeft al een gezin.",
+      "closed": "De verbinding is verbroken.",
+      "protocol": "De apparaten werden het niet eens. Werk beide bij en probeer het opnieuw.",
+      "timeout": "Geen verbinding. Zitten beide apparaten op hetzelfde wifi-netwerk?"
+    },
+    "join": {
+      "button": "Aansluiten bij een bestaand gezin",
+      "title": "Aansluiten bij een bestaand gezin",
+      "intro": "Voeg dit apparaat toe aan een gezin dat OmniFamily al op een ander apparaat gebruikt.",
+      "step1": "Open op het apparaat met het gezin Instellingen → Apparaten → “Ander apparaat koppelen” en scan de code hier.",
+      "step2": "Laat deze code nu aan het andere apparaat zien.",
+      "waiting": "Wachten op het andere apparaat…",
+      "back": "Toch een nieuw gezin instellen",
+      "deviceName": "Naam van dit apparaat"
+    },
+    "done": "Klaar",
+    "continue": "Verder",
+    "connected": "Verbonden. Als de cijfers op beide schermen gelijk zijn, ben je klaar."
   }
 }

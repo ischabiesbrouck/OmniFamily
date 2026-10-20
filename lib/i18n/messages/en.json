@@ -237,5 +237,60 @@
     "setupLink": "Set up the family",
     "open": "Open wall display",
     "openHint": "Full-screen overview for a tablet on the wall. The screen stays on; leaving it needs a parent PIN."
+  },
+  "sync": {
+    "devices": "Devices",
+    "thisDevice": "This device",
+    "connect": "Connect another device",
+    "lanNote": "Devices sync directly with each other over the same Wi-Fi network. This version has no cloud relay, so both devices must be on the same network with the app open.",
+    "defaultDeviceName": "New device",
+    "hostStep1": "On the other device, open the app, choose “Join an existing family” and scan this code.",
+    "hostStep2": "Then scan the code that appears on the other device.",
+    "qrLabel": "Pairing code",
+    "textCode": "No camera? Copy this code to the other device:",
+    "copy": "Copy code",
+    "copied": "Copied",
+    "pasteLabel": "Code from the other device",
+    "useCode": "Use this code",
+    "scan": "Scan with camera",
+    "stopScan": "Stop camera",
+    "scanning": "Point the camera at the code ({received} of {count})",
+    "scanningOne": "Point the camera at the code",
+    "noCamera": "This device cannot scan codes. Paste the code instead.",
+    "frames": "Part {index} of {count}",
+    "checkCode": "Check that both screens show {code}",
+    "disconnect": "Disconnect",
+    "cancel": "Cancel",
+    "state": {
+      "idle": "Not connected",
+      "connecting": "Connecting…",
+      "joining": "Receiving the family…",
+      "transferring": "Syncing…",
+      "live": "Live with {name}",
+      "closed": "Disconnected",
+      "failed": "Connection failed"
+    },
+    "errors": {
+      "unreadable": "That code could not be read. Try again.",
+      "wrong_code": "That is not the right code for this step.",
+      "household_mismatch": "That device belongs to another family.",
+      "no_household": "Neither device has a family yet.",
+      "closed": "The connection was closed.",
+      "protocol": "The devices could not agree. Update both and try again.",
+      "timeout": "No connection. Are both devices on the same Wi-Fi?"
+    },
+    "join": {
+      "button": "Join an existing family",
+      "title": "Join an existing family",
+      "intro": "Bring this device into a family that already uses OmniFamily on another device.",
+      "step1": "On the device that already has the family, open Settings → Devices → “Connect another device”, then scan its code here.",
+      "step2": "Now show this code to the other device.",
+      "waiting": "Waiting for the other device…",
+      "back": "Set up a new family instead",
+      "deviceName": "Name of this device"
+    },
+    "done": "Done",
+    "continue": "Continue",
+    "connected": "Connected. If the numbers match on both screens, you’re done."
   }
 }

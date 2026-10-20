@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { MemberSettings } from '@/components/members/MemberSettings';
 import { ParentGate } from '@/components/shell/ParentGate';
@@ -8,6 +9,12 @@ import { ReminderSettings } from '@/components/shell/ReminderSettings';
 import { Select } from '@/components/ui/Select';
 import { isLocale, locales } from '@/lib/i18n/config';
 import { useDeviceStore } from '@/stores/deviceStore';
+
+// Flag inlined at build time; webpack drops the dead import() when off (D-6.9).
+const DevicesSection =
+  process.env.NEXT_PUBLIC_FEATURE_SYNC === 'true'
+    ? dynamic(() => import('@/components/sync/DevicesSection'))
+    : null;
 
 export default function SettingsPage() {
   const t = useTranslations('settings');
@@ -40,6 +47,7 @@ export default function SettingsPage() {
           {tKiosk('open')}
         </Link>
       </section>
+      {DevicesSection && <DevicesSection />}
       <ReminderSettings />
       <ParentGate>
         <section aria-labelledby="members-heading" className="flex flex-col gap-4">
