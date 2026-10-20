@@ -170,3 +170,30 @@ Deviations from, and clarifications of, SPEC.md. Newest phase last. Format: **ID
 | `@serwist/next`, `serwist`            | Listed in SPEC §2 (service worker, precache).                                                                                      |
 | `@axe-core/playwright` (dev)          | Automated WCAG audit of every screen in e2e.                                                                                       |
 | `lighthouse`, `chrome-launcher` (dev) | Lighthouse CI budget (SPEC D9 / §9); `chrome-launcher` is Lighthouse's own launcher, made explicit because pnpm does not hoist it. |
+
+## Phase 6 — Pairing and sync, behind `NEXT_PUBLIC_FEATURE_SYNC` (2026-10-20)
+
+**D-6.1 — Household data key (HDK).** A random AES-GCM-256 key is created with the household (and lazily for older vaults). It encrypts every sync message (AAD = household id). Pairing runs ephemeral ECDH P-256 → HKDF-SHA-256 (salt = SHA-256 of both public keys) → an AES-GCM-256 _pairing key_. The pairing key protects the handshake and hands the HDK to the joining device. The HDK is extractable only so it can be handed over; IndexedDB is plaintext at rest by design (D5).
+
+**D-6.2 — The QR exchange is the trust anchor, backed by a check code.** Both devices show a 6-digit code derived from the ECDH secret (HKDF, separate `info`) and keep it on screen until the person continues. A substituted QR code yields different numbers. No signatures are needed for v1; device identities (ECDSA) are registered for future revocation.
+
+**D-6.3 — Sync is a full state exchange on every connect, then live deltas.** Each side sends all records (tombstones included) in batches of 100, sealed under the HDK; the receiver merges each record by LWW on `hlc` in one transaction per batch and acknowledges. After that, new outbox rows are streamed as the record's current state; acknowledged outbox rows are deleted and the records marked `synced`. Re-sending everything makes the protocol idempotent and resumable (§5.6), and correct for any number of devices without per-peer watermarks; for a family-sized vault it is a few hundred kB over the LAN. Remote applies never write outbox rows, so nothing echoes.
+
+**D-6.4 — Two schema additions on `FamilyTask` (no Dexie version bump; not indexed):** `completedHlc` (the completion fields merge as one group on this per-field clock, §5.3) and `completionGen` (bumped on each toggle). Completion ledger entries use the deterministic id `<taskId>:<generation>`, so the same chore completed on two devices while apart merges into one entry instead of paying out twice. _Known limitation:_ if one device reopens and another, with a later clock, re-completes from the same generation, the task ends completed while the ledger nets zero; a parent can correct it with a manual adjustment. An OR-Set/CRDT ledger is the v2 path (D4).
+
+**D-6.5 — Transport: WebRTC DataChannel, `iceServers: []`, host candidates only (others are also stripped from the SDP).** Chrome's mDNS host-name obfuscation stays on; the two-context e2e test passes with it. The offer and answer fit a single QR (~1 kB of Base45, ≈ version 20 at ECC M). Payloads over 900 characters split into an animated multi-frame QR, reassembled in any order. A copy/paste text code is the fallback where there is no camera; it is also what the e2e test uses.
+
+**D-6.6 — Scanning uses `BarcodeDetector` where available, otherwise `jsQR` on camera frames** (loaded on demand). QR codes are drawn as SVG from `qrcode-generator`.
+
+**D-6.7 — The live session lives in a non-persisted zustand store** and survives client-side navigation. A full reload closes the DataChannel; reconnecting means a new QR exchange, because without a signalling server there is no way back to the peer. Devices therefore sync whenever someone pairs them on the same LAN — the v1 limitation stated in SPEC §12 and in the Devices copy.
+
+**D-6.8 — A remote clock more than 24 h ahead does not advance ours** (`HlcDriftError` is caught); its records still merge.
+
+**D-6.9 — With the flag off, no sync code ships.** `next.config.ts` always defines `NEXT_PUBLIC_FEATURE_SYNC` (`'true'`/`'false'`), and each call site checks `process.env.NEXT_PUBLIC_FEATURE_SYNC === 'true'` inline around its `next/dynamic` import, so webpack folds the constant and drops the dead `import()`. (An imported `SYNC_ENABLED` constant was not enough: webpack still emitted the lazy chunk.) Verified: a flag-off build contains no WebRTC or pairing code. The household-key helpers live in `lib/crypto/householdKey.ts`, so household creation does not pull in pairing code. The e2e build turns the flag on.
+
+### Dependencies added in Phase 6
+
+| Package            | Justification                                                                       |
+| ------------------ | ----------------------------------------------------------------------------------- |
+| `qrcode-generator` | Draws the pairing QR (MIT, no dependencies); loaded only on the pairing screens.    |
+| `jsqr`             | QR decoding where `BarcodeDetector` is missing (Firefox, Safari); loaded on demand. |

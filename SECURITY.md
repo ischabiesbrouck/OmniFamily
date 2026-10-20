@@ -20,6 +20,13 @@ Anyone who can open the browser profile on an unlocked device can read the house
 
 PIN throttling is local to each device: exponential backoff (1 s, 2 s, 4 s, 8 s, 16 s) after 5 consecutive failures and a 15-minute lockout from the 10th; a correct PIN resets the counter. PIN attempt counters are never synced.
 
+## Pairing and sync (behind `NEXT_PUBLIC_FEATURE_SYNC`)
+
+- Devices pair by exchanging two QR codes (or the same text by hand). There is no signalling server, relay or account. WebRTC uses no STUN/TURN servers, so only devices on the same local network can connect.
+- Both screens show a 6-digit check code derived from the pairing secret. If the numbers differ, someone substituted a code: cancel the pairing.
+- Plaintext never crosses the DataChannel: the handshake is sealed under the pairing key and every record under the household data key.
+- Anyone who completes a pairing gets the whole household vault. Pair only devices you control.
+
 ## Reporting a vulnerability
 
 Open a private security advisory on the repository rather than a public issue.
