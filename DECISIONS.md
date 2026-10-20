@@ -91,3 +91,34 @@ Deviations from, and clarifications of, SPEC.md. Newest phase last. Format: **ID
 **D-2.9 — Own minimal UI primitives (`components/ui`), no Shadcn yet.** Button, TextField and Select are a few lines each on Tailwind v4; every target is ≥ 48 px and every text token is ≥ 7:1, checked by a unit test.
 
 **D-2.10 — `SECURITY.md` carries the D5 threat-model sentences verbatim; onboarding shows them (with sentence-case capitalisation) in both locales.**
+
+## Phase 3 — Calendar (2026-10-20)
+
+**D-3.1 — Recurrence is expanded in "floating" wall-clock time.** The series' first start is converted to its own IANA zone's wall clock, encoded as a UTC `Date` for `rrule` (no `tzid`), expanded, then each occurrence is converted back through `@date-fns/tz`. Weekly 19:00 Amsterdam therefore stays 19:00 across DST (acceptance test, unit + e2e). Times in a spring-forward gap move forward (TZDate behaviour).
+
+**D-3.2 — `rrule` stores only the RRULE body (e.g. `FREQ=WEEKLY`); DTSTART is the event's `startInstant` + `timeZone`.** No duplicated source of truth.
+
+**D-3.3 — `recurrenceId` and `exDates` hold the occurrence's original start as a UTC ISO instant.** All-day series use `<YYYY-MM-DD>T00:00:00.000Z` as an opaque key.
+
+**D-3.4 — All-day events: `allDayEndDate` is inclusive; `startInstant`/`endInstant` are sort keys only** (`<start>T00:00Z`, `<end+1>T00:00Z`). The floating dates are authoritative and are placed on the viewer's local days.
+
+**D-3.5 — Expansion caps: a window is clipped to 24 months and a series to 1 000 occurrences per window.** Satisfies D7's "hard-capped at 24 months" and bounds the work of a DAILY rule.
+
+**D-3.6 — Private events show only to their creator and the members involved, judged by the device's active profile.** Without an active profile, only family-visible events show.
+
+**D-3.7 — Editing "all occurrences" from any occurrence keeps the series' first date** and applies the new times, duration and fields. Editing "this occurrence" writes an override record; deleting it adds an exDate (and tombstones the override, if any). Deleting the series tombstones the master and every override.
+
+**D-3.8 — Week view is an agenda grid of 7 day columns, not an hourly time grid.** It is simpler, readable on a wall display and enough for v1.
+
+**D-3.9 — Calendar view and date live in the URL (`?view=week&date=2026-10-24`).** This makes views linkable and testable; the page wraps `useSearchParams` in `<Suspense>` for static prerendering.
+
+**D-3.10 — Formatting uses the browser's full locale tag in the chosen language (e.g. `en-GB`, `nl-BE`).** Catalogues stay `en`/`nl`, but dates and times follow regional conventions (24-hour clock in en-GB). The `Locale` augmentation was removed from next-intl's `AppConfig` for this reason.
+
+**D-3.11 — Bundle watch.** `/` and `/calendar` are at ~186–188 kB first-load JS against the 200 kB budget (SPEC §9). Phase 5 enforces the budget in CI and lazy-loads the event dialog (Radix Dialog + form) if needed.
+
+### Dependencies added in Phase 3
+
+| Package                  | Justification                                                                          |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| `@radix-ui/react-dialog` | Accessible modal (focus trap, Escape, aria) for the event editor; Radix is in SPEC §2. |
+| `lucide-react`           | Icons, listed in SPEC §2.                                                              |
