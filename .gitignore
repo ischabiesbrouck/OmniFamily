@@ -23,3 +23,8 @@ blob-report/
 # misc
 .DS_Store
 *.log
+
+# serwist output
+public/sw.js
+public/sw.js.map
+public/swe-worker-*.js

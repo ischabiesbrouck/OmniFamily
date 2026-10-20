@@ -1,4 +1,22 @@
+import { randomUUID } from 'node:crypto';
+import withSerwistInit from '@serwist/next';
 import type { NextConfig } from 'next';
+import { APP_ROUTES } from './lib/pwa/routes';
+
+// One revision per build: every page is re-precached when a new service worker installs.
+const revision = process.env.BUILD_REVISION ?? randomUUID();
+
+const withSerwist = withSerwistInit({
+  swSrc: 'app/sw.ts',
+  swDest: 'public/sw.js',
+  additionalPrecacheEntries: [...APP_ROUTES, '/manifest.webmanifest'].map((url) => ({
+    url,
+    revision,
+  })),
+  // A reload would discard half-typed forms and interrupt the kiosk.
+  reloadOnOnline: false,
+  disable: process.env.NODE_ENV === 'development',
+});
 
 // D1: the product surface is client components only. Do not enable Server Actions.
 const nextConfig: NextConfig = {
@@ -6,4 +24,4 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
 };
 
-export default nextConfig;
+export default withSerwist(nextConfig);

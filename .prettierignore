@@ -7,3 +7,5 @@ test-results/
 pnpm-lock.yaml
 next-env.d.ts
 SPEC.md
+public/sw.js
+public/swe-worker-*.js
