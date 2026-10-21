@@ -13,12 +13,16 @@ export function Card({
   return (
     <section
       aria-labelledby={id}
-      className={`rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-5 ${className}`}
+      className={`rounded-card border border-line bg-surface p-5 shadow-card sm:p-6 ${className}`}
       {...props}
     >
       {title && (
-        <div className="mb-3 flex items-center gap-2">
-          {icon && <span className="text-accent">{icon}</span>}
+        <div className="mb-4 flex items-center gap-3">
+          {icon && (
+            <span className="flex size-10 items-center justify-center rounded-full bg-accent-soft text-accent-soft-ink">
+              {icon}
+            </span>
+          )}
           <h2 id={id} className="text-lg font-semibold tracking-tight">
             {title}
           </h2>
@@ -42,7 +46,7 @@ export function PageHeader({
   return (
     <div className="mb-5 flex flex-wrap items-end gap-3">
       <div className="mr-auto min-w-0">
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
         {subtitle && <p className="mt-1 text-muted">{subtitle}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}

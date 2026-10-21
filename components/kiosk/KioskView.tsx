@@ -35,12 +35,12 @@ export function KioskView() {
       className="min-h-dvh p-6 transition-transform duration-200 lg:p-10"
       style={{ transform: `translate(${dx}px, ${dy}px)` }}
     >
-      <header className="mb-6 flex flex-wrap items-end justify-between gap-2">
+      <header className="hero mb-6 flex flex-wrap items-end justify-between gap-2 rounded-card p-6 shadow-card lg:p-8">
         <h1 className="sr-only">{t('title')}</h1>
-        <p className="text-7xl font-bold tracking-tight tabular-nums lg:text-8xl">
+        <p className="text-7xl font-semibold tracking-tight tabular-nums lg:text-8xl">
           {format.dateTime(now, { hour: '2-digit', minute: '2-digit', timeZone: zone })}
         </p>
-        <p className="text-2xl font-semibold text-muted first-letter:uppercase">
+        <p className="text-2xl font-semibold first-letter:uppercase">
           {format.dateTime(now, { weekday: 'long', day: 'numeric', month: 'long', timeZone: zone })}
         </p>
       </header>

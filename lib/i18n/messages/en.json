@@ -98,7 +98,8 @@
     "shopping": "Shopping list",
     "shoppingCount": "{count, plural, =0 {Nothing to buy} one {# item to buy} other {# items to buy}}",
     "seeAll": "See all",
-    "openCalendar": "Open calendar"
+    "openCalendar": "Open calendar",
+    "summary": "{events, plural, =0 {Nothing planned} one {# event} other {# events}} and {chores, plural, =0 {no chores} one {# chore} other {# chores}} today."
   },
   "settings": {
     "title": "Settings",
@@ -203,7 +204,8 @@
         "invalidTimeZone": "Choose a valid time zone."
       }
     },
-    "import": "Import"
+    "import": "Import",
+    "eventCount": "{count, plural, =0 {Free} one {# event} other {# events}}"
   },
   "tasks": {
     "title": "Tasks & chores",

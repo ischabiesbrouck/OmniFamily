@@ -331,3 +331,33 @@ Every event goes to every relay, so a relay that is down or forgets data costs n
 | ----------------------- | --------------------------------------------------------------------- |
 | `@noble/curves`         | BIP-340 Schnorr signatures that relays require (D-10.2); lazy-loaded. |
 | `ws`, `@types/ws` (dev) | Local NIP-01 relay for the e2e tests.                                 |
+
+## Phase 11 — Visual redesign v2
+
+**D-11.1 — Design language taken from the owner's references.** The aim is soft, rounded and calm:
+
+- **Surfaces.** A cool grey canvas, borderless white cards (radius 28 px) and ink-black pill buttons. In dark mode the pills turn white.
+- **Hero.** A mesh-gradient "hero" (teal → peach → lavender; deep tones in dark mode) holds the Today greeting, the week strip, the calendar's day headers and the wall-display clock.
+- **Events.** Events are **pastel tiles in the member's colour**: `.tint` mixes the member's hex with the surface (16 % light, 30 % dark) and `.tint-bar` adds the colour edge. Text on them is ink, which measures ≥ 12:1 for every member colour in both themes.
+- **Contrast.** The text tokens are retuned and still pass the AAA contrast test. `--brand` (violet) is decorative only (rings, focus outline, dots).
+
+**D-11.2 — Typeface: DM Sans (variable), self-hosted** from `@fontsource-variable/dm-sans` (OFL-1.1). There is no Google Fonts request, and the font is precached by the service worker, so it works offline. Latin-only plus Latin Extended, ≈ 37 kB woff2. It replaces the system font stack of D-9.7.
+
+**D-11.3 — Navigation.**
+
+- **Phones.** A floating, frosted bottom bar; the active tab's icon sits in a filled pill. A round ink "+" floats above it.
+- **Large screens.** The sidebar is a rounded panel with the family's avatars and a mini month. Every day in the mini month opens that day.
+- **Calendar header.** On phones the calendar header keeps a round "+" (New event); Import moves to the Add sheet.
+
+**D-11.4 — Calendar.**
+
+- **Phone month.** Day bubbles: the picked day is solid, today has a ring, member-colour dots show what is planned. Below them is a "21 · TODAY · 4 events" heading and pastel event cards.
+- **Large-screen month.** Rounded day tiles with pill weekday headers. Weeks that lie wholly in another month are left out.
+- **Week and day.** Gradient strip of day tiles above pastel blocks. The phone day view adds a week strip.
+- **Targets.** Week strips run edge to edge on phones so each day stays ≥ 48 px wide (SPEC §6).
+
+### Dependencies added in Phase 11
+
+| Package                        | Justification                                     |
+| ------------------------------ | ------------------------------------------------- |
+| `@fontsource-variable/dm-sans` | Self-hosted variable typeface (D-11.2); CSS only. |

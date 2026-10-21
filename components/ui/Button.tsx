@@ -3,15 +3,15 @@ import type { ButtonHTMLAttributes } from 'react';
 export type ButtonVariant = 'primary' | 'secondary' | 'soft' | 'ghost' | 'danger';
 
 export const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-on-accent shadow-card hover:brightness-110 active:brightness-95',
-  secondary: 'border border-line-strong bg-surface text-ink hover:bg-surface-2',
-  soft: 'bg-accent-soft text-accent-soft-ink hover:brightness-95',
+  primary: 'bg-accent text-on-accent shadow-card hover:opacity-90 active:scale-[0.98]',
+  secondary: 'border border-line bg-surface text-ink shadow-card hover:bg-surface-2',
+  soft: 'bg-accent-soft text-accent-soft-ink hover:brightness-95 active:scale-[0.98]',
   ghost: 'text-ink hover:bg-surface-2',
-  danger: 'bg-danger text-on-danger hover:brightness-110',
+  danger: 'bg-danger text-on-danger hover:opacity-90',
 };
 
 export const BUTTON_BASE =
-  'inline-flex min-h-12 min-w-12 select-none items-center justify-center gap-2 rounded-xl px-4 text-[0.95rem] font-semibold transition duration-150 disabled:cursor-not-allowed disabled:opacity-60';
+  'inline-flex min-h-12 min-w-12 select-none items-center justify-center gap-2 rounded-full px-5 text-[0.95rem] font-semibold tracking-tight transition duration-150 disabled:cursor-not-allowed disabled:opacity-60';
 
 /** ≥ 48 × 48 CSS px touch target (SPEC §6). */
 export function Button({
@@ -45,7 +45,7 @@ export function IconButton({
       type={type}
       aria-label={label}
       title={label}
-      className={`inline-flex size-12 shrink-0 items-center justify-center rounded-xl transition duration-150 disabled:opacity-60 ${BUTTON_VARIANTS[variant]} ${className}`}
+      className={`inline-flex size-12 shrink-0 items-center justify-center rounded-full transition duration-150 disabled:opacity-60 ${BUTTON_VARIANTS[variant]} ${className}`}
       {...props}
     />
   );

@@ -45,7 +45,8 @@ test('every screen passes axe (WCAG 2.2 AA + AAA contrast) with large enough tar
     ['/', 'Hello, Lotte'],
     ['/calendar?view=month&date=2026-10-01', 'October 2026'],
     ['/calendar?view=week&date=2026-10-24', '19 Oct – 25 Oct 2026'],
-    ['/calendar?view=day&date=2026-10-24', 'Saturday 24 October 2026'],
+    // Phones show the shorter "Sat 24 October".
+    ['/calendar?view=day&date=2026-10-24', /^Sat(urday)? 24 October/],
     ['/tasks', en.tasks.title],
     ['/groceries', en.groceries.title],
     ['/settings', en.settings.title],

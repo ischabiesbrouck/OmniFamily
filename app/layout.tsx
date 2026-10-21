@@ -6,6 +6,7 @@ import { catalogues } from '@/lib/i18n/messages';
 import { withBase } from '@/lib/pwa/basePath';
 import { THEME_BOOT_SCRIPT } from '@/lib/theme';
 import { ThemeController } from './ThemeController';
+import '@fontsource-variable/dm-sans/wght.css';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -19,8 +20,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f4f6fb' },
-    { media: '(prefers-color-scheme: dark)', color: '#0b1020' },
+    { media: '(prefers-color-scheme: light)', color: '#eef0f5' },
+    { media: '(prefers-color-scheme: dark)', color: '#0b0c10' },
   ],
   width: 'device-width',
   initialScale: 1,

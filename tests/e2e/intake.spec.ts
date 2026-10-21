@@ -54,7 +54,7 @@ test('acceptance: with /api/intake answering 503, every other feature still work
   await page.getByRole('link', { name: en.nav.settings }).click();
   await page.getByLabel(en.onboarding.memberName, { exact: true }).fill('Daan');
   await page.getByRole('button', { name: en.common.add, exact: true }).click();
-  await expect(page.locator('li', { hasText: 'Daan' })).toBeVisible();
+  await expect(page.getByRole('main').locator('li', { hasText: 'Daan' })).toBeVisible();
 });
 
 test('declining consent sends nothing; consent can be withdrawn', async ({ page }) => {

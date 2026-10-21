@@ -68,7 +68,9 @@ test('each device is its own person: join by QR link or typed family code, then 
   await c.getByRole('button', { name: s.who.submit }).click();
   await expect(c.getByRole('heading', { name: 'Hello, Lotte' })).toBeVisible();
   // Daan, added on B, reaches C through sync.
-  await expect(c.getByText('Daan', { exact: true })).toBeVisible({ timeout: 20_000 });
+  await expect(c.getByRole('main').getByText('Daan', { exact: true })).toBeVisible({
+    timeout: 20_000,
+  });
 
   // B → A, live.
   await b.getByRole('link', { name: en.nav.groceries }).click();

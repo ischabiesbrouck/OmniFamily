@@ -14,6 +14,7 @@ import {
   shiftAnchor,
   VIEWS,
   visibleDates,
+  weekDates,
   windowFor,
   type CalendarView as View,
 } from '@/lib/calendar/grid';
@@ -27,6 +28,7 @@ import { MonthView } from './MonthView';
 import { TimeGrid } from './TimeGrid';
 import { useOccurrences, useTaskProgress } from './useOccurrences';
 import { WeekAgenda } from './WeekAgenda';
+import { WeekStrip } from './WeekStrip';
 
 // Flag inlined at build time; webpack drops the dead import() when off (D-7.3).
 const QuickAdd =
@@ -106,19 +108,27 @@ export function CalendarView() {
       ? label(anchor, { month: 'long', year: 'numeric' })
       : view === 'week'
         ? `${label(dates[0] ?? anchor, { day: 'numeric', month: 'short' })} – ${label(dates[6] ?? anchor, { day: 'numeric', month: 'short', year: 'numeric' })}`
-        : label(anchor, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        : label(
+            anchor,
+            wide
+              ? { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
+              : { weekday: 'short', day: 'numeric', month: 'long' },
+          );
   const dayOccurrences = occurrencesOnDay(occurrences, anchor, zone);
+  const busyDays = new Set(
+    weekDates(anchor).filter((d) => occurrencesOnDay(occurrences, d, zone).length > 0),
+  );
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <h1
-          className="mr-auto min-w-0 text-2xl font-bold tracking-tight first-letter:uppercase sm:text-3xl"
-          aria-live="polite"
-        >
-          {heading}
-        </h1>
-        <div className="flex items-center gap-1">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <h1
+            className="mr-auto min-w-0 text-2xl font-semibold tracking-tight first-letter:uppercase sm:text-4xl"
+            aria-live="polite"
+          >
+            {heading}
+          </h1>
           <IconButton
             label={t('previous')}
             variant="secondary"
@@ -126,9 +136,6 @@ export function CalendarView() {
           >
             <ChevronLeft aria-hidden="true" className="size-5" />
           </IconButton>
-          <Button variant="secondary" onClick={() => navigate(view, today)}>
-            {t('today')}
-          </Button>
           <IconButton
             label={t('next')}
             variant="secondary"
@@ -136,21 +143,44 @@ export function CalendarView() {
           >
             <ChevronRight aria-hidden="true" className="size-5" />
           </IconButton>
+          <IconButton
+            label={t('newEvent')}
+            variant="primary"
+            className="sm:hidden"
+            onClick={() => openEditor({ mode: 'new', date: newEventDate })}
+          >
+            <Plus aria-hidden="true" className="size-5" />
+          </IconButton>
         </div>
-        <Segmented
-          label={t('views.label')}
-          value={view}
-          options={VIEWS.map((v) => ({ value: v, label: t(`views.${v}`) }))}
-          onChange={(v) => navigate(v, anchor)}
-        />
-        <Button variant="secondary" onClick={() => openSheet('import')}>
-          <FileUp aria-hidden="true" className="size-5" />
-          {t('import')}
-        </Button>
-        <Button onClick={() => openEditor({ mode: 'new', date: newEventDate })}>
-          <Plus aria-hidden="true" className="size-5" />
-          {t('newEvent')}
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Segmented
+            label={t('views.label')}
+            value={view}
+            options={VIEWS.map((v) => ({ value: v, label: t(`views.${v}`) }))}
+            onChange={(v) => navigate(v, anchor)}
+          />
+          <Button variant="secondary" onClick={() => navigate(view, today)}>
+            {t('today')}
+          </Button>
+          <span className="ml-auto flex gap-2">
+            {/* Phones: "New event" is the round "+" above; Import is in the Add sheet. */}
+            <Button
+              variant="secondary"
+              className="max-sm:hidden"
+              onClick={() => openSheet('import')}
+            >
+              <FileUp aria-hidden="true" className="size-5" />
+              {t('import')}
+            </Button>
+            <Button
+              className="max-sm:hidden"
+              onClick={() => openEditor({ mode: 'new', date: newEventDate })}
+            >
+              <Plus aria-hidden="true" className="size-5" />
+              {t('newEvent')}
+            </Button>
+          </span>
+        </div>
       </div>
 
       {QuickAdd && (
@@ -173,9 +203,12 @@ export function CalendarView() {
           />
           {!wide && (
             <section aria-label={label(anchor, { weekday: 'long', day: 'numeric', month: 'long' })}>
-              <h2 className="mb-2 font-bold first-letter:uppercase">
-                {label(anchor, { weekday: 'long', day: 'numeric', month: 'long' })}
-              </h2>
+              <DayHeading
+                date={anchor}
+                isToday={anchor === today}
+                count={dayOccurrences.length}
+                label={label}
+              />
               <DayAgenda
                 occurrences={dayOccurrences}
                 members={members}
@@ -215,6 +248,17 @@ export function CalendarView() {
 
       {view === 'day' && (
         <>
+          {!wide && (
+            <WeekStrip
+              className="hero rounded-card p-2"
+              dates={weekDates(anchor)}
+              selected={anchor}
+              today={today}
+              busy={busyDays}
+              label={label}
+              onPick={(d) => navigate('day', d)}
+            />
+          )}
           {dayOccurrences.length === 0 && <p className="text-muted">{t('noEvents')}</p>}
           <TimeGrid
             dates={[anchor]}
@@ -228,6 +272,39 @@ export function CalendarView() {
           />
         </>
       )}
+    </div>
+  );
+}
+
+/** Phone month view: "21 · TODAY / Wednesday 21 October · 3 events" above the day's list. */
+function DayHeading({
+  date,
+  isToday,
+  count,
+  label,
+}: {
+  date: FloatingDate;
+  isToday: boolean;
+  count: number;
+  label: (date: FloatingDate, options: DateTimeFormatOptions) => string;
+}) {
+  const t = useTranslations('calendar');
+  return (
+    <div className="mb-3 flex items-center gap-3 px-1">
+      <span className="text-4xl leading-none font-semibold tabular-nums">
+        {label(date, { day: 'numeric' })}
+      </span>
+      <h2 className="flex min-w-0 flex-col">
+        <span className="text-xs font-semibold tracking-widest text-muted uppercase">
+          {isToday ? t('today') : label(date, { month: 'long' })}
+        </span>
+        <span className="font-semibold first-letter:uppercase">
+          {label(date, { weekday: 'long', day: 'numeric', month: 'long' })}
+        </span>
+      </h2>
+      <span className="ml-auto rounded-full bg-accent px-3 py-1 text-sm font-semibold text-on-accent">
+        {t('eventCount', { count })}
+      </span>
     </div>
   );
 }

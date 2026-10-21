@@ -56,7 +56,7 @@ export function TimeGrid({
     // Open on the working day, or on the first event if it starts earlier.
     const first = occurrences.filter((o) => !o.isAllDay).map((o) => wallMinutes(o.start, zone));
     const startHour = Math.max(0, Math.min(7, ...first.map((m) => Math.floor(m / 60))));
-    if (scroller.current) scroller.current.scrollTop = startHour * HOUR_PX;
+    if (scroller.current) scroller.current.scrollTop = Math.max(0, startHour * HOUR_PX - 12);
     // Only on mount / date change: re-scrolling while someone reads would be jarring.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: occurrences excluded
   }, [datesKey, zone]);
@@ -83,9 +83,9 @@ export function TimeGrid({
   const hasAllDay = perDay.some((d) => d.allDay.length > 0);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+    <div className="overflow-hidden rounded-card border border-line bg-surface shadow-card">
       {cols > 1 && (
-        <div className="grid border-b border-line" style={gridCols}>
+        <div className="hero grid gap-1.5 border-b border-line p-2" style={gridCols}>
           <span />
           {dates.map((d) => (
             <button
@@ -93,13 +93,13 @@ export function TimeGrid({
               type="button"
               onClick={() => onOpenDay?.(d)}
               aria-current={d === today ? 'date' : undefined}
-              className="group flex min-h-12 flex-col items-center justify-center py-1 hover:bg-surface-2"
+              className="group flex min-h-14 flex-col items-center justify-center rounded-tile bg-glass py-1.5 transition hover:bg-surface aria-[current=date]:bg-accent aria-[current=date]:text-on-accent"
             >
               {/* SC 2.5.3: the name is the visible "Mon 19" plus a hidden "– Open Monday 19 October". */}
-              <span className="text-xs font-semibold text-muted uppercase">
+              <span className="text-xs font-medium lowercase group-aria-[current=date]:text-on-accent">
                 {label(d, { weekday: 'short' })}
               </span>{' '}
-              <span className="flex size-8 items-center justify-center rounded-full text-lg font-bold group-aria-[current=date]:bg-accent group-aria-[current=date]:text-on-accent">
+              <span className="text-xl leading-tight font-semibold tabular-nums">
                 {label(d, { day: 'numeric' })}
               </span>
               <span className="sr-only">
@@ -180,13 +180,13 @@ export function TimeGrid({
                   key={item.o.key}
                   type="button"
                   onClick={() => onOpen(item.o)}
-                  className="absolute z-[5] flex flex-col overflow-hidden rounded-lg border-l-4 bg-accent-soft px-1.5 py-1 text-left text-xs text-accent-soft-ink shadow-card hover:brightness-95"
+                  className="tint absolute z-[5] flex flex-col overflow-hidden rounded-xl px-2 py-1.5 text-left text-xs text-ink transition hover:brightness-95"
                   style={{
                     top: top * PX_PER_MIN + 1,
                     height: Math.max(height * PX_PER_MIN - 2, 22),
                     left: `calc(${(100 / columns) * column}% + 2px)`,
                     width: `calc(${100 / columns}% - 4px)`,
-                    borderLeftColor: occurrenceColor(item.o, members),
+                    ['--tint' as string]: occurrenceColor(item.o, members),
                   }}
                 >
                   {/* Accessible name keeps "time – title" order; short blocks fit on one line. */}
@@ -196,7 +196,7 @@ export function TimeGrid({
                     <span className="truncate tabular-nums">
                       {t('timeRange', { start: time(item.o.start), end: time(item.o.end) })}
                     </span>
-                    <span className="truncate text-sm font-bold">{item.o.event.title}</span>
+                    <span className="truncate text-sm font-semibold">{item.o.event.title}</span>
                   </span>
                   <ProgressBadge progress={progressFor(item.o.event, progress)} />
                 </button>

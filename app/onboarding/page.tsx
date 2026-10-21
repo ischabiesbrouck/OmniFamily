@@ -54,17 +54,17 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-      <aside className="bg-accent px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-8 text-on-accent lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col lg:justify-center lg:px-12">
+      <aside className="hero px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-8 text-ink lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col lg:justify-center lg:px-12">
         <div className="mx-auto w-full max-w-md">
           <div className="flex items-center gap-3">
-            <BrandMark className="size-12 rounded-2xl ring-2 ring-on-accent/40" />
+            <BrandMark className="size-12 rounded-2xl shadow-float" />
             <span className="text-lg font-bold">{tApp('name')}</span>
           </div>
           <p className="mt-6 text-2xl font-bold tracking-tight sm:text-3xl">{tApp('tagline')}</p>
           <ul className="mt-8 hidden flex-col gap-5 sm:flex">
             {PROPS.map(({ key, Icon }) => (
               <li key={key} className="flex gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-on-accent/15">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-glass">
                   <Icon aria-hidden="true" className="size-5" />
                 </span>
                 <span>

@@ -1,24 +1,36 @@
 'use client';
 
 import { CalendarDays, ListChecks, ShoppingBasket, Trophy, Users } from 'lucide-react';
-import { useFormatter, useTimeZone, useTranslations } from 'next-intl';
+import { useFormatter, useTimeZone, useTranslations, type DateTimeFormatOptions } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import Link from 'next/link';
 import { TodayAgenda } from '@/components/calendar/TodayAgenda';
+import { useOccurrences } from '@/components/calendar/useOccurrences';
+import { WeekStrip } from '@/components/calendar/WeekStrip';
 import { MemberAvatar } from '@/components/members/MemberAvatar';
 import { PointsBoard } from '@/components/tasks/PointsBoard';
 import { TaskItem } from '@/components/tasks/TaskItem';
-import { Card, EmptyState, PageHeader } from '@/components/ui/Card';
+import { Card, EmptyState } from '@/components/ui/Card';
+import { weekDates, windowFor } from '@/lib/calendar/grid';
 import { useLiveRecords, useMembers } from '@/lib/db/repositories/hooks';
 import { balances } from '@/lib/db/repositories/points';
 import { choresForToday } from '@/lib/db/repositories/tasks';
-import { addDays, startOfDayEpoch, todayIn } from '@/lib/time/zoned';
+import { occurrencesOnDay } from '@/lib/recurrence/expand';
+import {
+  addDays,
+  floatingDateToUtc,
+  startOfDayEpoch,
+  todayIn,
+  type FloatingDate,
+} from '@/lib/time/zoned';
 import { useDeviceStore } from '@/stores/deviceStore';
 
 function SeeAll({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="inline-flex min-h-12 items-center rounded-xl px-3 text-sm font-semibold text-accent hover:bg-surface-2"
+      className="inline-flex min-h-12 items-center rounded-full px-4 text-sm font-semibold text-ink hover:bg-surface-2"
     >
       {label}
     </Link>
@@ -28,6 +40,7 @@ function SeeAll({ href, label }: { href: string; label: string }) {
 export default function TodayPage() {
   const t = useTranslations('today');
   const format = useFormatter();
+  const router = useRouter();
   const zone = useTimeZone() ?? 'UTC';
   const members = useMembers() ?? [];
   const tasks = useLiveRecords('task') ?? [];
@@ -44,18 +57,41 @@ export default function TodayPage() {
   );
   const openChores = chores.filter((task) => !task.completed).length;
   const toBuy = groceries.filter((g) => !g.purchased);
+  const week = weekDates(today);
+  const window = useMemo(() => windowFor('week', today, zone), [today, zone]);
+  const occurrences = useOccurrences(window, zone, activeId) ?? [];
+  const busy = new Set(week.filter((d) => occurrencesOnDay(occurrences, d, zone).length > 0));
+  const todayCount = occurrencesOnDay(occurrences, today, zone).length;
+  const label = (date: FloatingDate, options: DateTimeFormatOptions) =>
+    format.dateTime(floatingDateToUtc(date), { ...options, timeZone: 'UTC' });
 
   return (
     <div>
-      <PageHeader
-        title={active ? t('greeting', { name: active.name }) : t('greetingAnonymous')}
-        subtitle={format.dateTime(Date.now(), {
-          weekday: 'long',
-          day: 'numeric',
-          month: 'long',
-          timeZone: zone,
-        })}
-      />
+      <section className="hero mb-5 rounded-card p-5 shadow-card sm:p-7">
+        <p className="text-sm font-semibold tracking-wide first-letter:uppercase">
+          {format.dateTime(Date.now(), {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            timeZone: zone,
+          })}
+        </p>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight sm:text-5xl">
+          {active ? t('greeting', { name: active.name }) : t('greetingAnonymous')}
+        </h1>
+        <p className="mt-2 text-base sm:text-lg">
+          {t('summary', { events: todayCount, chores: openChores })}
+        </p>
+        <WeekStrip
+          className="-mx-4 mt-4 max-w-xl sm:mx-0"
+          dates={week}
+          selected={today}
+          today={today}
+          busy={busy}
+          label={label}
+          onPick={(d) => router.push(`/calendar?view=day&date=${d}`)}
+        />
+      </section>
       <div className="grid gap-4 lg:grid-cols-3">
         <Card
           title={t('agenda')}

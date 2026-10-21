@@ -91,11 +91,11 @@ test('S1 + S5: every core feature works with the network disabled', async ({ pag
   await page.getByRole('link', { name: en.nav.settings }).click();
   await page.getByLabel(en.onboarding.memberName, { exact: true }).fill('Daan');
   await page.getByRole('button', { name: en.common.add, exact: true }).click();
-  await expect(page.locator('li', { hasText: 'Daan' })).toBeVisible();
+  await expect(page.getByRole('main').locator('li', { hasText: 'Daan' })).toBeVisible();
 
   // Everything survives an offline reload.
   await page.reload();
-  await expect(page.locator('li', { hasText: 'Daan' })).toBeVisible();
+  await expect(page.getByRole('main').locator('li', { hasText: 'Daan' })).toBeVisible();
 
   // S5: nothing was answered by the network; the only failures are optional RSC fetches
   // that Next.js replaces with a precached document navigation.

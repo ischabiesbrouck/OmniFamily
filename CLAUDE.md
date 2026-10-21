@@ -24,7 +24,7 @@ NEXT_PUBLIC_FEATURE_SYNC (pairing, Phase 6) · NEXT_PUBLIC_FEATURE_INTAKE (AI qu
 
 ## UI
 
-Use the tokens in app/globals.css (bg-surface, text-muted, bg-accent, …) and components/ui/*. Text must keep ≥ 7:1 in light and dark (tests/unit/contrast.test.ts). Global sheets and the event editor open through stores/uiStore.ts.
+Use the tokens in app/globals.css (bg-surface, text-muted, bg-accent, …), `.hero` (gradient), `.tint` + `--tint` (pastel member colour), radii `rounded-card`/`rounded-tile`, and components/ui/*. Pills: buttons and segmented controls are `rounded-full`. Text must keep ≥ 7:1 in light and dark (tests/unit/contrast.test.ts). Global sheets and the event editor open through stores/uiStore.ts.
 
 ## Before saying a task is done
 

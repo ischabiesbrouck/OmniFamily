@@ -17,7 +17,7 @@ export function Select({
       </label>
       <select
         id={id}
-        className="min-h-12 w-full rounded-xl border border-line-strong bg-surface px-3.5 pr-8 text-base text-ink transition placeholder:text-muted focus:border-accent aria-invalid:border-danger"
+        className="min-h-12 w-full rounded-2xl border border-line-strong bg-surface px-4 pr-8 text-base text-ink transition placeholder:text-muted focus:border-accent focus:ring-4 focus:ring-brand/20 focus:outline-none aria-invalid:border-danger"
         {...props}
       >
         {options.map((o) => (

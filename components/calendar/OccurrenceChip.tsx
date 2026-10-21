@@ -6,9 +6,7 @@ import type { FamilyMember } from '@/lib/db/schema';
 import type { Occurrence } from '@/lib/recurrence/expand';
 
 export function occurrenceColor(occurrence: Occurrence, members: readonly FamilyMember[]): string {
-  return (
-    members.find((m) => occurrence.event.memberIds.includes(m.id))?.colorHex ?? 'var(--accent)'
-  );
+  return members.find((m) => occurrence.event.memberIds.includes(m.id))?.colorHex ?? 'var(--brand)';
 }
 
 export function useTimeLabel() {
@@ -55,21 +53,17 @@ export function OccurrenceChip({
     <button
       type="button"
       onClick={() => onOpen(occurrence)}
-      className="flex min-h-12 w-full items-center gap-1.5 rounded-lg bg-surface-2 px-2 text-left text-sm hover:brightness-95 lg:pointer-fine:min-h-8"
+      className="tint flex min-h-12 w-full items-center gap-1.5 rounded-xl px-2 text-left text-sm text-ink transition hover:brightness-95 lg:pointer-fine:min-h-8"
+      style={{ ['--tint' as string]: color }}
     >
-      <span
-        aria-hidden="true"
-        className="size-2 shrink-0 rounded-full"
-        style={{ backgroundColor: color }}
-      />
-      <span className="shrink-0 font-semibold tabular-nums">
+      <span className="shrink-0 font-medium tabular-nums">
         {occurrence.isAllDay
           ? t('allDay')
           : compact
             ? time(occurrence.start)
             : t('timeRange', { start: time(occurrence.start), end: time(occurrence.end) })}
       </span>
-      <span className="truncate">{occurrence.event.title}</span>
+      <span className="truncate font-semibold">{occurrence.event.title}</span>
       <ProgressBadge progress={progress} />
     </button>
   );

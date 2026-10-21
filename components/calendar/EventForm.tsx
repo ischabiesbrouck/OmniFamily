@@ -68,67 +68,72 @@ export function EventForm({
         error={error === 'titleRequired' ? t('errors.titleRequired') : undefined}
       />
 
-      <label className="flex min-h-12 items-center gap-3 font-medium">
-        <input
-          type="checkbox"
-          className="size-6"
-          checked={draft.isAllDay}
-          onChange={(e) => setDraft((d) => ({ ...d, isAllDay: e.target.checked, endDate: d.date }))}
-        />
-        {t('allDay')}
-      </label>
+      <div className="flex flex-col gap-3 rounded-tile bg-surface-2 p-4">
+        <label className="flex min-h-12 items-center gap-3 font-semibold">
+          <input
+            type="checkbox"
+            className="size-6 accent-[var(--accent)]"
+            checked={draft.isAllDay}
+            onChange={(e) =>
+              setDraft((d) => ({ ...d, isAllDay: e.target.checked, endDate: d.date }))
+            }
+          />
+          {t('allDay')}
+        </label>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <TextField
-          type="date"
-          label={draft.isAllDay ? t('startDate') : t('date')}
-          value={draft.date}
-          onChange={(e) =>
-            setDraft((d) => ({
-              ...d,
-              date: e.target.value,
-              endDate: compareDates(d.endDate, e.target.value) < 0 ? e.target.value : d.endDate,
-            }))
-          }
-          error={error === 'invalidDate' ? t('errors.invalidDate') : undefined}
-        />
-        {draft.isAllDay ? (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <TextField
             type="date"
-            label={t('endDate')}
-            value={draft.endDate}
-            min={draft.date}
-            onChange={(e) => set('endDate', e.target.value)}
-            error={error === 'endBeforeStart' ? t('errors.endBeforeStart') : undefined}
+            className={draft.isAllDay ? '' : 'col-span-2 sm:col-span-1'}
+            label={draft.isAllDay ? t('startDate') : t('date')}
+            value={draft.date}
+            onChange={(e) =>
+              setDraft((d) => ({
+                ...d,
+                date: e.target.value,
+                endDate: compareDates(d.endDate, e.target.value) < 0 ? e.target.value : d.endDate,
+              }))
+            }
+            error={error === 'invalidDate' ? t('errors.invalidDate') : undefined}
           />
-        ) : (
-          <>
+          {draft.isAllDay ? (
             <TextField
-              type="time"
-              label={t('startTime')}
-              value={draft.startTime}
-              onChange={(e) => set('startTime', e.target.value)}
-              error={error === 'invalidTime' ? t('errors.invalidTime') : undefined}
-            />
-            <TextField
-              type="time"
-              label={t('endTime')}
-              value={draft.endTime}
-              onChange={(e) => set('endTime', e.target.value)}
+              type="date"
+              label={t('endDate')}
+              value={draft.endDate}
+              min={draft.date}
+              onChange={(e) => set('endDate', e.target.value)}
               error={error === 'endBeforeStart' ? t('errors.endBeforeStart') : undefined}
             />
-          </>
+          ) : (
+            <>
+              <TextField
+                type="time"
+                label={t('startTime')}
+                value={draft.startTime}
+                onChange={(e) => set('startTime', e.target.value)}
+                error={error === 'invalidTime' ? t('errors.invalidTime') : undefined}
+              />
+              <TextField
+                type="time"
+                label={t('endTime')}
+                value={draft.endTime}
+                onChange={(e) => set('endTime', e.target.value)}
+                error={error === 'endBeforeStart' ? t('errors.endBeforeStart') : undefined}
+              />
+            </>
+          )}
+        </div>
+
+        {!draft.isAllDay && (
+          <Select
+            label={t('timeZone')}
+            value={draft.timeZone}
+            options={zones.map((z) => ({ value: z, label: z.replaceAll('_', ' ') }))}
+            onChange={(e) => set('timeZone', e.target.value)}
+          />
         )}
       </div>
-
-      {!draft.isAllDay && (
-        <Select
-          label={t('timeZone')}
-          value={draft.timeZone}
-          options={zones.map((z) => ({ value: z, label: z.replaceAll('_', ' ') }))}
-          onChange={(e) => set('timeZone', e.target.value)}
-        />
-      )}
 
       <Select
         label={t('repeat')}
@@ -138,16 +143,16 @@ export function EventForm({
       />
 
       <fieldset className="flex flex-col gap-1">
-        <legend className="font-medium">{t('members')}</legend>
+        <legend className="mb-1 text-sm font-semibold">{t('members')}</legend>
         <div className="flex flex-wrap gap-2">
           {members.map((m) => (
             <label
               key={m.id}
-              className="flex min-h-12 items-center gap-2 rounded-lg border border-line-strong px-3"
+              className="flex min-h-12 cursor-pointer items-center gap-2 rounded-full border border-line-strong py-1 pr-4 pl-1.5 font-medium transition has-[:checked]:border-accent has-[:checked]:bg-accent has-[:checked]:text-on-accent has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-brand"
             >
               <input
                 type="checkbox"
-                className="size-5"
+                className="sr-only"
                 checked={draft.memberIds.includes(m.id)}
                 onChange={(e) =>
                   set(

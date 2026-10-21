@@ -63,10 +63,10 @@ test('acceptance: device B receives device A’s vault and a subsequent edit', a
 
   // B received A's vault: household, members and today's event.
   await expect(b).toHaveURL(/\/$/);
-  await expect(b.getByText('Lotte', { exact: true })).toBeVisible();
+  await expect(b.getByRole('main').getByText('Lotte', { exact: true })).toBeVisible();
   await expect(b.getByRole('button', { name: /Swimming/ })).toBeVisible();
   await expect(a.getByRole('navigation').getByText('Live with Daan’s phone')).toBeVisible();
-  await expect(a.locator('li', { hasText: 'Daan’s phone' })).toBeVisible(); // B's device record came back
+  await expect(a.getByRole('main').locator('li', { hasText: 'Daan’s phone' })).toBeVisible(); // B's device record came back
 
   // A subsequent edit on A arrives on B over the open channel (client-side navigation only:
   // a full reload would close the DataChannel).

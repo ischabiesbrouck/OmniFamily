@@ -32,29 +32,25 @@ export function DayAgenda({
             <button
               type="button"
               onClick={() => onOpen(o)}
-              className="flex min-h-14 w-full items-stretch gap-3 rounded-xl bg-surface-2 p-2.5 text-left transition hover:brightness-95"
+              className="tint tint-bar flex min-h-16 w-full items-center gap-3 rounded-tile py-3 pr-3 pl-5 text-left text-ink transition hover:brightness-95"
+              style={{ ['--tint' as string]: occurrenceColor(o, members) }}
             >
-              <span
-                aria-hidden="true"
-                className="w-1 shrink-0 rounded-full"
-                style={{ backgroundColor: occurrenceColor(o, members) }}
-              />
-              <span className="w-24 shrink-0 text-sm font-semibold tabular-nums sm:w-28">
-                {o.isAllDay
-                  ? t('allDay')
-                  : t('timeRange', { start: time(o.start), end: time(o.end) })}
-              </span>
               <span className="flex min-w-0 flex-1 flex-col">
-                <span className="truncate font-semibold">{o.event.title}</span>
+                <span className="text-sm font-medium tabular-nums">
+                  {o.isAllDay
+                    ? t('allDay')
+                    : t('timeRange', { start: time(o.start), end: time(o.end) })}
+                </span>
+                <span className="truncate text-[1.05rem] font-semibold">{o.event.title}</span>
                 {o.event.location && (
-                  <span className="flex items-center gap-1 truncate text-sm text-muted">
+                  <span className="flex items-center gap-1 truncate text-sm">
                     <MapPin aria-hidden="true" className="size-3.5 shrink-0" />
                     {o.event.location}
                   </span>
                 )}
               </span>
               <span className="flex shrink-0 items-center gap-2">
-                <span className="hidden -space-x-2 sm:flex">
+                <span className="flex -space-x-2">
                   {people.slice(0, 3).map((m) => (
                     <MemberAvatar key={m.id} member={m} size="sm" />
                   ))}
