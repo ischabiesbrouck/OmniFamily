@@ -10,7 +10,7 @@ import { getRepositories } from '@/lib/db/repositories';
 import { useHousehold, useLiveRecords, useSetting } from '@/lib/db/repositories/hooks';
 import { withBase } from '@/lib/pwa/basePath';
 import { isRelaySyncOn, RELAY_SYNC_KEY, relayUrls, setRelaySync } from '@/lib/sync/relay/config';
-import { inviteLink } from '@/lib/sync/relay/inviteCode';
+import { formatInviteCode, inviteLink } from '@/lib/sync/relay/inviteCode';
 import type { Invite } from '@/lib/sync/relay/invite';
 import type { RelayPool } from '@/lib/sync/relay/pool';
 import { startHostPairing, type HostPairing } from '@/lib/sync/pairingFlow';
@@ -30,7 +30,7 @@ type LanStep =
 type InviteStep =
   | { s: 'idle' }
   | { s: 'creating' }
-  | { s: 'open'; link: string; known: Set<string> }
+  | { s: 'open'; code: string; link: string; known: Set<string> }
   | { s: 'joined'; name: string }
   | { s: 'error' };
 
@@ -81,6 +81,7 @@ export default function DevicesSection() {
       const page = `${window.location.origin}${withBase('/onboarding/')}`;
       setInvite({
         s: 'open',
+        code: formatInviteCode(created.code),
         link: inviteLink(created.code, page),
         known: new Set(devices.map((d) => d.id)),
       });
@@ -167,6 +168,15 @@ export default function DevicesSection() {
           <div className="flex flex-col gap-3 rounded-2xl border border-line bg-surface-2 p-4">
             <p className="font-semibold">{t('invite.title')}</p>
             <p className="text-sm">{t('invite.hint')}</p>
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-semibold">{t('invite.codeLabel')}</span>
+              <output
+                aria-label={t('invite.codeLabel')}
+                className="self-start rounded-xl bg-surface px-4 py-2 font-mono text-3xl font-bold tracking-widest"
+              >
+                {invite.code}
+              </output>
+            </div>
             <QrCode
               frames={[invite.link]}
               label={t('invite.qrLabel')}

@@ -76,7 +76,16 @@
     },
     "aboutYou": "Over jou",
     "yourFamily": "Je gezin",
-    "securityAndDevice": "Pincode en apparaat"
+    "securityAndDevice": "Pincode en apparaat",
+    "choose": {
+      "title": "Welkom bij OmniFamily",
+      "intro": "Is dit het eerste apparaat in je gezin, of gebruikt je gezin OmniFamily al?",
+      "create": "Nieuw gezin aanmaken",
+      "createHint": "Begin opnieuw. Voeg later de andere telefoons en tablets van je gezin toe.",
+      "join": "Aansluiten bij een gezin",
+      "joinHint": "Iemand in je gezin gebruikt OmniFamily al. Vul diens gezinscode in of scan de QR-code.",
+      "back": "Terug"
+    }
   },
   "today": {
     "greeting": "Hallo, {name}",
@@ -315,18 +324,20 @@
       "timeout": "Geen verbinding. Zitten beide apparaten op hetzelfde wifi-netwerk?"
     },
     "join": {
-      "button": "Aansluiten bij een bestaand gezin",
-      "title": "Aansluiten bij een bestaand gezin",
-      "intro": "Voeg dit apparaat toe aan een gezin dat OmniFamily al op een ander apparaat gebruikt.",
-      "step1": "Open op een apparaat met het gezin Instellingen → Apparaten → “Apparaat toevoegen”. Scan de code hier of plak de uitnodigingslink.",
+      "button": "Aansluiten bij een gezin",
+      "title": "Aansluiten bij een gezin",
+      "intro": "Vul de gezinscode in die op het andere apparaat staat, of scan de QR-code. Op dat apparaat: Instellingen → Apparaten → “Apparaat toevoegen”.",
+      "step1": "Open op het andere apparaat Instellingen → Apparaten → “Zonder internet (zelfde wifi)” → “Koppelen via hetzelfde wifi” en scan de code hier.",
       "step2": "Laat deze code nu aan het andere apparaat zien.",
       "waiting": "Wachten op het andere apparaat…",
-      "back": "Toch een nieuw gezin instellen",
+      "back": "Terug",
       "deviceName": "Naam van dit apparaat",
       "submit": "Aansluiten",
       "joining": "Aansluiten… dit duurt een paar seconden.",
       "joined": "Gelukt! De gezinsagenda komt nu binnen.",
-      "fromLink": "Je hebt een uitnodigingslink geopend. Geef dit apparaat een naam en sluit aan."
+      "fromLink": "Je hebt een uitnodigingslink geopend. Geef dit apparaat een naam en sluit aan.",
+      "codeLabel": "Gezinscode",
+      "codePlaceholder": "ABCDE-12345"
     },
     "done": "Klaar",
     "continue": "Verder",
@@ -345,7 +356,7 @@
     "invite": {
       "button": "Apparaat toevoegen",
       "title": "Scan deze code met het nieuwe apparaat",
-      "hint": "Open de camera op de nieuwe telefoon of tablet en scan de code, of stuur de link. De uitnodiging werkt 15 minuten.",
+      "hint": "Open OmniFamily op de nieuwe telefoon of tablet, kies “Aansluiten bij een gezin” en typ de code of scan de QR-code. Werkt 15 minuten.",
       "qrLabel": "Uitnodigingscode",
       "link": "Uitnodigingslink",
       "copy": "Link kopiëren",
@@ -354,13 +365,23 @@
       "shareTitle": "Doe mee met ons gezin in OmniFamily",
       "waiting": "Wachten op het nieuwe apparaat…",
       "joined": "{name} is lid geworden van je gezin.",
-      "failed": "De synchronisatiedienst is niet bereikbaar. Controleer de internetverbinding en probeer het opnieuw."
+      "failed": "De synchronisatiedienst is niet bereikbaar. Controleer de internetverbinding en probeer het opnieuw.",
+      "codeLabel": "Gezinscode"
     },
     "inviteErrors": {
       "invalid": "Die uitnodigingslink is niet geldig.",
       "not_found": "Uitnodiging niet gevonden. Controleer de internetverbinding of maak een nieuwe uitnodiging op het andere apparaat.",
       "expired": "Deze uitnodiging is verlopen. Maak een nieuwe op het andere apparaat.",
       "publish_failed": "De synchronisatiedienst is niet bereikbaar. Controleer de internetverbinding en probeer het opnieuw."
+    },
+    "who": {
+      "title": "Wie ben jij?",
+      "intro": "Elk apparaat hoort bij één persoon, zodat het jouw agenda en taken toont. Kies jezelf, of voeg jezelf toe als je nieuw bent.",
+      "newPerson": "Ik ben nieuw in dit gezin",
+      "name": "Je naam",
+      "role": "Rol",
+      "submit": "Verder",
+      "required": "Kies wie je bent, of voeg jezelf toe."
     }
   },
   "intake": {

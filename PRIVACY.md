@@ -21,7 +21,7 @@ Pasted text, photos and spreadsheet files are read **on this device**: the text 
 
 ## Sync between your devices (optional)
 
-**Over the internet (default once you add a device).** Each device encrypts the family's data on the device itself (AES-GCM-256 with a key only your devices have) and leaves it on several free public "Nostr" relays. Your other devices pick it up from there. The relays — run by independent volunteers and companies, not by us — store only scrambled data they cannot read. They can see that an anonymous household key exists, when and how much data is sent, and the IP address that sent it. Inviting a device puts an encrypted invitation on the relays for 15 minutes; the key to open it is only in the QR code or link you share. You can switch internet sync off in Settings → Devices; the app then sends nothing.
+**Over the internet (default once you add a device).** Each device encrypts the family's data on the device itself (AES-GCM-256 with a key only your devices have) and leaves it on several free public "Nostr" relays. Your other devices pick it up from there. The relays — run by independent volunteers and companies, not by us — store only scrambled data they cannot read. They can see that an anonymous household key exists, when and how much data is sent, and the IP address that sent it. Adding a device puts an encrypted invitation (the family's key and member names) on the relays for 15 minutes; the family code that opens it is only on your screen, in the QR code or in the link you share. You can switch internet sync off in Settings → Devices; the app then sends nothing.
 
 **On the same Wi-Fi (no internet).** Devices can also pair directly over your local network, encrypted the same way. No server sees anything.
 

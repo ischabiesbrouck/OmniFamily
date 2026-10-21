@@ -312,6 +312,19 @@ Every event goes to every relay, so a relay that is down or forgets data costs n
 
 **D-10.7 — AI with your own key is parked** at the owner's request ("skip ai for now"). D-7.1 still applies.
 
+**D-10.8 — Family codes replace the 128-bit invite secret (owner: "join a family by code").**
+
+- **Format.** A code is 10 characters of Crockford Base32 (50 bits), shown as `ABCDE-12345`. Case, spaces and dashes are ignored, and O/I/L read as 0/1. The QR code and link carry the same code (`#join=ABCDE-12345`).
+- **Key derivation.** Keys come from the code through PBKDF2-HMAC-SHA-256 with 200 000 iterations (Web Crypto) and then HKDF: the invitation's author key, its AES-GCM key and its `d` tag. Deriving the `d` tag as well means invitations cannot be picked out on a relay by a fixed tag.
+- **Guessing cost.** An offline guess costs 200 000 HMACs. Exhausting 2⁵⁰ codes within the 15-minute lifetime is out of reach.
+- **Member list.** The invitation (payload v2) also carries the family's member records. The new device merges them with the normal LWW apply, so it can offer "I am Sem" before the first sync.
+
+**D-10.9 — Each device belongs to one person.**
+
+- **First screen.** Onboarding opens on a choice: "Create a new family" or "Join a family". With sync off, the form shows directly.
+- **After joining.** After joining (by code, QR or LAN pairing), the device asks "Who are you?": pick an existing member, or add yourself as a new one (name, role, colour). Adding yourself is an ordinary member write, so it reaches the other devices through sync.
+- **Storage.** The choice is the device's `activeMemberId` (per device, never synced). It can be changed later in Settings → "This device is used by".
+
 ### Dependencies added in Phase 10
 
 | Package                 | Justification                                                         |

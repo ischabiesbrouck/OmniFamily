@@ -8,6 +8,15 @@ test('every screen passes axe (WCAG 2.2 AA + AAA contrast) with large enough tar
   page,
 }) => {
   await page.goto('/onboarding');
+  await expect(page.getByRole('heading', { name: en.onboarding.choose.title })).toBeVisible();
+  await expectAccessible(page, 'welcome');
+  await expectLargeTargets(page, 'welcome');
+  await page.getByRole('button', { name: new RegExp(en.onboarding.choose.join) }).click();
+  await expect(page.getByRole('heading', { name: en.sync.join.title })).toBeVisible();
+  await expectAccessible(page, 'join');
+  await expectLargeTargets(page, 'join');
+  await page.getByRole('button', { name: en.sync.join.back }).click();
+  await page.getByRole('button', { name: new RegExp(en.onboarding.choose.create) }).click();
   await expect(page.getByRole('heading', { name: en.onboarding.title })).toBeVisible();
   await expectAccessible(page, 'onboarding');
   await expectLargeTargets(page, 'onboarding');

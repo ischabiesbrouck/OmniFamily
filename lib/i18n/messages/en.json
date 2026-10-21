@@ -76,7 +76,16 @@
     },
     "aboutYou": "About you",
     "yourFamily": "Your family",
-    "securityAndDevice": "PIN and device"
+    "securityAndDevice": "PIN and device",
+    "choose": {
+      "title": "Welcome to OmniFamily",
+      "intro": "Is this the first device in your family, or does your family already use OmniFamily?",
+      "create": "Create a new family",
+      "createHint": "Start fresh. Add your family’s other phones and tablets later.",
+      "join": "Join a family",
+      "joinHint": "Someone in your family already uses OmniFamily. Enter their family code or scan their QR code.",
+      "back": "Back"
+    }
   },
   "today": {
     "greeting": "Hello, {name}",
@@ -315,18 +324,20 @@
       "timeout": "No connection. Are both devices on the same Wi-Fi?"
     },
     "join": {
-      "button": "Join an existing family",
-      "title": "Join an existing family",
-      "intro": "Bring this device into a family that already uses OmniFamily on another device.",
-      "step1": "On a device that already has the family, open Settings → Devices → “Add a device”. Scan its code here or paste the invite link.",
+      "button": "Join a family",
+      "title": "Join a family",
+      "intro": "Enter the family code shown on the other device, or scan its QR code. On that device: Settings → Devices → “Add a device”.",
+      "step1": "On the other device, open Settings → Devices → “Without internet (same Wi-Fi)” → “Connect on the same Wi-Fi”, then scan its code here.",
       "step2": "Now show this code to the other device.",
       "waiting": "Waiting for the other device…",
-      "back": "Set up a new family instead",
+      "back": "Back",
       "deviceName": "Name of this device",
       "submit": "Join family",
       "joining": "Joining… this takes a few seconds.",
       "joined": "You’re in! Your family’s calendar is arriving now.",
-      "fromLink": "You opened an invite link. Give this device a name and join."
+      "fromLink": "You opened an invite link. Give this device a name and join.",
+      "codeLabel": "Family code",
+      "codePlaceholder": "ABCDE-12345"
     },
     "done": "Done",
     "continue": "Continue",
@@ -345,7 +356,7 @@
     "invite": {
       "button": "Add a device",
       "title": "Scan this code with the new device",
-      "hint": "Open the camera on the new phone or tablet and scan the code, or send it the link. The invite works for 15 minutes.",
+      "hint": "On the new phone or tablet, open OmniFamily, choose “Join a family” and type the code or scan the QR code. It works for 15 minutes.",
       "qrLabel": "Invite code",
       "link": "Invite link",
       "copy": "Copy link",
@@ -354,13 +365,23 @@
       "shareTitle": "Join our family on OmniFamily",
       "waiting": "Waiting for the new device…",
       "joined": "{name} has joined your family.",
-      "failed": "Could not reach the sync service. Check the internet connection and try again."
+      "failed": "Could not reach the sync service. Check the internet connection and try again.",
+      "codeLabel": "Family code"
     },
     "inviteErrors": {
       "invalid": "That invite link is not valid.",
       "not_found": "Invite not found. Check the internet connection, or create a new invite on the other device.",
       "expired": "This invite has expired. Create a new one on the other device.",
       "publish_failed": "Could not reach the sync service. Check the internet connection and try again."
+    },
+    "who": {
+      "title": "Who are you?",
+      "intro": "Each device belongs to one person, so it shows your calendar and tasks. Choose yourself, or add yourself if you are new.",
+      "newPerson": "I’m new in this family",
+      "name": "Your name",
+      "role": "Role",
+      "submit": "Continue",
+      "required": "Choose who you are, or add yourself."
     }
   },
   "intake": {

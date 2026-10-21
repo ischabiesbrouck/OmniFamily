@@ -2,22 +2,24 @@ import { open, seal } from '@/lib/crypto/aead';
 import { exportHouseholdKey, importHouseholdKey } from '@/lib/crypto/householdKey';
 import type { RepositoryCore } from '@/lib/db/repositories/core';
 import { ensureHouseholdKey, getHousehold, joinHousehold } from '@/lib/db/repositories/household';
-import type { HouseholdContext } from '@/lib/db/schema';
+import type { FamilyMember, HouseholdContext } from '@/lib/db/schema';
+import { applyRemoteRecords } from '../apply';
 import { setRelaySync } from './config';
-export { inviteLink, parseInviteCode } from './inviteCode';
+import { newInviteCode, parseInviteCode } from './inviteCode';
 import { inviteKeys } from './keys';
 import { APP_DATA_KIND, signEvent, type NostrEvent } from './nostr';
 import type { RelayPool } from './pool';
 
+export { inviteLink, parseInviteCode } from './inviteCode';
+
 /**
- * One-step device invites (D-10.4). The inviting device seals the household's id, name and
- * data key under a key derived from a random 128-bit secret and leaves it on the relays for
- * 15 minutes. The secret travels only in the QR code or link (as a URL fragment, which
- * browsers never send to a server), so the relays hold nothing they can open.
+ * Joining a family by code or QR (D-10.4, D-10.8). The inviting device seals the household's
+ * id, name, data key and member list under keys derived from a fresh family code and leaves
+ * the result on the relays for 15 minutes. The code travels only on screen, in the QR code
+ * or in the link's fragment (never sent to a web server), so relays hold nothing they can open.
  */
 export const INVITE_TTL_S = 15 * 60;
-const INVITE_D = 'omnifamily-invite';
-const AAD = 'omnifamily-invite-v1';
+const AAD = 'omnifamily-invite-v2';
 
 export class InviteError extends Error {
   constructor(readonly code: 'invalid' | 'not_found' | 'expired' | 'publish_failed') {
@@ -27,51 +29,52 @@ export class InviteError extends Error {
 }
 
 interface InvitePayload {
-  v: 1;
+  v: 2;
   householdId: string;
   householdName: string;
   key: string;
   expiresAt: number;
-}
-
-function toBase64Url(bytes: Uint8Array): string {
-  let binary = '';
-  for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-function fromBase64Url(text: string): Uint8Array<ArrayBuffer> {
-  const binary = atob(text.replace(/-/g, '+').replace(/_/g, '/'));
-  return Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  /** So the new device can say "I am Sem" at once, before the first sync. */
+  members: FamilyMember[];
 }
 
 export interface Invite {
+  /** Canonical 10-character code; show it with `formatInviteCode`. */
   code: string;
   expiresAt: number;
   /** Replaces the invitation on the relays with an empty one once it has been used. */
   burn(): Promise<void>;
 }
 
+interface InviteOptions {
+  now?: number;
+  /** Test-only override of the PBKDF2 work factor. */
+  iterations?: number;
+}
+
 export async function createInvite(
   core: RepositoryCore,
   pool: RelayPool,
-  now: number = Date.now(),
+  options: InviteOptions = {},
 ): Promise<Invite> {
-  const household = await getHousehold(core.db);
+  const { db } = core;
+  const household = await getHousehold(db);
   if (!household) throw new Error('No household on this device');
-  const secret = crypto.getRandomValues(new Uint8Array(16));
-  const keys = await inviteKeys(secret);
-  const createdAt = Math.floor(now / 1_000);
+  const code = newInviteCode();
+  const keys = await inviteKeys(code, options.iterations);
+  const createdAt = Math.floor((options.now ?? Date.now()) / 1_000);
   const expiresAt = createdAt + INVITE_TTL_S;
+  const members = (await db.tableFor('member').toArray()).filter((m) => m.deletedAt === undefined);
   const payload: InvitePayload = {
-    v: 1,
+    v: 2,
     householdId: household.householdId,
     householdName: household.householdName,
-    key: await exportHouseholdKey(await ensureHouseholdKey(core.db)),
+    key: await exportHouseholdKey(await ensureHouseholdKey(db)),
     expiresAt,
+    members,
   };
   const tags = [
-    ['d', INVITE_D],
+    ['d', keys.address],
     // NIP-40: relays that support it delete the event after this time.
     ['expiration', String(expiresAt)],
   ];
@@ -85,10 +88,10 @@ export async function createInvite(
     keys.secretKey,
   );
   if ((await pool.publish(event)) === 0) throw new InviteError('publish_failed');
-  // The inviting device starts syncing over the internet too, so the new one finds its data.
-  await setRelaySync(core.db, true);
+  // The inviting device syncs over the internet too, so the new one finds its data.
+  await setRelaySync(db, true);
   return {
-    code: toBase64Url(secret),
+    code,
     expiresAt: expiresAt * 1_000,
     async burn() {
       const empty = await signEvent(
@@ -100,32 +103,28 @@ export async function createInvite(
   };
 }
 
-/** Finds the invitation on the relays, opens it and makes this empty device a member. */
+/** Finds the invitation on the relays, opens it and makes this empty device part of the family. */
 export async function acceptInvite(
   core: RepositoryCore,
   pool: RelayPool,
-  code: string,
+  typed: string,
   deviceName: string,
-  options: { timeoutMs?: number; now?: number } = {},
+  options: InviteOptions & { timeoutMs?: number } = {},
 ): Promise<HouseholdContext> {
-  let secret: Uint8Array<ArrayBuffer>;
-  try {
-    secret = fromBase64Url(code);
-  } catch {
-    throw new InviteError('invalid');
-  }
-  if (secret.length !== 16) throw new InviteError('invalid');
-  const keys = await inviteKeys(secret);
+  const code = parseInviteCode(typed);
+  if (!code) throw new InviteError('invalid');
+  const keys = await inviteKeys(code, options.iterations);
 
   const event = await new Promise<NostrEvent | null>((resolve) => {
     let best: NostrEvent | null = null;
+    let stop = () => {};
     const finish = () => {
       clearTimeout(timer);
       stop();
       resolve(best);
     };
     const timer = setTimeout(finish, options.timeoutMs ?? 20_000);
-    const stop = pool.subscribe(
+    stop = pool.subscribe(
       [{ kinds: [APP_DATA_KIND], authors: [keys.pubkey] }],
       (e) => {
         if (best && best.created_at >= e.created_at) return;
@@ -145,7 +144,7 @@ export async function acceptInvite(
   } catch {
     throw new InviteError('invalid');
   }
-  if (payload.v !== 1 || typeof payload.key !== 'string') throw new InviteError('invalid');
+  if (payload.v !== 2 || typeof payload.key !== 'string') throw new InviteError('invalid');
   if (payload.expiresAt * 1_000 < (options.now ?? Date.now())) throw new InviteError('expired');
 
   const household = await joinHousehold(core, {
@@ -154,6 +153,12 @@ export async function acceptInvite(
     householdKey: await importHouseholdKey(payload.key),
     deviceName,
   });
+  // Same LWW merge as sync, so the full snapshot that follows simply confirms these.
+  if (Array.isArray(payload.members))
+    await applyRemoteRecords(
+      core,
+      payload.members.map((r) => ({ e: 'member', r })),
+    );
   await setRelaySync(core.db, true);
   return household;
 }

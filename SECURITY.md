@@ -24,7 +24,7 @@ PIN throttling is local to each device: exponential backoff (1 s, 2 s, 4 s, 8 s,
 
 - Every device publishes its full state to public Nostr relays, sealed with AES-GCM-256 under the household data key (AAD = household id). Relays never receive a key or plaintext.
 - Events are signed with a secp256k1 key derived from the household key (HKDF-SHA-256). That signature only lets relays index the events; it is not a security boundary. A narrow exception to "Web Crypto only" (D5): signing uses `@noble/curves`.
-- Invites: a random 128-bit secret in the QR code or link (URL fragment) derives the key that seals the household key on the relays; invitations expire after 15 minutes. **Anyone who has an unexpired invite link can join — share it only with your own devices.**
+- Invites: a 10-character family code (50 bits; also in the QR code and link) derives, via PBKDF2-SHA-256 (200 000 iterations) and HKDF, the key that seals the household key and member list on the relays; invitations expire after 15 minutes. **Anyone who has an unexpired family code can join — share it only with your own family.**
 - Relays see metadata: the household's public key, timing, sizes, device ids and IP addresses.
 - A removed device keeps the household key (no key rotation in this version).
 

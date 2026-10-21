@@ -61,6 +61,7 @@ test('spreadsheet (.xlsx) with Dutch headers', async ({ page }) => {
   });
   await expect(dialog.getByText('2 dates found')).toBeVisible();
   await dialog.getByRole('button', { name: 'Add 2 events' }).click();
+  await expect(page.getByText('2 events added')).toBeVisible();
   await page.goto('/calendar?view=day&date=2026-10-24');
   await expect(page.getByRole('button', { name: /19:00–20:30\s*Ouderavond/ })).toBeVisible();
   await page.goto('/calendar?view=day&date=2026-10-31');
@@ -96,6 +97,8 @@ test('photo of a letter → on-device OCR (self-hosted engine) → event', async
   });
   await expect(dialog.getByText('1 date found')).toBeVisible();
   await dialog.getByRole('button', { name: 'Add 1 event' }).click();
+  // Navigating away before the write commits would abort it (D-7.8).
+  await expect(page.getByText('1 event added')).toBeVisible();
   await page.goto('/calendar?view=day&date=2026-10-24');
   await expect(page.getByRole('button', { name: /10:00–11:00\s*Swimming lesson/ })).toBeVisible();
   // Engine and language data came from this app's own origin, never a CDN.

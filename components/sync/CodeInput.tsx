@@ -18,9 +18,12 @@ type BarcodeDetectorCtor = new (options: { formats: string[] }) => BarcodeDetect
 export function CodeInput({
   onCode,
   disabled = false,
+  paste = true,
 }: {
   onCode: (text: string) => void;
   disabled?: boolean;
+  /** Show the paste box (pairing codes); off where the page has its own code field. */
+  paste?: boolean;
 }) {
   const t = useTranslations('sync');
   const [text, setText] = useState('');
@@ -123,7 +126,7 @@ export function CodeInput({
           {scanning ? t('stopScan') : t('scan')}
         </Button>
       ) : (
-        <p>{t('noCamera')}</p>
+        paste && <p>{t('noCamera')}</p>
       )}
       {scanning && (
         <div className="flex flex-col gap-2">
@@ -138,20 +141,22 @@ export function CodeInput({
           </p>
         </div>
       )}
-      <form onSubmit={submit} className="flex flex-col gap-2">
-        <label className="flex flex-col gap-1 font-medium">
-          {t('pasteLabel')}
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            rows={3}
-            className="rounded-lg border border-line-strong p-2 font-mono text-xs"
-          />
-        </label>
-        <Button type="submit" className="self-start" disabled={disabled || text.trim() === ''}>
-          {t('useCode')}
-        </Button>
-      </form>
+      {paste && (
+        <form onSubmit={submit} className="flex flex-col gap-2">
+          <label className="flex flex-col gap-1 font-medium">
+            {t('pasteLabel')}
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={3}
+              className="rounded-lg border border-line-strong p-2 font-mono text-xs"
+            />
+          </label>
+          <Button type="submit" className="self-start" disabled={disabled || text.trim() === ''}>
+            {t('useCode')}
+          </Button>
+        </form>
+      )}
     </div>
   );
 }

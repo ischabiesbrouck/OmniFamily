@@ -153,7 +153,7 @@ test('export vault downloads JSON without secrets; delete everything erases the 
   page.once('dialog', (d) => void d.accept());
   await page.getByRole('button', { name: en.privacy.delete }).click();
   await expect(page).toHaveURL(/\/onboarding$/);
-  await expect(page.getByRole('heading', { name: en.onboarding.title })).toBeVisible();
+  await expect(page.getByRole('heading', { name: en.onboarding.choose.title })).toBeVisible();
   // The reloaded app reinstalls its (data-free) offline cache, so check for family data instead.
   const leftovers = await page.evaluate(
     () =>

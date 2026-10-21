@@ -6,6 +6,7 @@ export { en };
 /** Runs first-run onboarding with a name (and optionally a parent PIN). */
 export async function onboard(page: Page, name = 'Lotte', pin?: string): Promise<void> {
   await page.goto('/onboarding');
+  await page.getByRole('button', { name: new RegExp(en.onboarding.choose.create) }).click();
   await page.getByLabel(en.onboarding.yourName).fill(name);
   if (pin) await page.getByLabel(/Parent PIN/).fill(pin);
   await page.getByRole('button', { name: en.onboarding.submit }).click();

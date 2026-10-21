@@ -12,6 +12,7 @@ import {
   inviteLink,
   parseInviteCode,
 } from '@/lib/sync/relay/invite';
+import { formatInviteCode, newInviteCode } from '@/lib/sync/relay/inviteCode';
 import { eventId, fromHex, signEvent } from '@/lib/sync/relay/nostr';
 import { RelayPool } from '@/lib/sync/relay/pool';
 import { RelaySync } from '@/lib/sync/relay/relaySync';
@@ -20,6 +21,7 @@ import { FakeRelay } from './fakeRelay';
 import { setupRepositories } from './helpers';
 
 const FAST = { pinIterations: 1_000 };
+const FAST_CODE = { iterations: 1_000 };
 const draft: EventDraft = {
   title: 'Swimming',
   description: '',
@@ -117,47 +119,70 @@ describe('snapshots', () => {
   });
 });
 
-describe('invites', () => {
-  it('parse from a link or a bare code', () => {
-    const link = inviteLink('abcdefghijklmnopqrstuv', 'https://x.test/OmniFamily/onboarding/');
-    expect(link).toBe('https://x.test/OmniFamily/onboarding/#join=abcdefghijklmnopqrstuv');
-    expect(parseInviteCode(link)).toBe('abcdefghijklmnopqrstuv');
-    expect(parseInviteCode(' abcdefghijklmnopqrstuv\n')).toBe('abcdefghijklmnopqrstuv');
+describe('family codes', () => {
+  it('are 10 Crockford Base32 characters, forgiving look-alikes, in a link or alone', () => {
+    const code = newInviteCode();
+    expect(code).toMatch(/^[0-9A-HJKMNP-TV-Z]{10}$/);
+    expect(formatInviteCode('K7F2Q9XDM3')).toBe('K7F2Q-9XDM3');
+    const link = inviteLink('K7F2Q9XDM3', 'https://x.test/OmniFamily/onboarding/');
+    expect(link).toBe('https://x.test/OmniFamily/onboarding/#join=K7F2Q-9XDM3');
+    expect(parseInviteCode(link)).toBe('K7F2Q9XDM3');
+    expect(parseInviteCode(' k7f2q - 9xdm3 ')).toBe('K7F2Q9XDM3');
+    expect(parseInviteCode('O0IL1-ABCDE')).toBe('00111ABCDE');
+    expect(parseInviteCode('K7F2Q-9XDM')).toBeNull();
+    expect(parseInviteCode('K7F2Q-9XDMU')).toBeNull();
     expect(parseInviteCode('OF1/1/1/XYZ')).toBeNull();
   });
+});
 
-  it('let a new device join through the relays, which never see the household key', async () => {
+describe('invites', () => {
+  it('let a new device join by code; relays never see the key or the members', async () => {
     const relay = new FakeRelay();
     const a = await household();
-    const invite = await createInvite(a.repos.core, poolFor([relay]));
+    const invite = await createInvite(a.repos.core, poolFor([relay]), FAST_CODE);
     expect(isRelaySyncOn((await a.db.settings.get(RELAY_SYNC_KEY))?.value)).toBe(true);
 
     const b = setupRepositories();
-    const joined = await acceptInvite(b.repos.core, poolFor([relay]), invite.code, 'Phone');
+    const joined = await acceptInvite(
+      b.repos.core,
+      poolFor([relay]),
+      formatInviteCode(invite.code).toLowerCase(),
+      'Phone',
+      FAST_CODE,
+    );
     expect(joined.householdId).toBe((await getHousehold(a.db))?.householdId);
     expect(isRelaySyncOn((await b.db.settings.get(RELAY_SYNC_KEY))?.value)).toBe(true);
-    expect(JSON.stringify(relay.events)).not.toContain('De Vries');
+    // The member list arrives with the invitation, before any sync.
+    expect((await b.db.tableFor('member').toArray()).map((m) => m.name)).toEqual(['Anna']);
+    expect(await b.db.outbox.count()).toBe(1); // only B's own device record
+    expect(JSON.stringify(relay.events)).not.toMatch(/De Vries|Anna/);
+    expect(JSON.stringify(relay.events)).not.toContain(invite.code);
 
     await invite.burn();
     const c = setupRepositories();
     await expect(
-      acceptInvite(c.repos.core, poolFor([relay]), invite.code, 'Tablet'),
+      acceptInvite(c.repos.core, poolFor([relay]), invite.code, 'Tablet', FAST_CODE),
     ).rejects.toThrow(InviteError);
     expect(await getHousehold(c.db)).toBeUndefined();
   });
 
-  it('reject an unknown or expired code', async () => {
+  it('reject a malformed, unknown or expired code', async () => {
     const relay = new FakeRelay();
     const a = await household();
-    const invite = await createInvite(a.repos.core, poolFor([relay]));
+    const invite = await createInvite(a.repos.core, poolFor([relay]), FAST_CODE);
     const b = setupRepositories();
     await expect(
-      acceptInvite(b.repos.core, poolFor([relay]), 'AAAAAAAAAAAAAAAAAAAAAA', 'P', {
+      acceptInvite(b.repos.core, poolFor([relay]), 'nonsense', 'P', FAST_CODE),
+    ).rejects.toMatchObject({ code: 'invalid' });
+    await expect(
+      acceptInvite(b.repos.core, poolFor([relay]), '00000-00000', 'P', {
+        ...FAST_CODE,
         timeoutMs: 200,
       }),
     ).rejects.toMatchObject({ code: 'not_found' });
     await expect(
       acceptInvite(b.repos.core, poolFor([relay]), invite.code, 'P', {
+        ...FAST_CODE,
         now: invite.expiresAt + 1,
       }),
     ).rejects.toMatchObject({ code: 'expired' });
@@ -167,9 +192,9 @@ describe('invites', () => {
 describe('relay sync', () => {
   async function pair(relays: FakeRelay[]) {
     const a = await household();
-    const invite = await createInvite(a.repos.core, poolFor(relays));
+    const invite = await createInvite(a.repos.core, poolFor(relays), FAST_CODE);
     const b = setupRepositories();
-    await acceptInvite(b.repos.core, poolFor(relays), invite.code, 'Phone');
+    await acceptInvite(b.repos.core, poolFor(relays), invite.code, 'Phone', FAST_CODE);
     return { a, b };
   }
 

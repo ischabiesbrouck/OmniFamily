@@ -30,18 +30,17 @@ test('acceptance: device B receives device A’s vault and a subsequent edit', a
 
   // A shows the offer code…
   await a.getByRole('link', { name: en.nav.settings }).click();
-  await a.getByText(s.lanTitle).click();
+  await a.getByText(s.lanTitle, { exact: true }).click();
   await a.getByRole('button', { name: s.connect }).click();
   const offer = await codeFrom(a);
   expect(offer).toMatch(/^OF1\/1\/\d+\//);
 
   // …B (fresh: no account, no household) reads it and shows its answer…
   await b.goto('/onboarding');
-  await b.getByRole('button', { name: s.join.button }).click();
-  // The onboarding form has a same-named "Name of this device" field; type only once the
-  // join form has replaced it (a click before hydration is replayed by React a moment later).
+  await b.getByRole('button', { name: new RegExp(en.onboarding.choose.join) }).click();
   await expect(b.getByRole('heading', { name: s.join.title })).toBeVisible();
   await b.getByLabel(s.join.deviceName).fill('Daan’s phone');
+  await b.getByText(s.lanTitle, { exact: true }).click();
   await b.getByLabel(s.pasteLabel).fill(offer);
   await expect(b.getByLabel(s.join.deviceName)).toHaveValue('Daan’s phone');
   await b.getByRole('button', { name: s.useCode }).click();
@@ -57,7 +56,10 @@ test('acceptance: device B receives device A’s vault and a subsequent edit', a
   await expect(b.getByText(checkCode)).toBeVisible();
   await expect(b.getByText(en.sync.connected)).toBeVisible();
   await a.getByRole('button', { name: s.done }).click();
-  await b.getByRole('button', { name: s.continue }).click();
+  // B's device belongs to a new person in the family.
+  await b.getByRole('radio', { name: s.who.newPerson }).check();
+  await b.getByLabel(s.who.name).fill('Daan');
+  await b.getByRole('button', { name: s.who.submit }).click();
 
   // B received A's vault: household, members and today's event.
   await expect(b).toHaveURL(/\/$/);
