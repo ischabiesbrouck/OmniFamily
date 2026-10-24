@@ -2,6 +2,7 @@
 
 import { useTimeZone, useTranslations } from 'next-intl';
 import { useState, type FormEvent } from 'react';
+import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Select';
 import { TextField } from '@/components/ui/TextField';
@@ -51,54 +52,66 @@ export function TaskForm({
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-wrap items-end gap-2">
-      <TextField
-        className="min-w-48 flex-1"
-        label={t('name')}
-        value={draft.title}
-        onChange={(e) => setDraft({ ...draft, title: e.target.value })}
-        error={error === 'titleRequired' ? t('errors.titleRequired') : undefined}
-      />
-      <Select
-        label={t('assignee')}
-        value={draft.assigneeId ?? ''}
-        options={[
-          { value: '', label: t('nobody') },
-          ...members.map((m) => ({ value: m.id, label: m.name })),
-        ]}
-        onChange={(e) => setDraft({ ...draft, assigneeId: e.target.value || undefined })}
-      />
-      <TextField
-        className="w-24"
-        label={t('points')}
-        inputMode="numeric"
-        value={pointsText}
-        onChange={(e) => setPointsText(e.target.value.replace(/\D/g, '').slice(0, 4))}
-        error={error === 'invalidPoints' ? t('errors.invalidPoints') : undefined}
-      />
-      {!compact && (
-        <>
-          <TextField
-            type="date"
-            label={t('due')}
-            value={draft.dueDate ?? ''}
-            onChange={(e) => setDraft({ ...draft, dueDate: e.target.value || undefined })}
-            error={error === 'invalidDue' ? t('errors.invalidDue') : undefined}
-          />
-          {events.length > 0 && (
-            <Select
-              label={t('event')}
-              value={draft.eventId ?? ''}
-              options={[
-                { value: '', label: t('noEvent') },
-                ...events.map((e) => ({ value: e.id, label: e.title })),
-              ]}
-              onChange={(e) => setDraft({ ...draft, eventId: e.target.value || undefined })}
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-2">
+      <div className="flex items-start gap-2">
+        <TextField
+          inline
+          className="min-w-0 flex-1"
+          label={t('name')}
+          value={draft.title}
+          onChange={(e) => setDraft({ ...draft, title: e.target.value })}
+          error={error === 'titleRequired' ? t('errors.titleRequired') : undefined}
+        />
+        <Button type="submit" className="min-h-14 shrink-0">
+          <Plus aria-hidden="true" className="size-5" />
+          {t('add')}
+        </Button>
+      </div>
+      <div className={`grid grid-cols-2 gap-2 ${compact ? '' : 'sm:grid-cols-4'}`}>
+        <Select
+          inline
+          label={t('assignee')}
+          value={draft.assigneeId ?? ''}
+          options={[
+            { value: '', label: t('nobody') },
+            ...members.map((m) => ({ value: m.id, label: m.name })),
+          ]}
+          onChange={(e) => setDraft({ ...draft, assigneeId: e.target.value || undefined })}
+        />
+        <TextField
+          inline
+          label={t('points')}
+          inputMode="numeric"
+          placeholder="0"
+          value={pointsText}
+          onChange={(e) => setPointsText(e.target.value.replace(/\D/g, '').slice(0, 4))}
+          error={error === 'invalidPoints' ? t('errors.invalidPoints') : undefined}
+        />
+        {!compact && (
+          <>
+            <TextField
+              inline
+              type="date"
+              label={t('due')}
+              value={draft.dueDate ?? ''}
+              onChange={(e) => setDraft({ ...draft, dueDate: e.target.value || undefined })}
+              error={error === 'invalidDue' ? t('errors.invalidDue') : undefined}
             />
-          )}
-        </>
-      )}
-      <Button type="submit">{t('add')}</Button>
+            {events.length > 0 && (
+              <Select
+                inline
+                label={t('event')}
+                value={draft.eventId ?? ''}
+                options={[
+                  { value: '', label: t('noEvent') },
+                  ...events.map((e) => ({ value: e.id, label: e.title })),
+                ]}
+                onChange={(e) => setDraft({ ...draft, eventId: e.target.value || undefined })}
+              />
+            )}
+          </>
+        )}
+      </div>
     </form>
   );
 }

@@ -34,22 +34,26 @@ export function Card({
   );
 }
 
+/** Page title on the gradient hero card, with an optional visual (ring, icon) and actions. */
 export function PageHeader({
   title,
   subtitle,
   actions,
+  visual,
 }: {
   title: string;
   subtitle?: string | undefined;
   actions?: ReactNode;
+  visual?: ReactNode;
 }) {
   return (
-    <div className="mb-5 flex flex-wrap items-end gap-3">
+    <div className="hero mb-5 flex flex-wrap items-center gap-4 rounded-card p-5 shadow-card sm:p-7">
       <div className="mr-auto min-w-0">
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
-        {subtitle && <p className="mt-1 text-muted">{subtitle}</p>}
+        {subtitle && <p className="mt-1 text-base sm:text-lg">{subtitle}</p>}
+        {actions && <div className="mt-4 flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
-      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+      {visual}
     </div>
   );
 }

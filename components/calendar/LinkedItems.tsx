@@ -12,9 +12,12 @@ import type { FamilyMember } from '@/lib/db/schema';
 export function LinkedItems({
   eventId,
   members,
+  readOnly = false,
 }: {
   eventId: string;
   members: readonly FamilyMember[];
+  /** Detail view: lists only (and nothing at all when empty); adding happens in the editor. */
+  readOnly?: boolean;
 }) {
   const t = useTranslations('linked');
   const tasks = (useLiveRecords('task') ?? []).filter((task) => task.eventId === eventId);
@@ -22,6 +25,7 @@ export function LinkedItems({
     (g) => g.associatedEventId === eventId,
   );
 
+  if (readOnly && tasks.length === 0 && groceries.length === 0) return null;
   return (
     <section
       aria-labelledby="linked-heading"
@@ -38,7 +42,7 @@ export function LinkedItems({
           ))}
         </ul>
       )}
-      <TaskForm members={members} eventId={eventId} compact />
+      {!readOnly && <TaskForm members={members} eventId={eventId} compact />}
       <h4 className="font-semibold">{t('groceries')}</h4>
       {groceries.length > 0 && (
         <ul className="flex flex-col gap-2">
@@ -47,7 +51,7 @@ export function LinkedItems({
           ))}
         </ul>
       )}
-      <GroceryForm eventId={eventId} fallbackMemberId={members[0]?.id ?? ''} />
+      {!readOnly && <GroceryForm eventId={eventId} fallbackMemberId={members[0]?.id ?? ''} />}
     </section>
   );
 }

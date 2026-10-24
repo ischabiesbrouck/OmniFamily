@@ -1,5 +1,5 @@
 import * as chrono from 'chrono-node';
-import { formatFloatingDate, formatWallTime } from '@/lib/time/zoned';
+import { formatFloatingDate, formatWallTime, todayIn } from '@/lib/time/zoned';
 import type { Candidate, ExtractOptions } from './types';
 
 type Parsed = chrono.ParsedResult;
@@ -88,11 +88,15 @@ function toCandidate(
   index: number,
 ): Candidate {
   const { start, end } = result;
-  const date = formatFloatingDate({
+  let date = formatFloatingDate({
     year: start.get('year') ?? 0,
     month: start.get('month') ?? 1,
     day: start.get('day') ?? 1,
   });
+  // forwardDate compares instants, so "Saturday 24 October 10:00" read at 11:25 that day lands
+  // a year on. A day without a stated year that matches today means today.
+  const today = todayIn(options.timeZone, options.now.getTime());
+  if (!start.isCertain('year') && date.slice(5) === today.slice(5) && date > today) date = today;
   const timed = start.isCertain('hour');
   const startTime = timed
     ? formatWallTime({ hour: start.get('hour') ?? 0, minute: start.get('minute') ?? 0 })

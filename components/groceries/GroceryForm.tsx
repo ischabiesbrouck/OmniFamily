@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useState, type FormEvent } from 'react';
+import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Select';
 import { TextField } from '@/components/ui/TextField';
@@ -52,27 +53,36 @@ export function GroceryForm({
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-wrap items-end gap-2">
-      <TextField
-        className="min-w-40 flex-1"
-        label={t('name')}
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        error={error}
-      />
-      <TextField
-        className="w-28"
-        label={t('quantity')}
-        value={quantity}
-        onChange={(e) => setQuantity(e.target.value)}
-      />
-      <Select
-        label={t('category')}
-        value={category}
-        options={GROCERY_CATEGORIES.map((c) => ({ value: c, label: t(`categories.${c}`) }))}
-        onChange={(e) => setCategory(e.target.value as GroceryCategory)}
-      />
-      <Button type="submit">{t('add')}</Button>
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-2">
+      <div className="flex items-start gap-2">
+        <TextField
+          inline
+          className="min-w-0 flex-1"
+          label={t('name')}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          error={error}
+        />
+        <Button type="submit" className="min-h-14 shrink-0">
+          <Plus aria-hidden="true" className="size-5" />
+          {t('add')}
+        </Button>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <TextField
+          inline
+          label={t('quantity')}
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+        />
+        <Select
+          inline
+          label={t('category')}
+          value={category}
+          options={GROCERY_CATEGORIES.map((c) => ({ value: c, label: t(`categories.${c}`) }))}
+          onChange={(e) => setCategory(e.target.value as GroceryCategory)}
+        />
+      </div>
     </form>
   );
 }

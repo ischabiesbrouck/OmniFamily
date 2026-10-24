@@ -16,6 +16,7 @@ test('acceptance: completing a linked task writes a ledger entry and updates the
   await create.getByRole('button', { name: en.common.save }).click();
 
   await page.getByRole('button', { name: /Birthday party/ }).click();
+  await page.getByRole('dialog').getByRole('button', { name: en.common.edit }).click();
   const dialog = page.getByRole('dialog', { name: en.calendar.form.editTitle });
   await dialog.getByLabel(en.tasks.name).fill('Wrap the present');
   await dialog.getByLabel(en.tasks.assignee).selectOption({ label: 'Lotte' });

@@ -1,6 +1,6 @@
 'use client';
 
-import { MonitorSmartphone, Palette, Users } from 'lucide-react';
+import { MonitorSmartphone, Palette, Settings as SettingsIcon, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -33,7 +33,14 @@ export default function SettingsPage() {
 
   return (
     <div>
-      <PageHeader title={t('title')} />
+      <PageHeader
+        title={t('title')}
+        visual={
+          <span className="flex size-20 items-center justify-center rounded-full bg-glass shadow-card">
+            <SettingsIcon aria-hidden="true" className="size-9" />
+          </span>
+        }
+      />
       <div className="grid items-start gap-4 lg:grid-cols-2">
         <div className="flex flex-col gap-4">
           <Card title={t('appearance')} icon={<Palette aria-hidden="true" className="size-5" />}>

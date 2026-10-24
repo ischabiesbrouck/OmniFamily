@@ -161,7 +161,10 @@ export function AppShell({ children }: { children: ReactNode }) {
       </nav>
 
       <div className="min-w-0 pb-32 lg:pb-10">
-        <main className="mx-auto w-full max-w-6xl px-4 pt-3 sm:px-6 lg:px-8 lg:pt-8">
+        <main
+          key={pathname}
+          className="mx-auto w-full max-w-6xl animate-[rise_0.35s_ease-out_both] px-4 pt-3 sm:px-6 lg:px-8 lg:pt-8"
+        >
           {children}
         </main>
       </div>

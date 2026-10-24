@@ -99,7 +99,14 @@
     "shoppingCount": "{count, plural, =0 {Niets te kopen} one {# ding te kopen} other {# dingen te kopen}}",
     "seeAll": "Alles bekijken",
     "openCalendar": "Agenda openen",
-    "summary": "Vandaag {events, plural, =0 {niets gepland} one {# afspraak} other {# afspraken}} en {chores, plural, =0 {geen klusjes} one {# klusje} other {# klusjes}}."
+    "summary": "Vandaag {events, plural, =0 {niets gepland} one {# afspraak} other {# afspraken}} en {chores, plural, =0 {geen klusjes} one {# klusje} other {# klusjes}}.",
+    "upNext": "Hierna",
+    "now": "Nu",
+    "stats": {
+      "events": "Afspraken vandaag",
+      "chores": "Klusjes open",
+      "shopping": "Te kopen"
+    }
   },
   "settings": {
     "title": "Instellingen",
@@ -235,7 +242,9 @@
       "invalidDue": "Vul een geldige datum in.",
       "invalidPoints": "Punten zijn een heel getal van 0 tot 1000."
     },
-    "newTask": "Nieuwe taak"
+    "newTask": "Nieuwe taak",
+    "summary": "{open, plural, =0 {Niets meer te doen} other {# te doen}} · {done} klaar",
+    "progress": "{done} van {total} klaar"
   },
   "groceries": {
     "title": "Boodschappen",

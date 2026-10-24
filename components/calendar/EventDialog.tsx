@@ -1,6 +1,9 @@
 'use client';
 
+import { Pencil } from 'lucide-react';
 import { useTimeZone, useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { IconButton } from '@/components/ui/Button';
 import { Sheet } from '@/components/ui/Sheet';
 import { getRepositories } from '@/lib/db/repositories';
 import {
@@ -14,6 +17,7 @@ import {
 import { useMembers } from '@/lib/db/repositories/hooks';
 import { useDeviceStore } from '@/stores/deviceStore';
 import { useUiStore } from '@/stores/uiStore';
+import { EventDetails } from './EventDetails';
 import { EventForm } from './EventForm';
 import { LinkedItems } from './LinkedItems';
 
@@ -28,6 +32,15 @@ export function EventEditor() {
   const zone = useTimeZone() ?? 'UTC';
   const activeMemberId = useDeviceStore((s) => s.activeMemberId);
   const core = getRepositories().core;
+  const tCommon = useTranslations('common');
+  const [editing, setEditing] = useState(false);
+  const openKey = state?.mode === 'edit' ? state.occurrence.key : (state?.mode ?? null);
+  const [seenKey, setSeenKey] = useState(openKey);
+  if (seenKey !== openKey) {
+    // Another event (or none) opened: start again in the detail view.
+    setSeenKey(openKey);
+    setEditing(false);
+  }
 
   let initial: EventDraft | undefined;
   if (state?.mode === 'edit') initial = draftFromOccurrence(state.occurrence);
@@ -51,13 +64,33 @@ export function EventEditor() {
     };
   }
 
+  // An existing event opens as a read-only detail view; the pencil switches to the form.
+  const viewing = state?.mode === 'edit' && !editing;
+
   return (
     <Sheet
       open={state !== null}
       onOpenChange={(open) => !open && close()}
-      title={state?.mode === 'edit' ? t('editTitle') : t('newTitle')}
+      title={
+        state?.mode === 'edit'
+          ? viewing
+            ? state.occurrence.event.title
+            : t('editTitle')
+          : t('newTitle')
+      }
+      hero={viewing}
+      actions={
+        viewing ? (
+          <IconButton label={tCommon('edit')} variant="primary" onClick={() => setEditing(true)}>
+            <Pencil aria-hidden="true" className="size-5" />
+          </IconButton>
+        ) : undefined
+      }
     >
-      {state && initial && (
+      {state?.mode === 'edit' && viewing && (
+        <EventDetails occurrence={state.occurrence} members={members} />
+      )}
+      {state && initial && !viewing && (
         <EventForm
           key={state.mode === 'edit' ? state.occurrence.key : state.date}
           initial={initial}
@@ -83,7 +116,7 @@ export function EventEditor() {
       )}
       {state?.mode === 'edit' && (
         <div className="mt-6">
-          <LinkedItems eventId={state.occurrence.seriesId} members={members} />
+          <LinkedItems eventId={state.occurrence.seriesId} members={members} readOnly={viewing} />
         </div>
       )}
     </Sheet>

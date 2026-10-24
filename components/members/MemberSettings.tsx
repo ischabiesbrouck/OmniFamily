@@ -1,8 +1,9 @@
 'use client';
 
+import { Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState, type FormEvent } from 'react';
-import { Button } from '@/components/ui/Button';
+import { Button, IconButton } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Select';
 import { TextField } from '@/components/ui/TextField';
 import { isValidPin } from '@/lib/crypto/pin';
@@ -77,13 +78,11 @@ function AddMemberForm({ nextColor }: { nextColor: string }) {
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="flex flex-col gap-3 rounded-2xl border border-line bg-surface-2/40 p-4"
-    >
+    <form onSubmit={onSubmit} className="flex flex-col gap-3 rounded-tile bg-surface-2 p-4">
       <h3 className="font-semibold">{t('settings.addMember')}</h3>
-      <div className="flex flex-wrap items-end gap-2">
+      <div className="flex flex-wrap items-start gap-2">
         <TextField
+          inline
           className="min-w-40 flex-1"
           label={t('onboarding.memberName')}
           value={name}
@@ -91,6 +90,7 @@ function AddMemberForm({ nextColor }: { nextColor: string }) {
           error={error}
         />
         <Select
+          inline
           label={t('onboarding.role')}
           value={role}
           options={ROLES.map((r) => ({ value: r, label: t(`roles.${r}`) }))}
@@ -146,10 +146,7 @@ export function MemberSettings() {
 
       <ul className="flex flex-col gap-3">
         {members.map((m) => (
-          <li
-            key={m.id}
-            className="flex flex-col gap-2 rounded-2xl border border-line bg-surface-2/40 p-3"
-          >
+          <li key={m.id} className="flex flex-col gap-2 rounded-tile bg-surface-2 p-3">
             <div className="flex flex-wrap items-center gap-3">
               <MemberAvatar member={m} />
               <div className="flex flex-1 flex-col">
@@ -159,7 +156,7 @@ export function MemberSettings() {
                   {hasPin(m) ? t('settings.pinSet') : t('settings.pinNone')}
                 </span>
               </div>
-              <Button variant="secondary" onClick={() => setEditingPin(m.id)}>
+              <Button variant="soft" onClick={() => setEditingPin(m.id)}>
                 {hasPin(m) ? t('settings.changePin') : t('settings.setPin')}
               </Button>
               {hasPin(m) && (
@@ -170,9 +167,12 @@ export function MemberSettings() {
                   {t('settings.clearPin')}
                 </Button>
               )}
-              <Button variant="danger" onClick={() => void remove(m)}>
-                {t('common.remove')}
-              </Button>
+              <IconButton
+                label={t('onboarding.removeMember', { name: m.name })}
+                onClick={() => void remove(m)}
+              >
+                <Trash2 aria-hidden="true" className="size-5 text-danger" />
+              </IconButton>
             </div>
             {editingPin === m.id && <PinEditor member={m} onDone={() => setEditingPin(null)} />}
           </li>

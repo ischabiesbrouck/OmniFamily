@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { MemberAvatar } from '@/components/members/MemberAvatar';
 import { Card, EmptyState, PageHeader } from '@/components/ui/Card';
+import { ProgressRing } from '@/components/ui/ProgressRing';
 import { useLiveRecords, useMembers } from '@/lib/db/repositories/hooks';
 import { balances } from '@/lib/db/repositories/points';
 import type { FamilyTask } from '@/lib/db/schema';
@@ -51,11 +52,22 @@ export function TasksView() {
     .filter((task) => task.completed)
     .sort((a, b) => (b.completedAt ?? 0) - (a.completedAt ?? 0))
     .slice(0, 20);
+  const doneCount = visible.filter((task) => task.completed).length;
   const linkable = (events ?? []).filter((e) => !e.recurrenceParentId);
 
   return (
     <div>
-      <PageHeader title={t('title')} />
+      <PageHeader
+        title={t('title')}
+        subtitle={t('summary', { open: open.length, done: doneCount })}
+        visual={
+          <ProgressRing
+            done={doneCount}
+            total={doneCount + open.length}
+            label={t('progress', { done: doneCount, total: doneCount + open.length })}
+          />
+        }
+      />
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="flex flex-col gap-4 lg:col-span-2">
           <Card title={t('newTask')} icon={<Plus aria-hidden="true" className="size-5" />}>

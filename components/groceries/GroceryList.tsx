@@ -45,9 +45,14 @@ export function GroceryList() {
       <PageHeader
         title={t('title')}
         subtitle={t('toBuy', { count: toBuy })}
+        visual={
+          <span className="flex size-20 items-center justify-center rounded-full bg-glass shadow-card">
+            <ShoppingBasket aria-hidden="true" className="size-9" />
+          </span>
+        }
         actions={
           anyPurchased && (
-            <Button variant="secondary" onClick={() => void clearPurchased(getRepositories().core)}>
+            <Button variant="primary" onClick={() => void clearPurchased(getRepositories().core)}>
               <Trash aria-hidden="true" className="size-5" />
               {t('clearPurchased')}
             </Button>

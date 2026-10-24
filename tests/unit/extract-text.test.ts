@@ -98,6 +98,23 @@ describe('on-device text extraction', () => {
     });
   });
 
+  it('keeps a date of today when its time has already passed (not next year)', () => {
+    const lateSaturday = { ...options('en-GB'), now: new Date('2026-10-24T09:25:00Z') }; // 11:25
+    expect(
+      extractFromText('Swimming Saturday 24 October 10:00-11:00', lateSaturday).map(pick),
+    ).toEqual([
+      {
+        title: 'Swimming',
+        date: '2026-10-24',
+        startTime: '10:00',
+        endTime: '11:00',
+        memberIds: [],
+      },
+    ]);
+    // A weekday alone still means the coming one.
+    expect(extractFromText('Piano Monday 15:00', lateSaturday)[0]?.date).toBe('2026-10-26');
+  });
+
   it('finds nothing in text without dates', () => {
     expect(extractFromText('Hello there\nSee you soon', options('en-GB'))).toEqual([]);
   });

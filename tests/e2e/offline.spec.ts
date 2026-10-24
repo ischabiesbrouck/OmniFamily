@@ -57,6 +57,7 @@ test('S1 + S5: every core feature works with the network disabled', async ({ pag
   await dialog.getByLabel(en.calendar.form.endTime).fill('20:00');
   await dialog.getByRole('button', { name: en.common.save }).click();
   await page.getByRole('button', { name: /Offline swim/ }).click();
+  await page.getByRole('dialog').getByRole('button', { name: en.common.edit }).click();
   dialog = page.getByRole('dialog', { name: en.calendar.form.editTitle });
   await dialog.getByLabel(en.calendar.form.title).fill('Offline swim (moved)');
   await dialog.getByRole('button', { name: en.common.save }).click();
@@ -65,6 +66,7 @@ test('S1 + S5: every core feature works with the network disabled', async ({ pag
   ).toBeVisible();
   page.once('dialog', (d) => void d.accept());
   await page.getByRole('button', { name: /Offline swim/ }).click();
+  await page.getByRole('dialog').getByRole('button', { name: en.common.edit }).click();
   await page.getByRole('dialog').getByRole('button', { name: en.calendar.form.delete }).click();
   await expect(page.getByText(en.calendar.noEvents)).toBeVisible();
 

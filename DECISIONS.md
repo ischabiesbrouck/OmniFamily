@@ -361,3 +361,24 @@ Every event goes to every relay, so a relay that is down or forgets data costs n
 | Package                        | Justification                                     |
 | ------------------------------ | ------------------------------------------------- |
 | `@fontsource-variable/dm-sans` | Self-hosted variable typeface (D-11.2); CSS only. |
+
+## Phase 12 — Design v3
+
+**D-12.1 — Events open as a detail view.** Tapping an event shows a sheet with a large centred title, a tinted time pill, the people's avatars and rounded info rows (day and time, repeat, people, place, notes, private). Linked tasks and shopping are listed read-only. The pencil (top right; Close is top left) switches to the form, which still holds Delete and adding linked items. Reading no longer risks an accidental edit. `Sheet` gained `hero` and `actions` props for this.
+
+**D-12.2 — Today: "Up next" and stat tiles.** The hero shows the next (or current) timed event as a tinted card with a relative time ("in 25 minutes", "Now") that opens its detail view. Large screens add three glass tiles (events today, chores left, to buy) that link to their pages. Cards size to their content (`items-start`).
+
+**D-12.3 — Compact forms and page heroes.**
+
+- **Compact fields.** `TextField` and `Select` have an `inline` variant: the label floats inside the bordered field, and the input or select itself fills the 56 px box. That keeps targets ≥ 48 px and keeps the accessible name exactly the label.
+- **Forms using it.** Tasks, groceries and new members use it: a one-line "name + Add" row and a second row of options.
+- **Page headers.** Every page header is now a gradient hero card. Tasks shows a progress ring (done of total), Groceries and Settings a glass icon.
+- **Member actions.** Member removal became a quiet trash icon, and "Set PIN" a soft pill.
+
+**D-12.4 — Motion.**
+
+- **Effects.** Pages rise in (0.35 s), sheets slide up on phones and scale in on larger screens, and the overlay fades.
+- **Reduced motion.** All of it is disabled by the existing reduced-motion rule.
+- **Accessibility audits.** The axe helper waits for running animations to finish, so contrast is measured on the settled page.
+
+**D-12.5 — Date import fix (found because the test clock reached 24 October).** chrono's `forwardDate` compares instants, so "Saturday 24 October 10:00" read later that same day was moved a year ahead. A parsed day without a stated year that equals today now stays today (unit test added).

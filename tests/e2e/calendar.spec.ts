@@ -33,6 +33,9 @@ test('acceptance: 2026-10-24 19:00 Europe/Amsterdam still renders 19:00 after th
 
   // Edit just this occurrence; the series is untouched.
   await page.getByRole('button', { name: /Swimming/ }).click();
+  // An event opens as a detail view; the pencil switches to the form.
+  await expect(page.getByRole('dialog', { name: 'Swimming' })).toBeVisible();
+  await page.getByRole('dialog').getByRole('button', { name: en.common.edit }).click();
   const edit = page.getByRole('dialog', { name: f.editTitle });
   await edit.getByLabel(f.startTime).fill('18:00');
   await edit.getByLabel(f.endTime).fill('19:00');
@@ -46,6 +49,7 @@ test('acceptance: 2026-10-24 19:00 Europe/Amsterdam still renders 19:00 after th
   // Delete one occurrence.
   page.once('dialog', (d) => void d.accept());
   await page.getByRole('button', { name: /Swimming/ }).click();
+  await page.getByRole('dialog').getByRole('button', { name: en.common.edit }).click();
   await page
     .getByRole('dialog', { name: f.editTitle })
     .getByRole('button', { name: f.delete })

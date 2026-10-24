@@ -72,6 +72,7 @@ test('acceptance: device B receives device A’s vault and a subsequent edit', a
   // a full reload would close the DataChannel).
   await a.getByRole('link', { name: en.nav.today }).click();
   await a.getByRole('button', { name: /Swimming/ }).click();
+  await a.getByRole('dialog').getByRole('button', { name: en.common.edit }).click();
   const edit = a.getByRole('dialog', { name: en.calendar.form.editTitle });
   await edit.getByLabel(en.calendar.form.title).fill('Swimming lesson');
   await edit.getByRole('button', { name: en.common.save }).click();

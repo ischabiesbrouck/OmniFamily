@@ -99,7 +99,14 @@
     "shoppingCount": "{count, plural, =0 {Nothing to buy} one {# item to buy} other {# items to buy}}",
     "seeAll": "See all",
     "openCalendar": "Open calendar",
-    "summary": "{events, plural, =0 {Nothing planned} one {# event} other {# events}} and {chores, plural, =0 {no chores} one {# chore} other {# chores}} today."
+    "summary": "{events, plural, =0 {Nothing planned} one {# event} other {# events}} and {chores, plural, =0 {no chores} one {# chore} other {# chores}} today.",
+    "upNext": "Up next",
+    "now": "Now",
+    "stats": {
+      "events": "Events today",
+      "chores": "Chores left",
+      "shopping": "To buy"
+    }
   },
   "settings": {
     "title": "Settings",
@@ -235,7 +242,9 @@
       "invalidDue": "Enter a valid due date.",
       "invalidPoints": "Points must be a whole number from 0 to 1000."
     },
-    "newTask": "New task"
+    "newTask": "New task",
+    "summary": "{open, plural, =0 {Nothing left to do} other {# to do}} · {done} done",
+    "progress": "{done} of {total} done"
   },
   "groceries": {
     "title": "Groceries",

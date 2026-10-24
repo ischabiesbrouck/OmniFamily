@@ -1,11 +1,20 @@
 'use client';
 
-import { CalendarDays, ListChecks, ShoppingBasket, Trophy, Users } from 'lucide-react';
+import {
+  CalendarDays,
+  ChevronRight,
+  ListChecks,
+  ShoppingBasket,
+  Trophy,
+  Users,
+} from 'lucide-react';
 import { useFormatter, useTimeZone, useTranslations, type DateTimeFormatOptions } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import Link from 'next/link';
+import { occurrenceColor, useTimeLabel } from '@/components/calendar/OccurrenceChip';
 import { TodayAgenda } from '@/components/calendar/TodayAgenda';
+import { useMinuteClock } from '@/components/kiosk/hooks';
 import { useOccurrences } from '@/components/calendar/useOccurrences';
 import { WeekStrip } from '@/components/calendar/WeekStrip';
 import { MemberAvatar } from '@/components/members/MemberAvatar';
@@ -25,6 +34,13 @@ import {
   type FloatingDate,
 } from '@/lib/time/zoned';
 import { useDeviceStore } from '@/stores/deviceStore';
+import { useUiStore } from '@/stores/uiStore';
+
+const STATS = [
+  { key: 'events', href: '/calendar?view=day', Icon: CalendarDays },
+  { key: 'chores', href: '/tasks', Icon: ListChecks },
+  { key: 'shopping', href: '/groceries', Icon: ShoppingBasket },
+] as const;
 
 function SeeAll({ href, label }: { href: string; label: string }) {
   return (
@@ -41,6 +57,9 @@ export default function TodayPage() {
   const t = useTranslations('today');
   const format = useFormatter();
   const router = useRouter();
+  const tCal = useTranslations('calendar');
+  const time = useTimeLabel();
+  const openEditor = useUiStore((s) => s.openEditor);
   const zone = useTimeZone() ?? 'UTC';
   const members = useMembers() ?? [];
   const tasks = useLiveRecords('task') ?? [];
@@ -62,37 +81,85 @@ export default function TodayPage() {
   const occurrences = useOccurrences(window, zone, activeId) ?? [];
   const busy = new Set(week.filter((d) => occurrencesOnDay(occurrences, d, zone).length > 0));
   const todayCount = occurrencesOnDay(occurrences, today, zone).length;
+  const stats = { events: todayCount, chores: openChores, shopping: toBuy.length };
+  const now = useMinuteClock();
+  const next = occurrences
+    .filter((o) => !o.isAllDay && o.end > now)
+    .sort((a, b) => a.start - b.start)[0];
   const label = (date: FloatingDate, options: DateTimeFormatOptions) =>
     format.dateTime(floatingDateToUtc(date), { ...options, timeZone: 'UTC' });
 
   return (
     <div>
-      <section className="hero mb-5 rounded-card p-5 shadow-card sm:p-7">
-        <p className="text-sm font-semibold tracking-wide first-letter:uppercase">
-          {format.dateTime(Date.now(), {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            timeZone: zone,
-          })}
-        </p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight sm:text-5xl">
-          {active ? t('greeting', { name: active.name }) : t('greetingAnonymous')}
-        </h1>
-        <p className="mt-2 text-base sm:text-lg">
-          {t('summary', { events: todayCount, chores: openChores })}
-        </p>
-        <WeekStrip
-          className="-mx-4 mt-4 max-w-xl sm:mx-0"
-          dates={week}
-          selected={today}
-          today={today}
-          busy={busy}
-          label={label}
-          onPick={(d) => router.push(`/calendar?view=day&date=${d}`)}
-        />
+      <section className="hero mb-5 rounded-card p-5 shadow-card sm:p-7 lg:grid lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-8">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold tracking-wide first-letter:uppercase">
+            {format.dateTime(Date.now(), {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              timeZone: zone,
+            })}
+          </p>
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight sm:text-5xl">
+            {active ? t('greeting', { name: active.name }) : t('greetingAnonymous')}
+          </h1>
+          <p className="mt-2 text-base sm:text-lg">
+            {t('summary', { events: todayCount, chores: openChores })}
+          </p>
+          {next && (
+            <button
+              type="button"
+              onClick={() => openEditor({ mode: 'edit', occurrence: next })}
+              className="tint tint-bar mt-4 flex w-full max-w-xl items-center gap-3 rounded-tile py-3 pr-3 pl-5 text-left text-ink shadow-card transition hover:brightness-95"
+              style={{ ['--tint' as string]: occurrenceColor(next, members) }}
+            >
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="text-xs font-semibold tracking-widest uppercase">
+                  {t('upNext')} ·{' '}
+                  {next.start <= now ? t('now') : format.relativeTime(next.start, now)}
+                </span>
+                <span className="truncate text-lg font-semibold">{next.event.title}</span>
+                <span className="truncate text-sm">
+                  {tCal('timeRange', { start: time(next.start), end: time(next.end) })}
+                  {next.event.location ? ` · ${next.event.location}` : ''}
+                </span>
+              </span>
+              <ChevronRight aria-hidden="true" className="size-5 shrink-0" />
+            </button>
+          )}
+          <WeekStrip
+            className="-mx-4 mt-4 max-w-xl sm:mx-0"
+            dates={week}
+            selected={today}
+            today={today}
+            busy={busy}
+            label={label}
+            onPick={(d) => router.push(`/calendar?view=day&date=${d}`)}
+          />
+        </div>
+        <ul className="hidden flex-col justify-center gap-3 lg:flex">
+          {STATS.map(({ key, href, Icon }) => (
+            <li key={key}>
+              <Link
+                href={href}
+                className="flex items-center gap-4 rounded-tile bg-glass p-4 shadow-card transition hover:-translate-y-0.5"
+              >
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-on-accent">
+                  <Icon aria-hidden="true" className="size-5" />
+                </span>
+                <span className="flex flex-col">
+                  <span className="text-3xl leading-none font-semibold tabular-nums">
+                    {stats[key]}
+                  </span>
+                  <span className="mt-1 text-sm font-medium">{t(`stats.${key}`)}</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid items-start gap-4 lg:grid-cols-3">
         <Card
           title={t('agenda')}
           icon={<CalendarDays aria-hidden="true" className="size-5" />}

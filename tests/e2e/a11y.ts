@@ -3,6 +3,10 @@ import { expect, type Page } from '@playwright/test';
 
 /** WCAG 2.2 A/AA plus the AAA contrast rule (7:1, SPEC §6). */
 export async function expectAccessible(page: Page, label: string): Promise<void> {
+  // Measure the settled page: an entrance animation fades text in (D-12.4).
+  await page.waitForFunction(() =>
+    document.getAnimations().every((a) => a.playState !== 'running'),
+  );
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'wcag2aaa'])
     .analyze();
