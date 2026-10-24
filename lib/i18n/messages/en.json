@@ -486,5 +486,144 @@
     "allDay": "All day",
     "addSelected": "{count, plural, =0 {Nothing selected} one {Add # event} other {Add # events}}",
     "ocrFailed": "The photo could not be read. Try a sharper photo or paste the text instead."
+  },
+  "help": {
+    "title": "How it works",
+    "nav": "How it works",
+    "intro": "A short guide to OmniFamily. Pick a topic, or read it top to bottom in two minutes.",
+    "topics": "Topics",
+    "back": "Back to Today",
+    "welcome": {
+      "title": "New here?",
+      "text": "See in two minutes how OmniFamily works: the calendar, tasks, groceries and how to add your family.",
+      "open": "Show me how",
+      "dismiss": "Not now"
+    },
+    "sections": {
+      "start": {
+        "title": "The basics",
+        "intro": "OmniFamily is your family’s shared calendar, to-do list and shopping list. There is no account: everything is stored on your own devices.",
+        "steps": [
+          "Each phone or tablet belongs to one person. The first device creates the family; the others join it with a family code.",
+          "Switch between Today, Calendar, Tasks, Groceries and Settings with the bar at the bottom (on a computer: the menu on the left).",
+          "The round + button adds something from anywhere: an event, a task, groceries, or dates from a message or photo.",
+          "Everything works without internet. With more than one device, changes are shared automatically and encrypted."
+        ]
+      },
+      "today": {
+        "title": "Today",
+        "intro": "Your starting point for the day.",
+        "steps": [
+          "At the top: the date, a short summary and “Up next”, the next appointment with a countdown. Tap it for the details.",
+          "Tap a day in the row of days to open it in the calendar. A dot means something is planned.",
+          "Further down: today’s appointments, chores, the shopping list and everyone’s points."
+        ]
+      },
+      "calendar": {
+        "title": "Calendar",
+        "intro": "Everything that is planned, by month, week or day.",
+        "steps": [
+          "Switch between Month, Week and Day at the top. The arrows go back and forward; “Today” jumps back to now.",
+          "The colour shows who an appointment is for: every family member has their own colour.",
+          "Tap an appointment to see its details. Tap the pencil to change or delete it.",
+          "New appointment: tap + (or “New event”) and choose the date, time, who it is for and whether it repeats.",
+          "In the week or day view, tap an empty hour to plan something at that time."
+        ]
+      },
+      "tasks": {
+        "title": "Tasks & chores",
+        "intro": "Chores and to-dos, with points to motivate the children.",
+        "steps": [
+          "Type a task and tap “Add task”. If you like, choose who does it, how many points it is worth and a due date.",
+          "Tick the circle when it is done: the points go to that person. Untick to undo.",
+          "Tap a name to see only that person’s tasks. The ring at the top shows how much is done.",
+          "A task can belong to an appointment (“Pack swimming bag” with “Swimming”): add it in that appointment’s editor."
+        ]
+      },
+      "groceries": {
+        "title": "Groceries",
+        "intro": "One shopping list for the whole family.",
+        "steps": [
+          "Type an item, add an amount and an aisle if you like, then tap “Add”.",
+          "Tick items off while you shop. “Clear ticked items” empties the basket.",
+          "Everyone sees the same list, so you can shop together."
+        ]
+      },
+      "imports": {
+        "title": "Import dates",
+        "intro": "Get dates from a message, photo or spreadsheet without typing them over.",
+        "steps": [
+          "Tap + and choose “Import dates”.",
+          "Message: paste a WhatsApp message, e-mail or school letter. Photo: take a picture of a letter or poster. Spreadsheet: choose an Excel or CSV file.",
+          "Check the dates that were found, correct them, untick what you don’t want and tap “Add”.",
+          "Reading happens on your device; nothing is uploaded."
+        ]
+      },
+      "family": {
+        "title": "Family & devices",
+        "intro": "Bring the rest of the family in. Each device is one person.",
+        "steps": [
+          "On a device that already has the family: Settings → Devices → “Add a device”. A family code (like ABCDE-12345) and a QR code appear.",
+          "On the new phone: open OmniFamily, choose “Join a family” and type the code or scan the QR code.",
+          "Then choose who you are, or add yourself as a new family member.",
+          "From then on, everything syncs by itself. A code works for 15 minutes; make a new one for the next device.",
+          "Add family members, set a PIN or remove someone in Settings → Family members."
+        ]
+      },
+      "wall": {
+        "title": "Wall display",
+        "intro": "A calm overview on a tablet in the kitchen or hallway.",
+        "steps": [
+          "Open “Wall display” from the menu or from Settings.",
+          "It shows the clock, today’s and tomorrow’s appointments, chores and points, and keeps the screen on.",
+          "Anyone can tick off chores. Leaving the wall display asks for the parent PIN."
+        ]
+      },
+      "privacy": {
+        "title": "Privacy & safety",
+        "intro": "Your family’s data stays yours.",
+        "steps": [
+          "There is no account and no server of ours: your data is stored on your devices.",
+          "Sync between devices is encrypted on the device itself; the services that pass it on cannot read it.",
+          "A parent PIN protects the settings. Set one in Settings → Family members.",
+          "Settings → Privacy & data lets you download everything or delete everything from this device."
+        ]
+      },
+      "install": {
+        "title": "Install as an app",
+        "intro": "Use OmniFamily like any other app, also offline.",
+        "steps": [
+          "iPhone or iPad (Safari): tap Share, then “Add to Home Screen”.",
+          "Android (Chrome): tap the menu ⋮, then “Install app” or “Add to Home screen”.",
+          "Computer (Chrome or Edge): click the install icon in the address bar.",
+          "Turn on reminders in Settings for a notice 15 minutes before each appointment."
+        ]
+      }
+    },
+    "faq": {
+      "title": "Questions",
+      "items": [
+        {
+          "q": "I don’t see my partner’s appointments.",
+          "a": "Both devices must be in the same family. On one device open Settings → Devices → “Add a device” and join with that code on the other. Check that “Sync over the internet” is on."
+        },
+        {
+          "q": "What does the status at the top mean?",
+          "a": "“Synced”: everything is up to date. “Connecting…”: the app is reaching the sync service. “Offline · syncs later”: there is no internet; changes are sent as soon as it is back."
+        },
+        {
+          "q": "What if I lose my phone?",
+          "a": "Your other devices still have everything. Set up the app again and join the family with a new code. Without other devices, an export (Settings → Privacy & data) is your backup."
+        },
+        {
+          "q": "Do I need internet?",
+          "a": "No. Everything works offline; internet is only used to share changes between devices."
+        },
+        {
+          "q": "Does it cost anything?",
+          "a": "No. No account, no subscription and no ads."
+        }
+      ]
+    }
   }
 }

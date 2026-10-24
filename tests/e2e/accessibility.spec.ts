@@ -50,6 +50,7 @@ test('every screen passes axe (WCAG 2.2 AA + AAA contrast) with large enough tar
     ['/tasks', en.tasks.title],
     ['/groceries', en.groceries.title],
     ['/settings', en.settings.title],
+    ['/help', en.help.title],
   ] as const) {
     await page.goto(url);
     await expect(page.getByRole('heading', { name: ready, level: 1 })).toBeVisible();

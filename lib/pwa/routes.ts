@@ -5,6 +5,7 @@ export const APP_ROUTES = [
   '/tasks',
   '/groceries',
   '/settings',
+  '/help',
   '/onboarding',
   '/kiosk',
 ] as const;

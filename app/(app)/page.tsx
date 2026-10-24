@@ -3,6 +3,7 @@
 import {
   CalendarDays,
   ChevronRight,
+  HelpCircle,
   ListChecks,
   ShoppingBasket,
   Trophy,
@@ -20,6 +21,7 @@ import { WeekStrip } from '@/components/calendar/WeekStrip';
 import { MemberAvatar } from '@/components/members/MemberAvatar';
 import { PointsBoard } from '@/components/tasks/PointsBoard';
 import { TaskItem } from '@/components/tasks/TaskItem';
+import { BUTTON_BASE, BUTTON_VARIANTS, Button } from '@/components/ui/Button';
 import { Card, EmptyState } from '@/components/ui/Card';
 import { weekDates, windowFor } from '@/lib/calendar/grid';
 import { useLiveRecords, useMembers } from '@/lib/db/repositories/hooks';
@@ -57,6 +59,9 @@ export default function TodayPage() {
   const t = useTranslations('today');
   const format = useFormatter();
   const router = useRouter();
+  const tHelp = useTranslations('help');
+  const guideSeen = useDeviceStore((st) => st.guideSeen);
+  const setGuideSeen = useDeviceStore((st) => st.setGuideSeen);
   const tCal = useTranslations('calendar');
   const time = useTimeLabel();
   const openEditor = useUiStore((s) => s.openEditor);
@@ -159,6 +164,34 @@ export default function TodayPage() {
           ))}
         </ul>
       </section>
+      {!guideSeen && (
+        <section
+          aria-labelledby="welcome-guide"
+          className="mb-5 flex flex-wrap items-center gap-4 rounded-card border border-line bg-surface p-5 shadow-card"
+        >
+          <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent-soft-ink">
+            <HelpCircle aria-hidden="true" className="size-6" />
+          </span>
+          <div className="min-w-0 flex-1 basis-56">
+            <h2 id="welcome-guide" className="text-lg font-semibold">
+              {tHelp('welcome.title')}
+            </h2>
+            <p className="text-muted">{tHelp('welcome.text')}</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/help"
+              onClick={setGuideSeen}
+              className={`${BUTTON_BASE} ${BUTTON_VARIANTS.primary}`}
+            >
+              {tHelp('welcome.open')}
+            </Link>
+            <Button variant="ghost" onClick={setGuideSeen}>
+              {tHelp('welcome.dismiss')}
+            </Button>
+          </div>
+        </section>
+      )}
       <div className="grid items-start gap-4 lg:grid-cols-3">
         <Card
           title={t('agenda')}

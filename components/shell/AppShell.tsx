@@ -2,6 +2,7 @@
 
 import {
   CalendarDays,
+  HelpCircle,
   Home,
   ListChecks,
   MonitorSmartphone,
@@ -93,11 +94,19 @@ export function AppShell({ children }: { children: ReactNode }) {
         {me ? <MemberAvatar member={me} size="sm" /> : <BrandMark className="size-8" />}
         <span className="min-w-0 truncate font-semibold">{household.householdName}</span>
         <span className="ml-auto">{SyncStatus && <SyncStatus />}</span>
+        <Link
+          href="/help"
+          aria-label={t('help.nav')}
+          title={t('help.nav')}
+          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-surface shadow-card"
+        >
+          <HelpCircle aria-hidden="true" className="size-5" />
+        </Link>
       </header>
 
       <nav
         aria-label={t('nav.label')}
-        className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 rounded-card border border-line bg-glass p-1.5 shadow-float backdrop-blur-xl lg:sticky lg:top-3 lg:m-3 lg:mr-0 lg:flex lg:h-[calc(100dvh-1.5rem)] lg:flex-col lg:gap-5 lg:overflow-y-auto lg:bg-surface lg:p-4 lg:shadow-card"
+        className="fixed inset-x-2 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 rounded-card border border-line bg-glass p-1.5 shadow-float backdrop-blur-xl lg:sticky lg:top-3 lg:m-3 lg:mr-0 lg:flex lg:h-[calc(100dvh-1.5rem)] lg:flex-col lg:gap-5 lg:overflow-y-auto lg:bg-surface lg:p-4 lg:shadow-card"
       >
         <div className="hidden items-center gap-3 px-1 pt-1 lg:flex">
           <BrandMark className="size-11" />
@@ -114,7 +123,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 href={href}
                 aria-current={current(href) ? 'page' : undefined}
-                className="group flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl text-[0.7rem] font-semibold text-muted aria-[current=page]:text-ink lg:min-h-12 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-full lg:px-3 lg:text-[0.95rem] lg:hover:bg-surface-2 lg:aria-[current=page]:bg-accent lg:aria-[current=page]:text-on-accent"
+                className="group flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl text-[0.65rem] font-semibold tracking-tight whitespace-nowrap text-muted aria-[current=page]:text-ink lg:min-h-12 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-full lg:px-3 lg:text-[0.95rem] lg:hover:bg-surface-2 lg:aria-[current=page]:bg-accent lg:aria-[current=page]:text-on-accent"
               >
                 <span className="flex h-8 w-12 items-center justify-center rounded-full transition group-aria-[current=page]:bg-accent group-aria-[current=page]:text-on-accent lg:size-6 lg:w-6 lg:group-aria-[current=page]:bg-transparent">
                   <Icon aria-hidden="true" className="size-5" />
@@ -150,6 +159,14 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
         <div className="mt-auto hidden flex-col gap-2 lg:flex">
           {SyncStatus && <SyncStatus />}
+          <Link
+            href="/help"
+            aria-current={current('/help') ? 'page' : undefined}
+            className="flex min-h-12 items-center gap-3 rounded-full px-3 font-semibold text-muted hover:bg-surface-2 aria-[current=page]:bg-accent aria-[current=page]:text-on-accent"
+          >
+            <HelpCircle aria-hidden="true" className="size-5" />
+            {t('help.nav')}
+          </Link>
           <Link
             href="/kiosk"
             className="flex min-h-12 items-center gap-3 rounded-full px-3 font-semibold text-muted hover:bg-surface-2"

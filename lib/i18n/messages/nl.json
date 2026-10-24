@@ -486,5 +486,144 @@
     "allDay": "Hele dag",
     "addSelected": "{count, plural, =0 {Niets geselecteerd} one {# afspraak toevoegen} other {# afspraken toevoegen}}",
     "ocrFailed": "De foto kon niet worden gelezen. Probeer een scherpere foto of plak de tekst."
+  },
+  "help": {
+    "title": "Uitleg",
+    "nav": "Uitleg",
+    "intro": "Een korte uitleg van OmniFamily. Kies een onderwerp, of lees alles in twee minuten door.",
+    "topics": "Onderwerpen",
+    "back": "Terug naar Vandaag",
+    "welcome": {
+      "title": "Nieuw hier?",
+      "text": "Zie in twee minuten hoe OmniFamily werkt: de agenda, taken, boodschappen en hoe je je gezin toevoegt.",
+      "open": "Laat zien hoe",
+      "dismiss": "Niet nu"
+    },
+    "sections": {
+      "start": {
+        "title": "De basis",
+        "intro": "OmniFamily is de gedeelde agenda, takenlijst en boodschappenlijst van je gezin. Er is geen account: alles staat op je eigen apparaten.",
+        "steps": [
+          "Elke telefoon of tablet hoort bij één persoon. Het eerste apparaat maakt het gezin aan; de andere sluiten aan met een gezinscode.",
+          "Wissel tussen Vandaag, Agenda, Taken, Boodschappen en Instellingen met de balk onderin (op een computer: het menu links).",
+          "Met de ronde +‑knop voeg je overal iets toe: een afspraak, een taak, boodschappen of datums uit een bericht of foto.",
+          "Alles werkt zonder internet. Met meer apparaten worden wijzigingen automatisch en versleuteld gedeeld."
+        ]
+      },
+      "today": {
+        "title": "Vandaag",
+        "intro": "Je startpunt voor de dag.",
+        "steps": [
+          "Bovenaan: de datum, een korte samenvatting en “Hierna”, de volgende afspraak met aftelling. Tik erop voor de details.",
+          "Tik op een dag in de rij dagen om die in de agenda te openen. Een stip betekent dat er iets gepland is.",
+          "Verderop: de afspraken van vandaag, klusjes, de boodschappenlijst en ieders punten."
+        ]
+      },
+      "calendar": {
+        "title": "Agenda",
+        "intro": "Alles wat gepland is, per maand, week of dag.",
+        "steps": [
+          "Wissel bovenaan tussen Maand, Week en Dag. De pijlen gaan terug en vooruit; “Vandaag” springt terug naar nu.",
+          "De kleur laat zien voor wie een afspraak is: elk gezinslid heeft een eigen kleur.",
+          "Tik op een afspraak om de details te zien. Tik op het potlood om hem te wijzigen of te verwijderen.",
+          "Nieuwe afspraak: tik op + (of “Nieuwe afspraak”) en kies datum, tijd, voor wie en of hij herhaalt.",
+          "In de week- of dagweergave tik je op een leeg uur om op dat tijdstip iets te plannen."
+        ]
+      },
+      "tasks": {
+        "title": "Taken & klusjes",
+        "intro": "Klusjes en to-do’s, met punten om de kinderen te motiveren.",
+        "steps": [
+          "Typ een taak en tik op “Taak toevoegen”. Kies eventueel wie hem doet, hoeveel punten hij waard is en een einddatum.",
+          "Vink het rondje aan als hij klaar is: de punten gaan naar die persoon. Vink uit om het terug te draaien.",
+          "Tik op een naam om alleen de taken van die persoon te zien. De ring bovenaan laat zien hoeveel er klaar is.",
+          "Een taak kan bij een afspraak horen (“Zwemtas inpakken” bij “Zwemmen”): voeg hem toe in de bewerker van die afspraak."
+        ]
+      },
+      "groceries": {
+        "title": "Boodschappen",
+        "intro": "Eén boodschappenlijst voor het hele gezin.",
+        "steps": [
+          "Typ een product, voeg eventueel een hoeveelheid en een schap toe en tik op “Toevoegen”.",
+          "Vink producten af tijdens het winkelen. “Afgevinkte artikelen wissen” maakt het mandje leeg.",
+          "Iedereen ziet dezelfde lijst, dus je kunt samen boodschappen doen."
+        ]
+      },
+      "imports": {
+        "title": "Datums importeren",
+        "intro": "Haal datums uit een bericht, foto of spreadsheet zonder over te typen.",
+        "steps": [
+          "Tik op + en kies “Datums importeren”.",
+          "Bericht: plak een WhatsApp-bericht, e-mail of schoolbrief. Foto: maak een foto van een brief of poster. Spreadsheet: kies een Excel- of CSV-bestand.",
+          "Controleer de gevonden datums, verbeter ze, vink uit wat je niet wilt en tik op “Toevoegen”.",
+          "Het lezen gebeurt op je apparaat; er wordt niets geüpload."
+        ]
+      },
+      "family": {
+        "title": "Gezin & apparaten",
+        "intro": "Haal de rest van het gezin erbij. Elk apparaat is één persoon.",
+        "steps": [
+          "Op een apparaat dat het gezin al heeft: Instellingen → Apparaten → “Apparaat toevoegen”. Er verschijnen een gezinscode (zoals ABCDE-12345) en een QR-code.",
+          "Op de nieuwe telefoon: open OmniFamily, kies “Aansluiten bij een gezin” en typ de code of scan de QR-code.",
+          "Kies daarna wie je bent, of voeg jezelf toe als nieuw gezinslid.",
+          "Vanaf dan synchroniseert alles vanzelf. Een code werkt 15 minuten; maak een nieuwe voor het volgende apparaat.",
+          "Gezinsleden toevoegen, een pincode instellen of iemand verwijderen doe je bij Instellingen → Gezinsleden."
+        ]
+      },
+      "wall": {
+        "title": "Wandscherm",
+        "intro": "Een rustig overzicht op een tablet in de keuken of gang.",
+        "steps": [
+          "Open “Wandscherm” via het menu of via Instellingen.",
+          "Het toont de klok, de afspraken van vandaag en morgen, klusjes en punten, en houdt het scherm aan.",
+          "Iedereen kan klusjes afvinken. Het wandscherm verlaten vraagt om de ouderpincode."
+        ]
+      },
+      "privacy": {
+        "title": "Privacy & veiligheid",
+        "intro": "De gegevens van je gezin blijven van jou.",
+        "steps": [
+          "Er is geen account en geen server van ons: je gegevens staan op je apparaten.",
+          "Synchroniseren tussen apparaten wordt op het apparaat zelf versleuteld; de diensten die het doorgeven kunnen het niet lezen.",
+          "Een ouderpincode beschermt de instellingen. Stel er een in bij Instellingen → Gezinsleden.",
+          "Bij Instellingen → Privacy & gegevens kun je alles downloaden of alles van dit apparaat wissen."
+        ]
+      },
+      "install": {
+        "title": "Installeren als app",
+        "intro": "Gebruik OmniFamily als elke andere app, ook offline.",
+        "steps": [
+          "iPhone of iPad (Safari): tik op Deel en dan op “Zet op beginscherm”.",
+          "Android (Chrome): tik op het menu ⋮ en dan op “App installeren” of “Toevoegen aan startscherm”.",
+          "Computer (Chrome of Edge): klik op het installatie-icoon in de adresbalk.",
+          "Zet herinneringen aan in Instellingen voor een melding 15 minuten voor elke afspraak."
+        ]
+      }
+    },
+    "faq": {
+      "title": "Vragen",
+      "items": [
+        {
+          "q": "Ik zie de afspraken van mijn partner niet.",
+          "a": "Beide apparaten moeten in hetzelfde gezin zitten. Open op het ene apparaat Instellingen → Apparaten → “Apparaat toevoegen” en sluit met die code aan op het andere. Controleer dat “Synchroniseren via internet” aan staat."
+        },
+        {
+          "q": "Wat betekent de status bovenaan?",
+          "a": "“Gesynchroniseerd”: alles is bijgewerkt. “Verbinden…”: de app maakt verbinding met de synchronisatiedienst. “Offline · synchroniseert later”: er is geen internet; wijzigingen gaan mee zodra het terug is."
+        },
+        {
+          "q": "Wat als ik mijn telefoon kwijtraak?",
+          "a": "Je andere apparaten hebben alles nog. Installeer de app opnieuw en sluit aan met een nieuwe code. Zonder andere apparaten is een export (Instellingen → Privacy & gegevens) je back-up."
+        },
+        {
+          "q": "Heb ik internet nodig?",
+          "a": "Nee. Alles werkt offline; internet wordt alleen gebruikt om wijzigingen tussen apparaten te delen."
+        },
+        {
+          "q": "Kost het iets?",
+          "a": "Nee. Geen account, geen abonnement en geen advertenties."
+        }
+      ]
+    }
   }
 }

@@ -382,3 +382,18 @@ Every event goes to every relay, so a relay that is down or forgets data costs n
 - **Accessibility audits.** The axe helper waits for running animations to finish, so contrast is measured on the settled page.
 
 **D-12.5 — Date import fix (found because the test clock reached 24 October).** chrono's `forwardDate` compares instants, so "Saturday 24 October 10:00" read later that same day was moved a year ahead. A parsed day without a stated year that equals today now stays today (unit test added).
+
+## Phase 13 — In-app guide
+
+**D-13.1 — "How it works" (`/help`, nl: "Uitleg").** The guide has ten short topics, each a card with numbered steps: the basics, Today, calendar, tasks, groceries, importing dates, family & devices, wall display, privacy, installing as an app. Five common questions follow as expandable items. All of it is in the next-intl catalogue (en, nl); steps are arrays read with `t.raw` and checked at runtime. The page is precached, so it opens offline.
+
+**D-13.2 — How people find it.**
+
+- **Today.** A "New here?" card shows until it is opened or dismissed (`guideSeen` in the device store, per device).
+- **Other entry points.** A "?" button in the phone header, a sidebar link on large screens, and a card in Settings.
+
+**D-13.3 — Phone fit.**
+
+- **Tab labels.** The bottom-bar labels are 0.65 rem and never wrap, so the Dutch "Boodschappen" and "Instellingen" fit at 390 px.
+- **Topic chips.** The help topics scroll sideways on phones.
+- **Page headers.** Their icon or ring sits beside the text instead of wrapping below it.

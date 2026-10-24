@@ -10,9 +10,12 @@ interface DeviceState {
   activeMemberId: string | null;
   locale: Locale | null;
   theme: ThemePreference;
+  /** The "New here?" card on Today was opened or dismissed. */
+  guideSeen: boolean;
   setActiveMember: (id: string | null) => void;
   setLocale: (locale: Locale | null) => void;
   setTheme: (theme: ThemePreference) => void;
+  setGuideSeen: () => void;
 }
 
 export { DEVICE_STORE_KEY };
@@ -23,14 +26,21 @@ export const useDeviceStore = create<DeviceState>()(
       activeMemberId: null,
       locale: null,
       theme: 'system',
+      guideSeen: false,
       setActiveMember: (activeMemberId) => set({ activeMemberId }),
       setLocale: (locale) => set({ locale }),
       setTheme: (theme) => set({ theme }),
+      setGuideSeen: () => set({ guideSeen: true }),
     }),
     {
       name: DEVICE_STORE_KEY,
       storage: createJSONStorage(() => localStorage),
-      partialize: ({ activeMemberId, locale, theme }) => ({ activeMemberId, locale, theme }),
+      partialize: ({ activeMemberId, locale, theme, guideSeen }) => ({
+        activeMemberId,
+        locale,
+        theme,
+        guideSeen,
+      }),
     },
   ),
 );

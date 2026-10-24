@@ -1,6 +1,12 @@
 'use client';
 
-import { MonitorSmartphone, Palette, Settings as SettingsIcon, Users } from 'lucide-react';
+import {
+  HelpCircle,
+  MonitorSmartphone,
+  Palette,
+  Settings as SettingsIcon,
+  Users,
+} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -26,6 +32,7 @@ const THEMES: readonly ThemePreference[] = ['system', 'light', 'dark'];
 export default function SettingsPage() {
   const t = useTranslations('settings');
   const tKiosk = useTranslations('kiosk');
+  const tHelp = useTranslations('help');
   const locale = useDeviceStore((s) => s.locale);
   const setLocale = useDeviceStore((s) => s.setLocale);
   const theme = useDeviceStore((s) => s.theme);
@@ -77,6 +84,12 @@ export default function SettingsPage() {
             </Link>
           </Card>
           <ReminderSettings />
+          <Card title={tHelp('title')} icon={<HelpCircle aria-hidden="true" className="size-5" />}>
+            <p className="mb-3 text-muted">{tHelp('intro')}</p>
+            <Link href="/help" className={`${BUTTON_BASE} ${BUTTON_VARIANTS.secondary}`}>
+              {tHelp('nav')}
+            </Link>
+          </Card>
         </div>
         <div className="flex flex-col gap-4">
           <ParentGate>

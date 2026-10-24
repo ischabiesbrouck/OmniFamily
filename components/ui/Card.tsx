@@ -47,13 +47,13 @@ export function PageHeader({
   visual?: ReactNode;
 }) {
   return (
-    <div className="hero mb-5 flex flex-wrap items-center gap-4 rounded-card p-5 shadow-card sm:p-7">
-      <div className="mr-auto min-w-0">
+    <div className="hero mb-5 flex items-center gap-4 rounded-card p-5 shadow-card sm:p-7">
+      <div className="mr-auto min-w-0 flex-1">
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
         {subtitle && <p className="mt-1 text-base sm:text-lg">{subtitle}</p>}
         {actions && <div className="mt-4 flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
-      {visual}
+      {visual && <div className="shrink-0">{visual}</div>}
     </div>
   );
 }
